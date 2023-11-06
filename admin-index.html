@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Insert Into Menu</title>
+</head>
+<body>
+    <h1>Insert Into Menu</h1>
+
+    <form id="insertForm" method="post" action="insert_menu.php">
+        <label for="dishName">Dish Name:</label>
+        <input type="text" id="dishName" name="dishName" required>
+        <br>
+
+        <label for="price">Price:</label>
+        <input type="text" id="price" name="price" required>
+        <br>
+
+        <label for="vegetarian">Vegetarian (true/false):</label>
+        <input type="text" id="vegetarian" name="vegetarian" required>
+        <br>
+
+        <label for="available">Available (true/false):</label>
+        <input type="text" id="available" name="available" required>
+        <br>
+
+        <input type="submit" value="Insert Dish">
+    </form>
+
+    <div id="message"></div>
+</body>
+</html>

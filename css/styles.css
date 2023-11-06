@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css?family=Proxima+Nova:400,700');
+
+body {
+    font-family: 'Proxima Nova', sans-serif;
+}
+
+/* CSS to remove bullet points from the cart */
+ul#cart {
+    list-style-type: none;
+    padding: 0;
+}
+
+.add-to-cart-button {
+    font-size:medium;
+    background-color: #4CAF50; /* Set the background color */
+    color: white; /* Set the text color */
+    border: none; /* Remove the button border */
+    border-radius: 4px; /* Add rounded corners */
+    padding: 10px 20px; /* Add padding to make the button larger */
+    cursor: pointer; /* Add a pointer cursor on hover */
+    transition: background-color 0.3s; /* Add a smooth background color transition */
+}
+
+/* Change the button color on hover */
+.add-to-cart-button:hover {
+    background-color: #45a049;
+}
+
+/* CSS for item controls */
+.item-controls {
+    display: flex;
+}
+
+.item-controls button {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+}
+
+/* Header styles */
+#header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+}
+
+h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+
+/* Restaurant name and menu styles */
+/* CSS for the smaller admin login button */
+/* Update the CSS in your styles.css file */
+
+/* Make the login button very small */
+#restaurant-login {
+    background-color: #20286b;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px; /* Adjust the padding for button size */
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 12px; /* Reduce the font size */
+    position: absolute; /* Position the button absolutely */
+    top: 10px; /* Adjust the top position for desired placement */
+    right: 10px; /* Adjust the right position for desired placement */
+}
+
+#menu {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ccc;
+}
+
+.food-item {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Cart styles */
+#cart {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Cart item styles */
+li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* Item controls (plus and minus buttons) styles */
+.item-controls {
+    display: flex;
+    align-items: center;
+}
+
+.item-controls button {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+
+/* "Remove" button styles */
+li button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* "Check out" button styles */
+.button {
+    display: block;
+    margin: 20px auto;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+}
