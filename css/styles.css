@@ -150,3 +150,30 @@ li button {
     text-decoration: none;
     font-size: 18px;
 }
+
+#menu-container {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.food-item {
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-family: sans-serif;
+}
+
+.add-to-cart-button {
+    background-color: green;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.button {
+    background-color: blue;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
