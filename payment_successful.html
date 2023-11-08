@@ -11,6 +11,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
+      overflow: hidden; /* Ensure no scrollbars when the image is larger than the viewport */
     }
 
     #payment-processing {
@@ -18,8 +19,9 @@
     }
 
     #payment-processing img {
-      max-width: 100%;
-      height: auto;
+      width: 100%; /* Make the image width 100% of the viewport */
+      height: 100%; /* Make the image height 100% of the viewport */
+      object-fit: cover; /* Maintain aspect ratio and cover the entire viewport */
     }
 
     #payment-successful {
@@ -51,7 +53,7 @@
 </head>
 <body>
   <center id="payment-processing">
-    <img src="resources/payment-processing.gif" alt="Payment processing...">
+    <img src="resources/payment-animation.gif" alt="Payment processing...">
   </center>
 
   <script>

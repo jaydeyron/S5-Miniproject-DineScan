@@ -1,0 +1,40 @@
+.navigation {
+    height: 112px;
+    position: absolute;
+    right: 0px;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+}
+
+.logo {
+    color: #426b1f;
+    text-align: left;
+    font: 500 32px/100% "Newsreader", sans-serif;
+    position: absolute;
+    left: 96px;
+    top: 41px;
+  }
+  .aboutus_button {
+    color: #000000;
+    text-align: center;
+    font: 400 16px/130% "Inter", sans-serif;
+    position: absolute;
+    right: 274px;
+    top: 45.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .admin-button {
+    color: white;
+    background: #426b1f;
+    border-radius: 10px;
+    padding: 14px 23px 14px 23px;
+    width: 126px;
+    height: 48px;
+    position: absolute;
+    right: 96px;
+    top: 32px;
+    overflow: hidden;
+  }
