@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <title>DineScan</title>
+</head>
+<body>
+    <div id="logo" style="padding-left: 30px;">
+        <h1>Dine<span style="color: red;">Scan</span></h1>
+    </div>
+    <a id="restaurant-login" href="admin-panel.html" class="button">Admin login</a>
+    <h1 style="padding-top: 20px; padding-left: 20px;">McDonald's</h1>
+    <div id="menu-container">
+        <div class="food-item">
+            <h2 style="text-align: left;">Pizza</h2>
+            <button class="add-to-cart-button" onclick="addToCart('Pizza', 200.00)">Add to Cart</button>
+            <p style="text-align: left;">Price: Rs 200</p>
+        </div>
+        <div class="food-item">
+            <h2 style="text-align: left;">Burger</h2>
+            <button class="add-to-cart-button" onclick="addToCart('Burger', 220.00)">Add to Cart</button>
+            <p style="text-align: left;">Price: Rs 220</p>
+        </div>
+        <div class="food-item">
+            <h2 style="text-align: left;">Pasta</h2>
+            <button class="add-to-cart-button" onclick="addToCart('Pasta', 280.00)">Add to Cart</button>
+            <p style="text-align: left;">Price: Rs 280</p>
+        </div>
+        <div class="food-item">
+            <h2 style="text-align: left;">Sandwich</h2>
+            <button class="add-to-cart-button" onclick="addToCart('Sandwich', 180.00)">Add to Cart</button>
+            <p style="text-align: left;">Price: Rs 180</p>
+        </div>
+        <div class="food-item">
+            <h2 style="text-align: left;">Salad</h2>
+            <button class="add-to-cart-button" onclick="addToCart('Salad', 80.00)">Add to Cart</button>
+            <p style="text-align: left;">Price: Rs 80</p>
+        </div>
+        <div class="food-item">
+            <h2 style="text-align: left;">Chicken Wings</h2>
+            <button class="add-to-cart-button" onclick="addToCart('Chicken Wings', 290.00)">Add to Cart</button>
+            <p style="text-align: left;">Price: Rs 290</p>
+        </div>
+    </div>
+
+    <h3>Shopping Cart</h3>
+    <ul id="cart">
+    </ul>
+
+    <h3>Total: Rs <span id="total">0.00</span></h3>
+
+    <script>
+        // Cart data
+        let cart = [];
+        let total = 0.00;
+
+        // Function to add items to the cart
+        function addToCart(itemName, itemPrice) {
+            // Check if the item is already in the cart
+            const existingItem = cart.find(item => item.name === itemName);
+            if (existingItem) {
+                existingItem.count++;
+            } else {
+                cart.push({ name: itemName, price: itemPrice, count: 1 });
+            }
+            total += itemPrice;
+            updateCartDisplay();
+        }
+
+        // Function to remove items from the cart
+        function removeFromCart(itemName) {
+            const existingItem = cart.find(item => item.name === itemName);
+            if (existingItem) {
+                existingItem.count--;
+                total -= existingItem.price;
+                if (existingItem.count === 0) {
+                    cart = cart.filter(item => item.name !== itemName);
+                }
+                updateCartDisplay();
+            }
+        }
+
+        // Function to update the cart display
+        function updateCartDisplay() {
+            const cartList = document.getElementById("cart");
+            const totalDisplay = document.getElementById("total");
+            cartList.innerHTML = "";
+            cart.forEach(item => {
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `
+                    <div class="item-controls">
+                        <button onclick="removeOneFromCart('${item.name}')">-</button>
+                        <span>${item.name} x ${item.count} - Rs ${(item.price * item.count).toFixed(2)}</span>
+                        <button onclick="addToCart('${item.name}', ${item.price})">+</button>
+                    </div>
+                    <button onclick="removeFromCart('${item.name}')">Remove All</button>
+                `;
+                cartList.appendChild(listItem);
+            });
+            totalDisplay.textContent = total.toFixed(2);
+        }
+
+        // Function to remove one item from the cart
+        function removeOneFromCart(itemName) {
+            const existingItem = cart.find(item => item.name === itemName);
+            if (existingItem && existingItem.count > 1) {
+                existingItem.count--;
+                total -= existingItem.price;
+                updateCartDisplay();
+            }
+        }
+    </script>
+    <a href="payment_bard.html" target="_blank" class="button">Check out</a>
+</body>
+</html>
