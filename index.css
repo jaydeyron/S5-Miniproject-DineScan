@@ -181,7 +181,7 @@
   font: 600 20px/130% "Inter", sans-serif;
   position: absolute;
   right: 24px;
-  top: 24px;
+  top: 44px;
 }
 .bigmacpic {
   width: 160px;
@@ -196,7 +196,7 @@
   font: 600 20px/130% "Inter", sans-serif;
   position: absolute;
   right: 24px;
-  top: 24px;
+  top: 44px;
 }
 .mcnuggetspic {
   width: 160px;
@@ -211,7 +211,7 @@
   font: 600 20px/130% "Inter", sans-serif;
   position: absolute;
   right: 24px;
-  top: 24px;
+  top: 44px;
 }
 .icedcoffeepic {
   width: 160px;
@@ -226,7 +226,7 @@
   font: 600 20px/130% "Inter", sans-serif;
   position: absolute;
   right: 24px;
-  top: 24px;
+  top: 44px;
 }
 .spicymcpic {
   width: 160px;
@@ -234,4 +234,89 @@
   left: 0px;
   bottom: -1px;
   top: 15px;
+}
+.add-to-cart-button {
+  color: #ffffff;
+  cursor: pointer;
+  background: #426b1f;
+  text-align: right;
+  border-radius: 18px;
+  font-size: 18px;
+  padding: 6px 10px 6px 10px;
+  position: absolute;
+  right: 24px;
+  top: 88px;
+  overflow: hidden;
+}
+.add-to-cart-button:hover {
+  background-color: #5a793e;
+  color: #ffffff;
+}
+.cart_text{
+  color: #000000;
+    text-align: left;
+    font: 500 32px/100% "Newsreader", sans-serif;
+    position: absolute;
+    left: 120px;
+    top: 1050px;
+}
+.total_amount{
+  color: #000000;
+    text-align: left;
+    font: 500 26px/100% "Newsreader", sans-serif;
+    position: absolute;
+}
+ul#cart {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+li {
+  flex: 1; /* Allow items to expand and wrap */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px; /* Adjust padding */
+  background-color: #f7f7f7;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  font-size: 14px;
+  margin: 6px; /* Add margin to separate items */
+  max-width: 120px; /* Limit the maximum width of each item */
+}
+
+li:hover {
+  background-color: #e0e0e0;
+}
+
+
+.cart_container {
+  position: absolute;
+}
+#cart {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+.checkout-button {
+  color: rgb(255, 255, 255);
+    font-size: 18px;
+    background: #426b1f;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    padding: 14px 23px 14px 23px;
+    width: 1040px;
+    height: 48px;
+    position: absolute;
+    overflow: hidden;
+}
+.checkout-button:hover {
+  background-color: #5a793e; /* Change to your preferred color */
+  color: #ffffff; /* Change to a contrasting color */
 }

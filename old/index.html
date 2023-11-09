@@ -1,66 +1,56 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="index.css">
-        <title>DineScan</title>
-    </head>
-    <body>
-    <div class="navigation">
-        <div class="logo">DineScan</div>
-        <a href="about-us.html"> <div class="aboutus_button">About us</div> </a>
-        <a href="admin-panel.html"><button type="button" class ="admin-button">Admin?</button></a>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <title>DineScan</title>
+</head>
+<body>
+    <div id="logo" style="padding-left: 30px;">
+        <h1>Dine<span style="color: red;">Scan</span></h1>
     </div>
-    <div class="page-heading">
-      <div class="restaurant_name">McDonalds</div>
-      <div class="divider"></div>
-    </div>
-    <div class="menu">
-        <div class="bigMac">
-          <div class="bigmac">Big Mac ®</div>
-          <div class="bigmacprice">Rs.399</div>
-          <img
-            class="bigmacpic"
-            src="resources/bigmac.jpeg"
-          />
-          <button class="add-to-cart-button" onclick="addToCart('Big Mac ®', 399.00)">Add to cart</button>
+    <a id="restaurant-login" href="admin-panel.html" class="button">Admin login</a>
+    <h1 style="padding-top: 20px; padding-left: 20px;">McDonald's</h1>
+    <div id="menu-container">
+        <div class="food-item">
+            <h2 style="text-align: left;">Pizza</h2>
+            <button class="add-to-cart-button" onclick="addToCart('Pizza', 200.00)">Add to Cart</button>
+            <p style="text-align: left;">Price: Rs 200</p>
         </div>
-        <div class="mcNuggets">
-          <div class="mcnuggets">Chicken McNuggets ®</div>
-          <div class="mcnuggetsprice">Rs.289</div>
-          <img
-            class="mcnuggetspic"
-            src="resources/mcnuggets.jpeg"
-          />
-          <button class="add-to-cart-button" onclick="addToCart('Chicken McNuggets ®', 289.00)">Add to cart</button>
+        <div class="food-item">
+            <h2 style="text-align: left;">Burger</h2>
+            <button class="add-to-cart-button" onclick="addToCart('Burger', 220.00)">Add to Cart</button>
+            <p style="text-align: left;">Price: Rs 220</p>
         </div>
-        <div class="icedCoffee">
-          <div class="icedcoffee">Iced Coffee</div>
-          <div class="icedcoffeeprice">Rs.249</div>
-          <img
-            class="icedcoffeepic"
-            src="resources/icedcoffee.jpeg"
-          />
-          <button class="add-to-cart-button" onclick="addToCart('Iced Coffee',249.00)">Add to cart</button>
+        <div class="food-item">
+            <h2 style="text-align: left;">Pasta</h2>
+            <button class="add-to-cart-button" onclick="addToCart('Pasta', 280.00)">Add to Cart</button>
+            <p style="text-align: left;">Price: Rs 280</p>
         </div>
-        <div class="spicyMc">
-          <div class="spicymc">Spicy McCrispy™</div>
-          <div class="spicymcprice">Rs.359</div>
-          <img
-            class="spicymcpic"
-            src="resources/mcspicy.jpeg"
-          />
-          <button class="add-to-cart-button" onclick="addToCart('Spicy McCrispy',359.00)">Add to cart</button>
+        <div class="food-item">
+            <h2 style="text-align: left;">Sandwich</h2>
+            <button class="add-to-cart-button" onclick="addToCart('Sandwich', 180.00)">Add to Cart</button>
+            <p style="text-align: left;">Price: Rs 180</p>
         </div>
-      </div>
-      <div class="cart_text">Cart
-      <div class="cart_container">
-        <ul id="cart"></ul>
-        <div class="total_amount">Total: Rs. <span id="total">0.00</span><br><br><a href="payment_gateway.html"><button type="button" class ="checkout-button">Check out</button></a>
+        <div class="food-item">
+            <h2 style="text-align: left;">Salad</h2>
+            <button class="add-to-cart-button" onclick="addToCart('Salad', 80.00)">Add to Cart</button>
+            <p style="text-align: left;">Price: Rs 80</p>
+        </div>
+        <div class="food-item">
+            <h2 style="text-align: left;">Chicken Wings</h2>
+            <button class="add-to-cart-button" onclick="addToCart('Chicken Wings', 290.00)">Add to Cart</button>
+            <p style="text-align: left;">Price: Rs 290</p>
         </div>
     </div>
-    </div>
-      <script>
+
+    <h3>Shopping Cart</h3>
+    <ul id="cart">
+    </ul>
+
+    <h3>Total: Rs <span id="total">0.00</span></h3>
+
+    <script>
         // Cart data
         let cart = [];
         let total = 0.00;
@@ -121,5 +111,6 @@
             }
         }
     </script>
-    </body>
+    <a href="payment_gateway.html" target="_blank" class="button">Check out</a>
+</body>
 </html>
