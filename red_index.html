@@ -1,127 +1,63 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="index.css">
-        <title>DineScan</title>
-    </head>
-    <body>
-    <div>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="red_index.css">
+    <title>DineScan</title>
+  </head>
+  <body>
     <div class="navigation">
-        <div class="logo">DineScan</div>
-        <a href="about-us.html"> <div class="aboutus_button">About us</div> </a>
-        <a href="login.html"><button type="button" class ="admin-button">Admin?</button></a>
+      <div class="logo">DineScan</div>
+      <div> <a class="aboutus-button" href="about_us.html">About us</a> </div>
+      <div> <a href="login.html"> <button type="button" class ="admin-button">Admin?</button> </a> </div>
     </div>
-    <div class="page-heading">
-      <div class="restaurant_name">McDonalds</div>
+    <div class="restaurant-heading">
+      <div class="restaurant-name">McDonald's</div>
       <div class="divider"></div>
     </div>
     <div class="menu">
-        <div class="bigMac">
-          <div class="bigmac">Big Mac ®</div>
-          <div class="bigmacprice">Rs.399</div>
-          <img
-            class="bigmacpic"
-            src="resources/bigmac.jpeg"
-          />
-          <button class="add-to-cart-button" onclick="addToCart('Big Mac ®', 399.00)">Add to cart</button>
-        </div>
-        <div class="mcNuggets">
-          <div class="mcnuggets">Chicken McNuggets ®</div>
-          <div class="mcnuggetsprice">Rs.289</div>
-          <img
-            class="mcnuggetspic"
-            src="resources/mcnuggets.jpeg"
-          />
-          <button class="add-to-cart-button" onclick="addToCart('Chicken McNuggets ®', 289.00)">Add to cart</button>
-        </div>
-        <div class="icedCoffee">
-          <div class="icedcoffee">Iced Coffee</div>
-          <div class="icedcoffeeprice">Rs.249</div>
-          <img
-            class="icedcoffeepic"
-            src="resources/icedcoffee.jpeg"
-          />
-          <button class="add-to-cart-button" onclick="addToCart('Iced Coffee',249.00)">Add to cart</button>
-        </div>
-        <div class="spicyMc">
-          <div class="spicymc">Spicy McCrispy™</div>
-          <div class="spicymcprice">Rs.359</div>
-          <img
-            class="spicymcpic"
-            src="resources/mcspicy.jpeg"
-          />
-          <button class="add-to-cart-button" onclick="addToCart('Spicy McCrispy',359.00)">Add to cart</button>
-        </div>
+      <div class="dish-box">
+        <img class="dish-pic" src="">
+        <div class="dish-name">a </div>
+        <div class="dish_price">1 </div>
+        <button class="add-to-cart-button" onclick="">Add to cart</button>
       </div>
-      <div class="cart_text">Cart
-      <div class="cart_container">
-        <ul id="cart"></ul>
-        <div class="total_amount">Total: Rs. <span id="total">0.00</span><br><br><a href="payment_gateway.html"><button type="button" class ="checkout-button">Check out</button></a>
-        </div>
+      <div class="dish-box">
+        <img class="dish-pic" src="">
+        <div class="dish-name">b </div>
+        <div class="dish_price">2 </div>
+        <button class="add-to-cart-button" onclick="">Add to cart</button>
+      </div>
+      <div class="dish-box">
+        <img class="dish-pic" src="">
+        <div class="dish-name">c </div>
+        <div class="dish_price">3 </div>
+        <button class="add-to-cart-button" onclick="">Add to cart</button>
+      </div>
+      <div class="dish-box">
+        <img class="dish-pic" src="">
+        <div class="dish-name">d </div>
+        <div class="dish_price">4 </div>
+        <button class="add-to-cart-button" onclick="">Add to cart</button>
+      </div>
+      <div class="dish-box">
+        <img class="dish-pic" src="">
+        <div class="dish-name">e </div>
+        <div class="dish_price">5 </div>
+        <button class="add-to-cart-button" onclick="">Add to cart</button>
+      </div>
+      <div class="dish-box">
+        <img class="dish-pic" src="">
+        <div class="dish-name">f </div>
+        <div class="dish_price">6 </div>
+        <button class="add-to-cart-button" onclick="">Add to cart</button>
+      </div>
     </div>
+    <div class="cart">
+      <span style="color: #000000;margin-left: 25px; font: 500 32px/100% 'Newsreader', sans-serif">Cart</span>
+      <ul id="cart-items"></ul>
+      <div class="cart-total">Total: Rs. <span id="total">0.00</span> </div>
+      <a><button type="button" class="checkout-button">Check out</div></a>
     </div>
-      <script>
-        // Cart data
-        let cart = [];
-        let total = 0.00;
-
-        // Function to add items to the cart
-        function addToCart(itemName, itemPrice) {
-            // Check if the item is already in the cart
-            const existingItem = cart.find(item => item.name === itemName);
-            if (existingItem) {
-                existingItem.count++;
-            } else {
-                cart.push({ name: itemName, price: itemPrice, count: 1 });
-            }
-            total += itemPrice;
-            updateCartDisplay();
-        }
-
-        // Function to remove items from the cart
-        function removeFromCart(itemName) {
-            const existingItem = cart.find(item => item.name === itemName);
-            if (existingItem) {
-                existingItem.count--;
-                total -= existingItem.price;
-                if (existingItem.count === 0) {
-                    cart = cart.filter(item => item.name !== itemName);
-                }
-                updateCartDisplay();
-            }
-        }
-
-        // Function to update the cart display
-        function updateCartDisplay() {
-            const cartList = document.getElementById("cart");
-            const totalDisplay = document.getElementById("total");
-            cartList.innerHTML = "";
-            cart.forEach(item => {
-                const listItem = document.createElement("li");
-                listItem.innerHTML = `
-                    <div class="item-controls">
-                        <button onclick="removeOneFromCart('${item.name}')">-</button>
-                        <span>${item.name} x ${item.count} - Rs ${(item.price * item.count).toFixed(2)}</span>
-                        <button onclick="addToCart('${item.name}', ${item.price})">+</button>
-                    </div>
-                    <button onclick="removeFromCart('${item.name}')">Remove All</button>
-                `;
-                cartList.appendChild(listItem);
-            });
-            totalDisplay.textContent = total.toFixed(2);
-        }
-
-        // Function to remove one item from the cart
-        function removeOneFromCart(itemName) {
-            const existingItem = cart.find(item => item.name === itemName);
-            if (existingItem && existingItem.count > 1) {
-                existingItem.count--;
-                total -= existingItem.price;
-                updateCartDisplay();
-            }
-        }
-    </script>
-  </div>
-    </body>
+  </body>
 </html>
