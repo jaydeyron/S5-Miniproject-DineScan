@@ -1,0 +1,322 @@
+.navigation {
+    height: 112px;
+    position: absolute;
+    right: 0px;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+}
+
+.logo {
+    color: #426b1f;
+    text-align: left;
+    font: 500 32px/100% "Newsreader", sans-serif;
+    position: absolute;
+    left: 96px;
+    top: 41px;
+  }
+
+  .aboutus_button:hover {
+    background-color: rgba(255, 255, 255, 0.778);
+    color: rgba(0, 0, 0, 0.620);
+}
+
+.aboutus_button {
+    color: #000000;
+    text-align: center;
+    font: 400 16px/130% "Inter", sans-serif;
+    position: absolute;
+    right: 274px;
+    top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+.admin-button:hover {
+    background-color: #5a793e; /* Change to your preferred color */
+    color: #ffffff; /* Change to a contrasting color */
+}
+
+.admin-button {
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    background: #426b1f;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    padding: 14px 23px 14px 23px;
+    width: 126px;
+    height: 48px;
+    position: absolute;
+    right: 96px;
+    top: 32px;
+    overflow: hidden;
+  }
+
+.bigMac {
+    background: #fafaf5;
+    border-radius: 24px;
+    border-style: solid;
+    border-color: #e6e6e6;
+    border-width: 2px;
+    height: 159px;
+    position: absolute;
+    right: 96px;
+    left: 96px;
+    top: 296px;
+    overflow: hidden;
+}
+
+.bigmac {
+  color: #000000;
+  text-align: left;
+  font: 600 20px/130% "Inter", sans-serif;
+  position: absolute;
+  left: 184px;
+  top: 24px;
+}
+
+.mcNuggets {
+  background: #fafaf5;
+  border-radius: 24px;
+  border-style: solid;
+  border-color: #e6e6e6;
+  border-width: 2px;
+  height: 159px;
+  position: absolute;
+  right: 96px;
+  left: 96px;
+  top: 483px;
+  overflow: hidden;
+}
+.mcnuggets {
+  color: #000000;
+  text-align: left;
+  font: 600 20px/130% "Inter", sans-serif;
+  position: absolute;
+  left: 184px;
+  top: 24px;
+}
+
+.icedCoffee {
+  background: #fafaf5;
+  border-radius: 24px;
+  border-style: solid;
+  border-color: #e6e6e6;
+  border-width: 2px;
+  height: 159px;
+  position: absolute;
+  right: 96px;
+  left: 96px;
+  top: 670px;
+  overflow: hidden;
+}
+.icedcoffee {
+  color: #000000;
+  text-align: left;
+  font: 600 20px/130% "Inter", sans-serif;
+  position: absolute;
+  left: 184px;
+  top: 24px;
+}
+
+.spicyMc {
+  background: #fafaf5;
+  border-radius: 24px;
+  border-style: solid;
+  border-color: #e6e6e6;
+  border-width: 2px;
+  height: 159px;
+  position: absolute;
+  right: 96px;
+  left: 96px;
+  top: 857px;
+  overflow: hidden;
+}
+.spicymc {
+  color: #000000;
+  text-align: left;
+  font: 600 20px/130% "Inter", sans-serif;
+  position: absolute;
+  left: 184px;
+  top: 24px;
+}
+.page-heading {
+  background: #ffffff;
+  height: 149px;
+  position: absolute;
+  right: 0px;
+  left: 0px;
+  top: 112px;
+  overflow: hidden;
+}
+.restaurant_name {
+  color: #000000;
+  text-align: left;
+  font: 400 64px/120% "Newsreader", sans-serif;
+  position: absolute;
+  left: 96px;
+  bottom: 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+.divider {
+  border-style: solid;
+  border-color: #e6e6e6;
+  border-width: 2px 0 0 0;
+  height: 0px;
+  position: absolute;
+  right: 96px;
+  left: 96px;
+  bottom: 0px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  transform-origin: 0 0;
+  transform: rotate(0deg) scale(1, 1);
+}
+.bigmacprice {
+  color: #000000;
+  text-align: right;
+  font: 600 20px/130% "Inter", sans-serif;
+  position: absolute;
+  right: 24px;
+  top: 44px;
+}
+.bigmacpic {
+  width: 160px;
+  position: absolute;
+  left: 0px;
+  bottom: -1px;
+  top: 15px;
+}
+.mcnuggetsprice {
+  color: #000000;
+  text-align: right;
+  font: 600 20px/130% "Inter", sans-serif;
+  position: absolute;
+  right: 24px;
+  top: 44px;
+}
+.mcnuggetspic {
+  width: 160px;
+  position: absolute;
+  left: 0px;
+  bottom: -1px;
+  top: 15px;
+}
+.icedcoffeeprice {
+  color: #000000;
+  text-align: right;
+  font: 600 20px/130% "Inter", sans-serif;
+  position: absolute;
+  right: 24px;
+  top: 44px;
+}
+.icedcoffeepic {
+  width: 160px;
+  position: absolute;
+  left: 0px;
+  bottom: -1px;
+  top: 15px;
+}
+.spicymcprice {
+  color: #000000;
+  text-align: right;
+  font: 600 20px/130% "Inter", sans-serif;
+  position: absolute;
+  right: 24px;
+  top: 44px;
+}
+.spicymcpic {
+  width: 160px;
+  position: absolute;
+  left: 0px;
+  bottom: -1px;
+  top: 15px;
+}
+.add-to-cart-button {
+  color: #ffffff;
+  cursor: pointer;
+  background: #426b1f;
+  text-align: right;
+  border-radius: 18px;
+  font-size: 18px;
+  padding: 6px 10px 6px 10px;
+  position: absolute;
+  right: 24px;
+  top: 88px;
+  overflow: hidden;
+}
+.add-to-cart-button:hover {
+  background-color: #5a793e;
+  color: #ffffff;
+}
+.cart_text{
+  color: #000000;
+    text-align: left;
+    font: 500 32px/100% "Newsreader", sans-serif;
+    position: absolute;
+    left: 120px;
+    top: 1050px;
+}
+.total_amount{
+  color: #000000;
+    text-align: left;
+    font: 500 26px/100% "Newsreader", sans-serif;
+    position: absolute;
+}
+ul#cart {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+li {
+  flex: 1; /* Allow items to expand and wrap */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px; /* Adjust padding */
+  background-color: #f7f7f7;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  font-size: 14px;
+  margin: 6px; /* Add margin to separate items */
+  max-width: 120px; /* Limit the maximum width of each item */
+}
+
+li:hover {
+  background-color: #e0e0e0;
+}
+
+
+.cart_container {
+  position: absolute;
+}
+#cart {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+.checkout-button {
+  color: rgb(255, 255, 255);
+    font-size: 18px;
+    background: #426b1f;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    padding: 14px 23px 14px 23px;
+    width: 1040px;
+    height: 48px;
+    position: absolute;
+    overflow: hidden;
+}
+.checkout-button:hover {
+  background-color: #5a793e; /* Change to your preferred color */
+  color: #ffffff; /* Change to a contrasting color */
+}
