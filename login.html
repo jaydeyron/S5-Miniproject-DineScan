@@ -4,43 +4,66 @@
     <title>Admin Login</title>
     <style>
         body {
-            font-family: 'Proxima Nova', sans-serif;
-            background-color: #f2f2f2;
+            font-family: 'Arial', sans-serif;
+            background-color: #fff;
             text-align: center;
+            color: #333;
+            margin: 0;
+            padding: 0;
         }
         .login-container {
-            background-color: #fff;
+            background-color: #f2f2f2;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            max-width: 260px;
-            margin: 0 auto;
+            max-width: 300px;
+            margin: 80px auto;
             padding: 30px;
+            box-sizing: border-box;
         }
         h2 {
-            color: #333;
+            font: 500 32px/100% "Newsreader", sans-serif;
+            color: #426b1f;
+            margin-bottom: 20px;
         }
         label {
+            font: 500 16px/100% "Newsreader", sans-serif;
             display: block;
-            margin: 10px 0;
+            margin: 15px 0 5px;
+            color: #333;
+            text-align: center; /* Centering the text captions */
         }
         input[type="text"],
         input[type="password"] {
-            width: 88%;
+            width: 100%;
             padding: 10px;
-            margin: 5px 0;
+            margin: 5px 0 15px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            box-sizing: border-box;
+            text-align: center; /* Centering the text within input fields */
         }
         input[type="submit"] {
-            background-color: #007BFF;
+            background-color: #426b1f;
             color: #fff;
-            padding: 5px 20px;
+            padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
         input[type="submit"]:hover {
-            background-color: #0056b3;
+            background-color: #315017;
+        }
+        p {
+            margin-top: 20px;
+            color: #333;
+        }
+        a {
+            color: #426b1f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            color: #315017;
         }
     </style>
 </head>
