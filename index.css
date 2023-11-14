@@ -33,7 +33,7 @@
 .admin-button:hover {
   color: #ffffff;
   background-color: #5a793e;
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
 }
 
 .admin-button {
@@ -128,6 +128,11 @@
   overflow: hidden;
 }
 
+.add-to-cart-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
 .add-to-cart-button:hover {
   color: #ffffff;
   background-color: #5a793e;
@@ -142,15 +147,30 @@
 
 #cart-items {
   list-style-type: none;
-  text-align: left;
   display: flex;
+  flex-direction: column;
 }
 
-.cart-total {
+.sticky-cart {
+  border-style: solid;
+  border-color: #e6e6e6;
+  border-radius: 50px;
+  border-width: 2px;
   color: #000000;
-  margin-left: 20px;
+  background-color: #f7f7ee;
+  padding-top: 30px;
+  margin-left: 60px;
+  margin-right: 60px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-left: 80px;
+  padding-right: 80px;
   text-align: left;
-  font: 500 26px/100% "Newsreader", sans-serif;
+  animation: slide-in 0.5s ease-in-out; 
+  font: 520 24px/100% "Open Sans", sans-serif;
+  position:sticky;
+  position:-webkit-sticky;
+  bottom:0;
 }
 
 .checkout-button {
@@ -171,6 +191,50 @@
   color: #ffffff;
   background-color: #5a793e;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.plus-button {
+  color: rgb(255, 255, 255);
+  margin: 20px;
+  font-size: 20px;
+  text-align: center;
+  background: #426b1f;
+  border-style: inherit;
+  border-radius: 24px;
+  border-color: #5a793e;
+  cursor: pointer;
+  padding: 10px 15px 10px 15px;
+  overflow: hidden;
+}
+
+.plus-button:hover {
+  color: #ffffff;
+  background-color: #5a793e;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.minus-button {
+  color: rgb(255, 255, 255);
+  margin: 20px;
+  font-size: 20px;
+  text-align: center;
+  background: #426b1f;
+  border-style: inherit;
+  border-radius: 24px;
+  border-color: #5a793e;
+  cursor: pointer;
+  padding: 10px 18px 10px 18px;
+  overflow: hidden;
+}
+
+.minus-button:hover {
+  color: #ffffff;
+  background-color: #5a793e;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.list-items{
+  font: 350 20px/100% "Newsreader", sans-serif;
 }
 
 @media (max-width: 768px) {

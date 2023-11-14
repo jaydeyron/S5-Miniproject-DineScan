@@ -12,7 +12,6 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-    # Create a cursor within the route function
     mycurs = mysql.connection.cursor()
     mycurs.execute('SELECT * FROM dishes')
     a = mycurs.fetchall()
