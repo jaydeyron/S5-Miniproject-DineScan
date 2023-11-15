@@ -1,20 +1,6 @@
 CREATE DATABASE IF NOT EXISTS dinescan;
 USE dinescan;
 
-CREATE TABLE IF NOT EXISTS customer (
-    customer_id INT AUTO_INCREMENT PRIMARY KEY,
-    phone_number INT,
-    name VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS orders (
-    order_id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT,
-    order_date DATE NOT NULL,
-    order_total DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
-);
-
 CREATE TABLE IF NOT EXISTS dishes (
     dish_id INT AUTO_INCREMENT PRIMARY KEY,
     dish_name VARCHAR(255) NOT NULL,
@@ -22,6 +8,31 @@ CREATE TABLE IF NOT EXISTS dishes (
     vegetarian BOOLEAN NOT NULL,
     available BOOLEAN NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS payment (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    payment_type VARCHAR(255) NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS customer (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    payment_id INT NOT NULL,
+    customer_name VARCHAR(255) NOT NULL,
+    phone_num DECIMAL(10, 2) NOT NULL,
+    order_date INT NOT NULL,
+    table_num INT NOT NULL,
+    FOREIGN KEY (payment_id) REFERENCES payment(payment_id)
+);
+
+CREATE TABLE IF NOT EXISTS kitchen (
+    order_id INT NOT NULL,
+    dish_id INT NOT NULL,
+    quantity INT NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES customer(order_id),
+    FOREIGN KEY (dish_id) REFERENCES dishes(dish_id)
+);
+
 
 -- sample data
 INSERT INTO dishes (dish_name, price, vegetarian, available)
@@ -34,12 +45,4 @@ VALUES
     ('Caesar Salad', 8.75, 1, 1);
 --
 
-CREATE TABLE IF NOT EXISTS order_items (
-    order_item_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT,
-    dish_id INT,
-    quantity INT NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id),
-    FOREIGN KEY (dish_id) REFERENCES dishes(dish_id)
-);
 
