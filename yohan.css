@@ -1,0 +1,230 @@
+body {
+  font-family: 'Newsreader', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.navigation {
+  background-color: #4CAF50;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.nav-link {
+  margin: 0 15px;
+  text-decoration: none;
+  color: white;
+}
+
+.admin-button {
+  background-color: #45a049;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.restaurant {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.restaurant-name {
+  font-size: 36px;
+  color: #333;
+}
+
+.divider {
+  border: 2px solid #4CAF50;
+  margin: 10px 0;
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px;
+}
+
+.dish-box {
+  border: 1px solid #ddd;
+  padding: 15px;
+  text-align: center;
+  max-width: 250px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.dish-box:hover {
+  transform: scale(1.05);
+}
+
+.dish-pic {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dish-name {
+  font-size: 18px;
+  margin: 10px 0;
+  color: #333;
+}
+
+.price-cart {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dish-price {
+  font-size: 16px;
+  color: #4CAF50;
+}
+
+.add-to-cart-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cart {
+  margin: 20px;
+}
+
+.cart-title {
+  color: #333;
+  font-size: 32px;
+}
+
+.sticky-cart {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: red;
+  padding: 15px;
+  text-align: center;
+  color: white;
+}
+
+.checkout-button {
+  background-color: #45a049;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  cursor: pointer;
+  font-size: 16px;
+}
+  
+  .checkout-button {
+    color: rgb(255, 255, 255);
+    margin: 20px;
+    font-size: 20px;
+    text-align: center;
+    background: #426b1f;
+    border-style: inherit;
+    border-radius: 24px;
+    border-color: #5a793e;
+    cursor: pointer;
+    padding: 10px 20px 10px 20px;
+    overflow: hidden;
+  }
+  
+  .checkout-button:hover {
+    color: #ffffff;
+    background-color: #5a793e;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+  }
+  
+  .plus-button {
+    color: rgb(255, 255, 255);
+    margin: 20px;
+    font-size: 20px;
+    text-align: center;
+    background: #426b1f;
+    border-style: inherit;
+    border-radius: 24px;
+    border-color: #5a793e;
+    cursor: pointer;
+    padding: 10px 15px 10px 15px;
+    overflow: hidden;
+  }
+  
+  .plus-button:hover {
+    color: #ffffff;
+    background-color: #5a793e;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+  }
+  
+  .minus-button {
+    color: rgb(255, 255, 255);
+    margin: 20px;
+    font-size: 20px;
+    text-align: center;
+    background: #426b1f;
+    border-style: inherit;
+    border-radius: 24px;
+    border-color: #5a793e;
+    cursor: pointer;
+    padding: 10px 18px 10px 18px;
+    overflow: hidden;
+  }
+  
+  .minus-button:hover {
+    color: #ffffff;
+    background-color: #5a793e;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+  }
+  
+  .list-items{
+    font: 350 20px/100% "Newsreader", sans-serif;
+  }
+  
+  @media (max-width: 768px) {
+    .navigation {
+      margin: 20px;
+    }
+  
+    .dish-box {
+      margin: 10px;
+    }
+  
+    .dish-name, .dish-price {
+      padding: 10px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .dish-box {
+      flex-direction: column;
+    }
+  
+    .dish-pic {
+      width: 100px;
+    }
+  
+    .dish-name, .dish-price {
+      padding: 5px;
+    }
+  
+    .add-to-cart-button {
+      font-size: 14px;
+    }
+  }
+  
