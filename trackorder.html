@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Order</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    #track-order {
+      text-align: center;
+    }
+
+    #track-order form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #track-order label {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    #track-order input {
+      padding: 8px;
+      margin-bottom: 20px;
+      width: 200px;
+      font-size: 16px;
+    }
+
+    #track-order button {
+      background-color: #426b1f; /* Blue background for the button */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 10px; /* Rounded corners */
+      font-size: 16px;
+    }
+
+    #track-order button:hover {
+      background-color: #5a793e; /* Darker blue on hover */
+    }
+
+    #order-status {
+      text-align: center;
+      display: none;
+    }
+
+    #order-status p {
+      font-size: 18px;
+      color: #426b1f; /* Blue color for success message */
+      font-weight: bold;
+    }
+
+    #order-status button {
+      background-color: #426b1f; /* Blue background for the button */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 10px; /* Rounded corners */
+      font-size: 16px;
+    }
+
+    #order-status button:hover {
+      background-color: #5a793e; /* Darker blue on hover */
+    }
+  </style>
+</head>
+<body>
+  <div id="track-order">
+    <form id="order-form">
+      <label for="order-number">Enter your Order Number:</label>
+      <input type="text" id="order-number" placeholder="Order Number" required>
+      <label for="email">Enter your Email:</label>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <button type="button" onclick="checkOrderStatus()">Track Order</button>
+    </form>
+  </div>
+
+  <div id="order-status">
+    <p>Your order is on its way!</p>
+    <button onclick="trackAnotherOrder()">Track Another Order</button>
+  </div>
+
+  <script>
+    function checkOrderStatus() {
+      // Implement logic to check order status based on order number and email
+      // For demonstration purposes, let's assume the order is always successful
+      document.getElementById('track-order').style.display = 'none';
+      document.getElementById('order-status').style.display = 'block';
+    }
+
+    function trackAnotherOrder() {
+      document.getElementById('order-form').reset();
+      document.getElementById('order-status').style.display = 'none';
+      document.getElementById('track-order').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
