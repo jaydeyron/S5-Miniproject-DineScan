@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
-app.secret_key = 'hailhitler'
+# app.secret_key = 'hailhitler'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 app.config['MYSQL_HOST'] = 'localhost'
@@ -14,19 +14,23 @@ mysql = MySQL(app)
 
 @app.route("/") 
 def index(): 
-   return render_template("home.html")
+   return render_template('home.html')
 
 @app.route("/login") 
-def index(): 
+def login(): 
    return render_template("login.html")
+
+@app.route("/menu") 
+def menu(): 
+   return render_template("index.html")
 
 @app.route('/demo')
 def demo():
-    mycurs = mysql.connection.cursor()
-    mycurs.execute('SELECT * FROM dishes')
-    a = mycurs.fetchall()
-    mycurs.close()
+    with mysql.connection.cursor() as mycurs:
+        mycurs.execute('SELECT * FROM dishes')
+        a = mycurs.fetchall()
     return str(a)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
