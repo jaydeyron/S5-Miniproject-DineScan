@@ -7,19 +7,23 @@ const app = express();
 const port = 3000;
 
 // set up a static directory for storing assets
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'src/views')));
 
 // defines a route to the index
-app.get(['/','/index'], (req, res) => {
+app.get(['/index'], (req, res) => {
   // path.join creates a platform-independent path to the HTML file
-  res.sendFile(path.join(__dirname, 'public', 'home.html'));
+  res.sendFile(path.join(__dirname, 'src/views', 'home.html'));
 });
+
+app.get('/', (req, res) => {
+  res.redirect('/index');
+})
 
 // defines a route to the menu
 app.get(['/menu/:table_num','/menu'], (req, res) => {
   // :table_num dictates the number of the table from the QR code
   const tableNumber = req.params.table_num;
-  const menuPath = path.join(__dirname, 'public', 'menu.html');
+  const menuPath = path.join(__dirname, 'src/views', 'menu.html');
   res.sendFile(menuPath);
 });
 
