@@ -53,8 +53,8 @@ CREATE TABLE kitchen (
 -------------------
 
 -- Inserting into Users table
-INSERT INTO users (username, password, role) VALUES
-  ('jay', '188502', 'admin'),
-  ('yohanjose', '69420', 'staff');
+-- INSERT INTO users (username, password, role) VALUES
+--   ('jay', '188502', 'admin'),
+--   ('yohanjose', '69420', 'staff');
 
 

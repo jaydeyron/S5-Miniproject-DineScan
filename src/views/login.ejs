@@ -87,11 +87,11 @@
 
             <input type="submit" value="Login">
         </form>
-        <p>Not an admin? <a href="index.html">Go back to the homepage</a></p>
+        <p>Not an admin? <a href="/home">Go back to the homepage</a></p>
     </div>
 
     <script>
-        function validatePassword(event) {
+        function validatePassword() {
             // Get the password input element
             var passwordInput = document.getElementById('password');
             // Get the entered password
@@ -104,9 +104,7 @@
             if (!passwordPattern.test(password)) {
                 // If not, display an error message
                 document.getElementById('passwordError').innerHTML = 'Password must start with a letter and contain only small case letters, numbers, or underscores. No spaces allowed.';
-                // Prevent form submission
-                event.preventDefault();
-                return false;
+                return false; // Prevent form submission
             } else {
                 // Clear any previous error message
                 document.getElementById('passwordError').innerHTML = '';
@@ -114,7 +112,5 @@
             }
         }
     </script>
-    
-    
 </body>
 </html>
