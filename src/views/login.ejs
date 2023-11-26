@@ -7,66 +7,86 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #fff;
-            text-align: center;
-            color: #333;
+            background: #16161d;
+            color: #ffffff;
             margin: 0;
             padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
         }
+
         .login-container {
-            background-color: #f2f2f2;
+            background: #ffffff;
             border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            max-width: 300px;
-            margin: 80px auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            max-width: 350px;
             padding: 30px;
             box-sizing: border-box;
+            transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.5s ease;
+            transform-origin: center;
         }
+
         h2 {
-            font: 500 32px/100% "Newsreader", sans-serif;
-            color: #426b1f;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-size: 28px;
+            color: #16161d;
             margin-bottom: 20px;
+            transition: color 0.5s ease;
         }
+
         label {
-            font: 500 16px/100% "Newsreader", sans-serif;
             display: block;
             margin: 15px 0 5px;
-            color: #333;
-            text-align: center; /* Centering the text captions */
+            color: #555;
+            transition: color 0.5s ease;
         }
+
         input[type="text"],
         input[type="password"] {
             width: 100%;
-            padding: 10px;
+            padding: 16px; /* Increased input text size */
             margin: 5px 0 15px;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
             box-sizing: border-box;
-            text-align: center; /* Centering the text within input fields */
+            transition: border-color 0.5s ease;
         }
+
         input[type="submit"] {
-            background-color: #426b1f;
-            color: #fff;
-            padding: 10px 20px;
+            background: #3498db;
+            color: #ffffff;
+            padding: 12px;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background 0.5s ease;
         }
+
         input[type="submit"]:hover {
-            background-color: #315017;
+            background: #2980b9;
         }
+
         p {
             margin-top: 20px;
-            color: #333;
+            color: #555;
+            transition: color 0.5s ease;
         }
+
         a {
-            color: #426b1f;
+            color: #3498db;
             text-decoration: none;
             font-weight: bold;
+            transition: color 0.5s ease;
         }
+
         a:hover {
-            color: #315017;
+            color: #2980b9;
         }
+
         #passwordError {
             color: #FF0000;
             margin-top: 5px;
@@ -78,10 +98,10 @@
         <h2>Admin Login</h2>
         <form class="admin-login" id="adminLoginForm" onsubmit="return validatePassword()" method="post">
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username" name="username" required style="font-size: medium">
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" required style="font-size: medium">
             <!-- Display error message for password -->
             <div id="passwordError"></div>
 

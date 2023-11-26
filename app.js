@@ -85,9 +85,15 @@ app.post('/login', (req, res) => {
       res.status(500).send('Internal Server Error');
     } else {
       // Check if there is a matching user
-      if (results.length > 0) {
+      if (results.length > 0 ) {
         // Authentication successful
-        res.redirect('/admin-dashboard');
+        const role = results[0].role;
+        if ( role == 'admin'){
+          res.redirect('admin-dashboard');
+        }
+        else if ( role == 'staff'){
+          res.redirect('staff-dashboard');
+        }
       } else {
         // Authentication failed
         res.status(401).send('Unauthorized');
