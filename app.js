@@ -8,6 +8,7 @@ const dotenv = require('dotenv');
 // define constants
 const app = express();
 const port = 3000;
+var temp;
 // load the environment variables from .env file
 dotenv.config();
 
@@ -31,9 +32,8 @@ connection.connect((err) => {
   console.log('Connected to MySQL server');
 });
 
-// middleware to parse incoming JSON requests
+// middleware to parse incoming JSON requests and parse the incoming form data
 app.use(bodyParser.json());
-// middleware to parse incoming form data
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -42,17 +42,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/views'));
 
-// defines a route to the index
+// defines a route to index
 app.get('/index', (req, res) => {
-  // path.join creates a platform-independent path to the HTML file
   res.render('home');
 });
 
+// redirects a route to home towards index
 app.get(['/', '/home'], (req, res) => {
   res.redirect('/index');
 })
 
-// defines a route to the menu
+// defines a route to menu
 app.get(['/menu/:table_num','/menu'], (req, res) => {
   // :table_num dictates the number of the table from the QR code
   const tableNumber = req.params.table_num;
@@ -61,12 +61,12 @@ app.get(['/menu/:table_num','/menu'], (req, res) => {
 
 // defines a route to the payment gateway
 app.get('/payment', (req, res) => {
-  res.render('payment_gateway');
+  res.render('payment-gateway');
 });
 
 // defines a route to the payment successful page
 app.get('/payment-succesful', (req, res) => {
-  res.render('payment_successful');
+  res.render('payment-successful');
 });
 
 app.get('/login', (req, res) => {
@@ -77,7 +77,7 @@ app.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  // Query the database to check if the provided credentials are valid
+  // query the database to check if the provided credentials are valid
   const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
   connection.query(query, [username, password], (error, results, fields) => {
     if (error) {
@@ -86,6 +86,7 @@ app.post('/login', (req, res) => {
     } else {
       // Check if there is a matching user
       if (results.length > 0 ) {
+        temp = username;
         // Authentication successful
         const role = results[0].role;
         if ( role == 'admin'){
@@ -96,15 +97,20 @@ app.post('/login', (req, res) => {
         }
       } else {
         // Authentication failed
-        res.status(401).send('Unauthorized');
+        res.redirect('/login');
       }
     }
   });
 });
 
 app.get('/admin-dashboard', (req, res) => {
-  // Render the admin dashboard view or perform other actions
+  // render the admin dashboard view
   res.render('admin-dashboard');
+});
+
+app.get('/staff-dashboard', (req, res) => {
+  // Render the staff dashboard view
+  res.render('staff-dashboard');
 });
 
 // response if the server is successfully running
