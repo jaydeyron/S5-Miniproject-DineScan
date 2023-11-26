@@ -8,7 +8,6 @@ const dotenv = require('dotenv');
 // define constants
 const app = express();
 const port = 3000;
-var temp;
 // load the environment variables from .env file
 dotenv.config();
 

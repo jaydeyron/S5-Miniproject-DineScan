@@ -14938,7 +14938,7 @@ a.close.disabled {
   .modal-dialog-centered {
     min-height: calc(100% - 60px);
   }
-  .modal-dialog-centered::before {
+  .modal-dialog-centered::before 
     height: calc(100vh - 60px);
   }
   .modal-sm {
