@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,14 +96,14 @@
 <body>
     <div class="login-container">
         <h2>Admin Login</h2>
-        <form class="admin-login" id="adminLoginForm" onsubmit="return validatePassword()" method="post">
+        <form class="admin-login" id="adminLoginForm" onsubmit="return validateUsername()" method="post">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required style="font-size: medium">
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required style="font-size: medium">
             <!-- Display error message for password -->
-            <div id="passwordError"></div>
+            <div id="usernameError"></div>
 
             <input type="submit" value="Login" style="font-size: medium;">
         </form>
@@ -111,23 +111,23 @@
     </div>
 
     <script>
-        function validatePassword() {
+        function validateUsername() {
             // Get the password input element
-            var passwordInput = document.getElementById('password');
+            var userInput = document.getElementById('username');
             // Get the entered password
-            var password = passwordInput.value;
+            var username = userInput.value;
     
             // Define the regex pattern for the password
-            var passwordPattern = /^[a-z][a-z0-9_]*$/;
+            var usernamePattern = /^[A-Za-z][A-Za-z0-9_]*$/;
     
             // Check if the password matches the pattern
-            if (!passwordPattern.test(password)) {
+            if (!usernamePattern.test(username)) {
                 // If not, display an error message
-                document.getElementById('passwordError').innerHTML = 'Password must start with a letter and contain only small case letters, numbers, or underscores. No spaces allowed.';
+                document.getElementById('usernameError').innerHTML = 'Username does not match our records';
                 return false; // Prevent form submission
             } else {
                 // Clear any previous error message
-                document.getElementById('passwordError').innerHTML = '';
+                document.getElementById('usernameError').innerHTML = '';
                 return true; // Allow form submission
             }
         }

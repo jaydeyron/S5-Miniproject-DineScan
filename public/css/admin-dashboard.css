@@ -1,6 +1,27 @@
-.navbar {
-    transition: width 0.25s ease, background 0.25s ease;
-    -webkit-transition: width 0.25s ease, background 0.25s ease;
-    -moz-transition: width 0.25s ease, background 0.25s ease;
-    -ms-transition: width 0.25s ease, background 0.25s ease;
-  }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  margin: 0;
+}
+
+.menu {
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-items {
+  list-style-type: none;
+  color: white;
+}
+
+.menu-list-items {
+  list-style-type: none;
+  color: white;
+}
+
+.settings-items {
+  list-style-type: none;
+  color: white;
+}
+

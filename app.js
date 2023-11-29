@@ -85,17 +85,19 @@ app.post('/login', (req, res) => {
     } else {
       // Check if there is a matching user
       if (results.length > 0 ) {
-        temp = username;
         // Authentication successful
         const role = results[0].role;
         if ( role == 'admin'){
+          console.log('Authentication successful: Redirected to admin dashboard')
           res.redirect('admin-dashboard');
         }
         else if ( role == 'staff'){
+          console.log('Authentication successful: Redirected to staff dashboard')
           res.redirect('staff-dashboard');
         }
       } else {
         // Authentication failed
+        console.log('Authentication error')
         res.redirect('/login');
       }
     }
