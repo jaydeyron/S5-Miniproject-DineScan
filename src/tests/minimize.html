@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            height: 100vh;
+        }
+
+        #menu {
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+            height: 30vh; /* Set the height to 30% of the viewport height */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        #logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #minimize-toggle {
+            cursor: pointer;
+            font-size: 20px;
+            padding: 10px;
+            color: #fff;
+            background-color: #2980b9;
+            border: none;
+        }
+
+        #content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #ecf0f1;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        li {
+            padding: 10px;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+    <title>Vertical Menu Example</title>
+</head>
+<body>
+
+    <div id="menu">
+        <div id="logo">Your Logo</div>
+        <button id="minimize-toggle">&#9776; Toggle</button>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </div>
+
+    <div id="content">
+        <!-- Your main content goes here -->
+        <h1>Main Content</h1>
+        <p>Your webpage content goes here.</p>
+    </div>
+
+</body>
+</html>

@@ -1,41 +1,82 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/admin-dashboard.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <title>Admin Dashboard</title>
   </head>
   <body>
-      <div class="menu">
-        <div class="logo">
-          <ul class="logo-items">
-            <li>DineScan</li>
-          </ul>
-        </div>
-        <div class="menu-list">
-          <ul class="menu-list-items">
-            <li>Overview</li>
-            <li>Analytics</li>
-            <li>Report</li>
-            <li>Transactions</li>
-            <li>Orders</li>
-            <li>Access control</li>
-          </ul>
-        </div>
-        <div class="settings">
-          <ul class="settings-items">
-            <li>Settings</li>
-          </ul>
-        </div>
-      </div>
-      <div class="body-main">
-        <div class="profile">
-          profile
-        </div>
-        <div class="main-body">
-          main body
+    <section id="main-body">
+      <ul class="menu-items">
+        <li id="overview" class="menu-item selected" style="opacity: 1;"><span class="material-symbols-outlined">grid_view</span><a href="#"><span class="list-item">Overview</span></a></li>
+        <li id="access-control" class="menu-item"><span class="material-symbols-outlined">accessibility</span><a href="#"><span class="list-item">Access control</span></a></li>
+        <li id="transactions" class="menu-item"><span class="material-symbols-outlined">receipt_long</span><a href="#"><span class="list-item">Transactions</span></a></li>
+        <li id="orders" class="menu-item"><span class="material-symbols-outlined">orders</span><a href="#"><span class="list-item">Orders</span></a></li>
+        <li id="report" class="menu-item"><span class="material-symbols-outlined">lab_profile</span><a href="#"><span class="list-item">Report</span></a></li>
+        <span class="divider"></span>
+        <li id="settings" class="menu-item"><span class="material-symbols-outlined">Settings</span><a href="#"><span class="list-item">Settings</span></a></li>
+      </ul>
+      <div class="border-content">
+        <div class="content">
+          <div class="task-bar">
+            <div class="welcome">
+              <span style="font-size: 32px; font-weight: 500;">Welcome back, User</span><br>
+              <span style="font-size: 15px;">Here's whats happening at the store today</span>
+            </div>
+            <div class="profile">
+              <img id="profile-img" src="/public/images/profile.png" alt="profile image">
+              <button id="profile-button">Emma Watson</button>
+              <span class="material-symbols-outlined" style="color:black;">arrow_drop_down</span>
+            </div>
+          </div>
+          <div class="main-content">
+
+          </div>
         </div>
       </div>
+    </section>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const borderContent = document.querySelector('.content');
+        borderContent.style.opacity = '1';
+      });
+      
+      document.addEventListener('DOMContentLoaded', function () {
+        const menuItems = document.querySelectorAll('.menu-item');
+    
+        function handleClick(event) {
+          // Remove 'selected' class from all menu items
+          menuItems.forEach(item => {
+            item.classList.remove('selected');
+            item.style.opacity = '0.5'; // Reset opacity for all items
+          });
+    
+          // Add 'selected' class to the clicked menu item
+          event.currentTarget.classList.add('selected');
+          event.currentTarget.style.opacity = '1';
+        }
+    
+        menuItems.forEach(item => {
+          item.addEventListener('click', handleClick);
+    
+          item.addEventListener('mouseover', function () {
+            if (!item.classList.contains('selected')) {
+              item.style.opacity = '1';
+            }
+          });
+    
+          item.addEventListener('mouseout', function () {
+            if (!item.classList.contains('selected')) {
+              item.style.opacity = '0.5';
+            }
+          });
+        });
+      });
+    </script>
   </body>
 </html>
