@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 
 // define constants
 const app = express();
-const port = 3000;
+const port = 3001;
 // load the environment variables from .env file
 dotenv.config();
 
@@ -46,10 +46,39 @@ app.get('/index', (req, res) => {
   res.render('home');
 });
 
+
 // redirects a route to home towards index
 app.get(['/', '/home'], (req, res) => {
   res.redirect('/index');
 })
+
+app.get('/admin-dashboard', (req, res) => {
+  res.redirect('/admin-dashboard/overview');
+})
+
+app.get('/admin-dashboard/overview', (req, res) => {
+  res.render('admin-dashboard/overview.ejs');
+});
+
+app.get('/admin-dashboard/access-control', (req, res) => {
+  res.render('admin-dashboard/access-control.ejs');
+});
+
+app.get('/admin-dashboard/orders', (req, res) => {
+  res.render('admin-dashboard/orders.ejs');
+});
+
+app.get('/admin-dashboard/report', (req, res) => {
+  res.render('admin-dashboard/report.ejs');
+});
+
+app.get('/admin-dashboard/settings', (req, res) => {
+  res.render('admin-dashboard/settings.ejs');
+});
+
+app.get('/admin-dashboard/transactions', (req, res) => {
+  res.render('admin-dashboard/transactions.ejs');
+});
 
 // defines a route to menu
 app.get(['/menu/:table_num','/menu'], (req, res) => {
