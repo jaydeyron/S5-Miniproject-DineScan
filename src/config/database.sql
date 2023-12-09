@@ -1,3 +1,5 @@
+-- database design --
+
 CREATE DATABASE IF NOT EXISTS dinescan;
 USE dinescan;
 
@@ -6,6 +8,10 @@ CREATE TABLE IF NOT EXISTS users (
   username VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
   role ENUM('admin', 'staff') NOT NULL,
+  profile_photo_url VARCHAR(255),
+  first_name VARCHAR(255),
+  last_name VARCHAR(255),
+  email VARCHAR(255),
   UNIQUE KEY unique_username_password (username, password)
 );
 
@@ -41,3 +47,4 @@ CREATE TABLE IF NOT EXISTS kitchen (
   FOREIGN KEY (dish_id) REFERENCES dishes(dish_id)
 );
 
+COMMIT;

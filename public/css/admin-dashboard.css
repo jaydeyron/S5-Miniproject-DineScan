@@ -1,3 +1,5 @@
+/* Common CSS for Dashboard */
+
 body {
   font-family: 'Roboto', sans-serif;
   display: flex;
@@ -16,7 +18,7 @@ a {
 
 .border-content {
   background-color: white;
-  flex-grow: 1;
+  flex: 1;
   border: 25px solid #172233;
   border-radius: 40px;
   box-sizing: border-box;

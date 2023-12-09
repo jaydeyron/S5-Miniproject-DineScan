@@ -15,6 +15,7 @@
       <ul class="menu-items">
         <li id="overview" class="menu-item selected"><span class="material-symbols-outlined">grid_view</span><a href="/admin-dashboard/overview"><span class="list-item">Overview</span></a></li>
         <li id="access-control" class="menu-item" style="opacity: 1;"><span class="material-symbols-outlined">accessibility</span><a href="/admin-dashboard/access-control"><span class="list-item">Access control</span></a></li>
+        <li id="data-management" class="menu-item"><span class="material-symbols-outlined">database</span><a href="/admin-dashboard/data-management"><span class="list-item">Data management</span></a></li>
         <li id="transactions" class="menu-item"><span class="material-symbols-outlined">receipt_long</span><a href="/admin-dashboard/transactions"><span class="list-item">Transactions</span></a></li>
         <li id="orders" class="menu-item"><span class="material-symbols-outlined">orders</span><a href="/admin-dashboard/orders"><span class="list-item">Orders</span></a></li>
         <li id="report" class="menu-item"><span class="material-symbols-outlined">lab_profile</span><a href="/admin-dashboard/report"><span class="list-item">Report</span></a></li>
@@ -25,12 +26,12 @@
         <div class="content">
           <div class="task-bar">
             <div class="welcome">
-              <span style="font-size: 32px; font-weight: 500;">Welcome back, Mike</span><br>
+              <span style="font-size: 32px; font-weight: 500;">Welcome back, <%= username %></span><br>
               <span style="font-size: 15px;">Here's whats happening at the store today</span>
             </div>
             <div class="profile">
               <img id="profile-img" src="/public/images/default.jpg" alt="profile image">
-              <button id="profile-button">Mike Oxlong</button>
+              <button id="profile-button"><%= username %></button>
               <span class="material-symbols-outlined" style="color:black;">arrow_drop_down</span>
               <div class="dropdown-content" id="dropdown-content">
                 <a href="#">
@@ -39,7 +40,7 @@
                     <span class="list-item">Profile</span>
                   </div>
                 </a>
-                <a href="#">
+                <a href="/logout">
                   <div class="logout-container">
                     <span class="material-symbols-outlined">logout</span>
                     <span class="list-item">Logout</span>
