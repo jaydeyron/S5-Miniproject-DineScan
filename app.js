@@ -14,7 +14,7 @@ const port = 3000;
 dotenv.config();
 
 // create a connection to the MySQL server
-const connection = mysql2.createConnection({
+const pool = mysql2.createPool({
   host: process.env.DBMS_host,
   user: process.env.DBMS_user,
   password: process.env.DBMS_password,
@@ -26,13 +26,14 @@ const connection = mysql2.createConnection({
   },
 });
 
-
-connection.connect((err) => {
+pool.getConnection((err, connection) => {
   if (err) {
-    console.error("Error connecting to MySQL:", err);
+    console.error("Error connecting to MySQL pool:", err);
     return;
   }
-  console.log("Connected to MySQL server");
+  console.log("Connected to MySQL pool");
+  // Release the connection back to the pool
+  connection.release();
 });
 
 // session middleware
@@ -84,27 +85,39 @@ app.get("/admin-dashboard/overview", isAuthenticated, (req, res) => {
 });
 
 app.get('/api/payment-data', isAuthenticated, (req, res) => {
-  // Query to fetch payment data from the "payment" table
-  const query = 'SELECT payment_type, SUM(total_amount) AS total_amount FROM payment GROUP BY payment_type';
-  
-  connection.query(query, (error, results, fields) => {
+  // Acquire a connection from the pool
+  pool.getConnection((error, connection) => {
     if (error) {
-      console.error('Error querying database:', error);
+      console.error('Error acquiring a connection from the pool:', error);
       res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      // Extract relevant data for the chart
-      const labels = results.map(item => item.payment_type);
-      const data = results.map(item => item.total_amount);
-
-      // Send the payment data as JSON
-      res.json({
-        labels: labels,
-        datasets: [{
-          data: data,
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        }],
-      });
+      return;
     }
+
+    // Query to fetch payment data from the "payment" table
+    const query = 'SELECT payment_type, SUM(total_amount) AS total_amount FROM payment GROUP BY payment_type';
+
+    connection.query(query, (error, results, fields) => {
+      // Release the connection back to the pool
+      connection.release();
+
+      if (error) {
+        console.error('Error querying database:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        // Extract relevant data for the chart
+        const labels = results.map(item => item.payment_type);
+        const data = results.map(item => item.total_amount);
+
+        // Send the payment data as JSON
+        res.json({
+          labels: labels,
+          datasets: [{
+            data: data,
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+          }],
+        });
+      }
+    });
   });
 });
 
@@ -125,7 +138,21 @@ app.get("/admin-dashboard/settings", isAuthenticated, (req, res) => {
 });
 
 app.get("/admin-dashboard/data-management", isAuthenticated, (req, res) => {
-  res.render("admin-dashboard/data-management.ejs", { username: req.session.username });
+  pool.getConnection((error, connection) => {
+    const query = "SELECT * FROM dishes";
+    connection.query(query, (error, results, fields) => {
+      // Release the connection back to the pool
+      connection.release();
+
+      if (error) {
+        console.error("Error querying database:", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        // Render the EJS template with the retrieved dish details
+        res.render("admin-dashboard/data-management.ejs", { username: req.session.username, dishes: results });
+      }
+    });
+  })
 });
 
 app.get("/admin-dashboard/transactions", isAuthenticated, (req, res) => {
@@ -157,37 +184,45 @@ app.post("/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  // query the database to check if the provided credentials are valid
-  const query = "SELECT * FROM users WHERE username = ? AND password = ?";
-  connection.query(query, [username, password], (error, results, fields) => {
+  // Acquire a connection from the pool
+  pool.getConnection((error, connection) => {
     if (error) {
-      console.error("Error querying database:", error);
+      console.error('Error acquiring a connection from the pool:', error);
       res.status(500).send("Internal Server Error");
-    } else {
-      // Check if there is a matching user
-      if (results.length > 0) {
-        // Authentication successful
-        req.session.authenticated = true;
-        req.session.username = username;
-
-        const role = results[0].role;
-        if (role == "admin") {
-          console.log(
-            "Authentication successful: Redirected to admin dashboard"
-          );
-          res.redirect("admin-dashboard");
-        } else if (role == "staff") {
-          console.log(
-            "Authentication successful: Redirected to staff dashboard"
-          );
-          res.redirect("staff-dashboard");
-        }
-      } else {
-        // Authentication failed
-        console.log("Authentication error");
-        res.redirect("/login");
-      }
+      return;
     }
+
+    // Query the database to check if the provided credentials are valid
+    const query = "SELECT * FROM users WHERE username = ? AND password = ?";
+    connection.query(query, [username, password], (error, results, fields) => {
+      // Release the connection back to the pool
+      connection.release();
+
+      if (error) {
+        console.error("Error querying database:", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        // Check if there is a matching user
+        if (results.length > 0) {
+          // Authentication successful
+          req.session.authenticated = true;
+          req.session.username = username;
+
+          const role = results[0].role;
+          if (role == "admin") {
+            console.log("Authentication successful: Redirected to admin dashboard");
+            res.redirect("admin-dashboard");
+          } else if (role == "staff") {
+            console.log("Authentication successful: Redirected to staff dashboard");
+            res.redirect("staff-dashboard");
+          }
+        } else {
+          // Authentication failed
+          console.log("Authentication error");
+          res.redirect("/login");
+        }
+      }
+    });
   });
 });
 

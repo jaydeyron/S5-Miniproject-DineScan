@@ -114,4 +114,13 @@ VALUES
   (2, 3, 2),
   (3, 4, 1);
 
+
+
+INSERT INTO dishes (dish_name, price, vegetarian, available) VALUES
+('Butter Chicken', 300.00, false, 25),
+('Paneer Tikka', 200.00, true, 20),
+('Dal Tadka', 150.00, true, 18),
+('Chicken Biryani', 350.00, false, 15),
+('Vegetable Biryani', 250.00, true, 22);
+
 COMMIT;

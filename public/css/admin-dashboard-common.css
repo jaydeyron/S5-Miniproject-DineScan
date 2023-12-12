@@ -1,0 +1,108 @@
+
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    height: 100vh;
+    background-color: #172233;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#menu-division {
+    padding-top: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#logo {
+    height: 25px;
+    width: 25px;
+}
+
+#navigation-menu {
+    flex: 1;
+    padding-top: 100px;
+}
+
+#menu-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item {
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    opacity: 0.5;
+    font-size: small;
+    transition: opacity 0.3s ease-in-out, transform 0.2s ease-in-out; 
+}
+
+.menu-item:hover {
+    opacity: 1;
+    transform: scale(1.008);
+}
+
+.divider {
+    padding: 18px;
+    opacity: 0.15;
+    width: 80%;
+    border-bottom: 1px solid white;
+}
+
+#content-division {
+    background-color: white;
+    border: 25px solid #172233;
+    border-radius: 40px;
+    box-sizing: border-box;
+    padding: 40px;
+    flex: 1;
+}
+
+.title-division {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+#title {
+    display: flex;
+    flex-direction: column;
+}
+
+#profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+#profile-pic {
+    height: 30px;
+    width: 30px;
+    padding-right: 12px;
+}
+
+#profile-name {
+    font-size: small;
+    font-weight: 400;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 250,'GRAD' 0, 'opsz' 100;
+    border: none;
+    border-radius: 6px;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+}
