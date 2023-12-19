@@ -4,7 +4,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const mysql2 = require("mysql2");
 const dotenv = require("dotenv");
-const session = require('express-session');
+const session = require("express-session");
 
 // define constants
 const app = express();
@@ -153,6 +153,21 @@ app.get("/admin-dashboard/data-management", isAuthenticated, (req, res) => {
       }
     });
   })
+});
+
+app.delete('/api/remove-dish/:dishId', isAuthenticated, (req, res) => {
+  const dishId = req.params.dishId;
+
+  // Perform the removal logic here, for example:
+  pool.query('DELETE FROM dishes WHERE dish_id = ?', [dishId], (error, results) => {
+    if (error) {
+      console.error('Error removing dish:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      // Send a success response
+      res.json({ message: 'Dish removed successfully' });
+    }
+  });
 });
 
 app.get("/admin-dashboard/transactions", isAuthenticated, (req, res) => {

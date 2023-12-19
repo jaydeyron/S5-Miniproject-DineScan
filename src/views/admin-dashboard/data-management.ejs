@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">    
         <link rel="stylesheet" href="/css/admin-dashboard-common.css">
+        <link rel="stylesheet" href="/css/data-management.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +31,7 @@
             <div class="title-division">
                 <div id="title">
                     <span style="font-size: 32px; font-weight: 500;">Manage the database</span><br>
-                    <span style="font-size: 15px;">Add, remove or edit the dishes</span>
+                    <span style="font-size: 15px;">Add, remove or update the dishes</span>
                 </div>
                 <button id="profile">
                     <img id="profile-pic" src="/images/default.jpg">
@@ -39,17 +40,65 @@
                 </button>
             </div>
             <div id="main-division">
-                <ul>
-                    <% dishes.forEach(dish => { %>
-                      <li>
-                        <strong><%= dish.dish_name %></strong>
-                        - Price: <%= dish.price %>
-                        - Vegetarian: <%= dish.vegetarian ? 'Yes' : 'No' %>
-                        - Available: <%= dish.available %>
-                      </li>
-                    <% }); %>
-                  </ul>                  
+                <button class="table-buttons">Add dish</button>
+                <table id="dish-table">
+                    <thead>
+                        <tr>
+                            <td colspan="5" style=" border-top: 1px solid #172233;"></td>
+                        </tr>
+                        <tr>
+                            <th>Dish Name</th>
+                            <th>Price</th>
+                            <th>Veg/Non-Veg</th>
+                            <th>Available</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style=" border-bottom: 1px solid #172233;"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% dishes.forEach(dish => { %>
+                            <tr>
+                                <td style="font-size: 18px;"> <%= dish.dish_name %></td>
+                                <td>Rs. <%= dish.price %></td>
+                                <td><%= dish.vegetarian ? 'Veg' : 'Non-Veg' %></td>
+                                <td><%= dish.available %></td>
+                                <td>
+                                    <button class="table-buttons" onclick="openUpdateDishModal('<%= dish.id %>')">Update</button>
+                                    <span style="padding: 5px;"></span>
+                                    <button class="table-buttons" onclick="confirmRemove('<%= dish.dish_name %>','<%= dish.dish_id %>')">Remove</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="table-divider" colspan="5"></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
             </div>
         </div>
+        <div id="updateDishModal" class="modal">
+            <div class="modal-content">
+              <span class="close" onclick="closeUpdateDishModal()">&times;</span>
+              <h2>Update Dish Details</h2>
+              <form id="updateDishForm">
+                <label for="dishName">Dish Name:</label>
+                <input type="text" id="dishName" name="dishName" required>
+          
+                <label for="price">Price:</label>
+                <input type="text" id="price" name="price" required>
+          
+                <label for="vegetarian">Vegetarian (true/false):</label>
+                <input type="text" id="vegetarian" name="vegetarian" required>
+          
+                <label for="available">Available (true/false):</label>
+                <input type="text" id="available" name="available" required>
+          
+                <button type="button" onclick="submitUpdateDishForm('<%= dishes.dish_id %>')">Update</button>
+              </form>
+            </div>
+          </div>  
+        <script src="/js/data-management.js"></script>
     </body>
 </html>

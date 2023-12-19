@@ -62,6 +62,7 @@ a {
     background-color: white;
     border: 25px solid #172233;
     border-radius: 40px;
+    overflow: auto;
     box-sizing: border-box;
     padding: 40px;
     flex: 1;
