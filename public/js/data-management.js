@@ -1,47 +1,72 @@
 function confirmRemove(dishName, dishId) {
     var confirmation = confirm("Are you sure you want to remove the dish '" + dishName + "'?");
     if (confirmation) {
-        fetch(`/api/remove-dish/${dishId}`, {
-            method: 'DELETE',
-          })
-            .then(response => response.json())
-            .then(data => {
-              console.log(data);
-              alert(data.message);
-            })
-            .catch(error => {
-              console.error('Error removing dish:', error);
-            })
-            .finally(() => {
-              setTimeout(() => {
-                location.reload();
-              }, 200);
-            });          
+      fetch(`/api/remove-dish/${dishId}`, {
+        method: 'DELETE',
+      })
+      .then(response => {
+        if (response.ok) {
+          // If the request was successful, redirect
+          window.location.href = "/admin-dashboard/data-management";
+        } else {
+          console.error('Error removing dish:', response.statusText);
+        }
+      })
+      .catch(error => {
+        console.error('Error removing dish:', error);
+      });
     } else {
       // Handle the case where the user canceled the action
     }
   }
   
 // Add this JavaScript code to your existing script or in a new script file
-const updateDishModal = document.getElementById('updateDishModal');
+const updateForm = document.getElementById('update-form');
+const addForm = document.getElementById('add-form');
+const menuDiv = document.getElementById('menu-division');
+const contentDiv = document.getElementById('content-division');
 
-function openUpdateDishModal() {
-  updateDishModal.style.display = 'block';
+function openUpdateForm(dishId, dishName, price, vegetarian, available) {
+  const dishHeading = document.getElementById('update-form-header');
+  const formAction = document.getElementById('updateDishForm');
+  dishHeading.textContent = `Update Dish: ${dishName}`;
+
+  // Use backticks (`) to create a template literal
+  formAction.action = `/api/update-dish/${dishId}`;
+  console.log(formAction.action);
+
+  // Populate the form fields with the existing data
+  document.getElementById('update-dishName').value = dishName;
+  document.getElementById('update-price').value = price;
+  document.getElementById('update-vegetarian').value = vegetarian;
+  document.getElementById('update-available').value = available;
+
+  updateForm.style.display = 'flex';
+  menuDiv.style.filter = 'blur(5px)';
+  contentDiv.style.filter = 'blur(5px)';
 }
 
-function closeUpdateDishModal() {
-  updateDishModal.style.display = 'none';
+function closeUpdateForm() {
+    updateForm.style.display = 'none';
+    menuDiv.style.filter = 'none';
+    contentDiv.style.filter = 'none';
 }
 
-function submitUpdateDishForm(dishId) {
-  const dishName = document.getElementById('dishName').value;
-  const price = document.getElementById('price').value;
-  const vegetarian = document.getElementById('vegetarian').value;
-  const available = document.getElementById('available').value;
+function openAddForm() {
+    const dishHeading = document.getElementById('add-form-header');
+    const formAction = document.getElementById('addDishForm');
 
-  // Perform the update logic here using fetch or other methods
-  console.log(`Updating dish ${dishId} with new details: ${dishName}, ${price}, ${vegetarian}, ${available}`);
+    formAction.action = `/api/add-dish`;
+    console.log(formAction.action);
 
-  // Close the modal after updating
-  closeUpdateDishModal();
+    dishHeading.textContent = `Add New Dish:`;
+    addForm.style.display = 'flex';
+    menuDiv.style.filter = 'blur(5px)';
+    contentDiv.style.filter = 'blur(5px)';
+}
+
+function closeAddForm() {
+    addForm.style.display = 'none';
+    menuDiv.style.filter = 'none';
+    contentDiv.style.filter = 'none';
 }

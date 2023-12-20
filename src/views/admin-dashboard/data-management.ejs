@@ -3,8 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-        <link rel="stylesheet" href="/css/admin-dashboard-common.css">
-        <link rel="stylesheet" href="/css/data-management.css">
+        <link rel="stylesheet" href="/css/admin-dashboard/admin-dashboard-common.css">
+        <link rel="stylesheet" href="/css/admin-dashboard/data-management.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,13 +40,14 @@
                 </button>
             </div>
             <div id="main-division">
-                <button class="table-buttons">Add dish</button>
+                <button class="table-buttons" onclick="openAddForm()">Add dish</button>
                 <table id="dish-table">
                     <thead>
                         <tr>
-                            <td colspan="5" style=" border-top: 1px solid #172233;"></td>
+                            <td colspan="6" style=" border-top: 1px solid #172233;"></td>
                         </tr>
                         <tr>
+                            <th></th>
                             <th>Dish Name</th>
                             <th>Price</th>
                             <th>Veg/Non-Veg</th>
@@ -54,51 +55,73 @@
                             <th></th>
                         </tr>
                         <tr>
-                            <td colspan="5" style=" border-bottom: 1px solid #172233;"></td>
+                            <td colspan="6" style=" border-bottom: 1px solid #172233;"></td>
                         </tr>
                     </thead>
                     <tbody>
-                        <% dishes.forEach(dish => { %>
-                            <tr>
+                        <% let counter = 1; dishes.forEach(dish => { %>
+                            <tr id="dishRow_<%= dish.dish_id %>">
+                                <td style="font-size: 18px;"> <%= counter++ %></td>
                                 <td style="font-size: 18px;"> <%= dish.dish_name %></td>
                                 <td>Rs. <%= dish.price %></td>
                                 <td><%= dish.vegetarian ? 'Veg' : 'Non-Veg' %></td>
                                 <td><%= dish.available %></td>
                                 <td>
-                                    <button class="table-buttons" onclick="openUpdateDishModal('<%= dish.id %>')">Update</button>
+                                    <button class="table-buttons" onclick="openUpdateForm('<%= dish.dish_id %>','<%= dish.dish_name %>','<%= dish.price %>','<%= dish.vegetarian %>','<%= dish.available %>')">Update</button>
                                     <span style="padding: 5px;"></span>
                                     <button class="table-buttons" onclick="confirmRemove('<%= dish.dish_name %>','<%= dish.dish_id %>')">Remove</button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="table-divider" colspan="5"></td>
+                            <tr id="divider_<%= dish.dish_id %>">
+                                <td class="table-divider" colspan="6"></td>
                             </tr>
                         <% }); %>
                     </tbody>
                 </table>
             </div>
         </div>
-        <div id="updateDishModal" class="modal">
-            <div class="modal-content">
-              <span class="close" onclick="closeUpdateDishModal()">&times;</span>
-              <h2>Update Dish Details</h2>
-              <form id="updateDishForm">
-                <label for="dishName">Dish Name:</label>
-                <input type="text" id="dishName" name="dishName" required>
-          
-                <label for="price">Price:</label>
-                <input type="text" id="price" name="price" required>
-          
-                <label for="vegetarian">Vegetarian (true/false):</label>
-                <input type="text" id="vegetarian" name="vegetarian" required>
-          
-                <label for="available">Available (true/false):</label>
-                <input type="text" id="available" name="available" required>
-          
-                <button type="button" onclick="submitUpdateDishForm('<%= dishes.dish_id %>')">Update</button>
-              </form>
+        <div id="update-form">
+            <div class="form-content">
+                <span class="close" onclick="closeUpdateForm()">&times;</span>
+                <span id="update-form-header" style="font-size: 26px;"></span>
+                <form id="updateDishForm" method="post">
+                    <label for="dishName">Dish Name :</label>
+                    <input type="text" id="update-dishName" name="dishName" required>
+              
+                    <label for="price">Price :</label>
+                    <input type="text" id="update-price" name="price" required>
+              
+                    <label for="vegetarian">Vegetarian (true/false) :</label>
+                    <input type="text" id="update-vegetarian" name="vegetarian" required>
+              
+                    <label for="available">Available :</label>
+                    <input type="text" id="update-available" name="available" required>
+              
+                    <button type="submit">Update</button>
+                </form>
             </div>
-          </div>  
+        </div>
+        <div id="add-form">
+            <div class="form-content">
+                <span class="close" onclick="closeAddForm()">&times;</span>
+                <span id="add-form-header" style="font-size: 26px;"></span>
+                <form id="addDishForm" method="post">
+                    <label for="dishName">Dish Name :</label>
+                    <input type="text" id="add-dishName" name="dishName" required>
+              
+                    <label for="price">Price :</label>
+                    <input type="text" id="add-price" name="price" required>
+              
+                    <label for="vegetarian">Vegetarian (true/false) :</label>
+                    <input type="text" id="add-vegetarian" name="vegetarian" required>
+              
+                    <label for="available">Available :</label>
+                    <input type="text" id="add-available" name="available" required>
+              
+                    <button type="submit">Add</button>
+                </form>
+            </div>
+        </div>
         <script src="/js/data-management.js"></script>
     </body>
 </html>

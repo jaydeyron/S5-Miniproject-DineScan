@@ -170,6 +170,44 @@ app.delete('/api/remove-dish/:dishId', isAuthenticated, (req, res) => {
   });
 });
 
+// Add this route to handle dish updates
+app.post('/api/update-dish/:dishId', isAuthenticated, (req, res) => {
+  const dishId = req.params.dishId;
+  const { dishName, price, vegetarian, available } = req.body;
+
+  // Perform the update logic here
+  pool.query(
+    'UPDATE dishes SET dish_name = ?, price = ?, vegetarian = ?, available = ? WHERE dish_id = ?',
+    [dishName, price, vegetarian, available, dishId],
+    (error, results) => {
+      if (error) {
+        console.error('Error updating dish:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        // Send a success response
+        res.redirect("/admin-dashboard/data-management")
+      }
+    }
+  );
+});
+
+app.post('/api/add-dish',isAuthenticated, (req, res) => {
+  const { dishName, price, vegetarian, available } = req.body;
+  pool.query(
+    'INSERT INTO dishes (dish_name, price, vegetarian, available) VALUES (?, ?, ?, ?)',
+    [dishName, price, vegetarian, available],
+    (error, results) => {
+      if (error) {
+        console.error('Error adding new dish:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        // Send a success response
+        res.redirect("/admin-dashboard/data-management")
+      }
+    }
+  );
+})
+
 app.get("/admin-dashboard/transactions", isAuthenticated, (req, res) => {
   res.render("admin-dashboard/transactions.ejs", { username: req.session.username });
 });
