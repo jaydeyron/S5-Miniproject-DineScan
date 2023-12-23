@@ -21,12 +21,11 @@ function confirmRemove(dishName, dishId) {
   }
   
 // Add this JavaScript code to your existing script or in a new script file
-const updateForm = document.getElementById('update-form');
-const addForm = document.getElementById('add-form');
-const menuDiv = document.getElementById('menu-division');
-const contentDiv = document.getElementById('content-division');
 
 function openUpdateForm(dishId, dishName, price, vegetarian, available) {
+  const updateForm = document.getElementById('update-form');
+  const menuDiv = document.getElementById('menu-division');
+  const contentDiv = document.getElementById('content-division');
   const dishHeading = document.getElementById('update-form-header');
   const formAction = document.getElementById('updateDishForm');
   dishHeading.textContent = `Update Dish: ${dishName}`;
@@ -47,12 +46,18 @@ function openUpdateForm(dishId, dishName, price, vegetarian, available) {
 }
 
 function closeUpdateForm() {
+  const updateForm = document.getElementById('update-form');
+  const menuDiv = document.getElementById('menu-division');
+  const contentDiv = document.getElementById('content-division');
     updateForm.style.display = 'none';
     menuDiv.style.filter = 'none';
     contentDiv.style.filter = 'none';
 }
 
 function openAddForm() {
+  const addForm = document.getElementById('add-form');
+  const menuDiv = document.getElementById('menu-division');
+  const contentDiv = document.getElementById('content-division');
     const dishHeading = document.getElementById('add-form-header');
     const formAction = document.getElementById('addDishForm');
 
@@ -66,6 +71,9 @@ function openAddForm() {
 }
 
 function closeAddForm() {
+  const addForm = document.getElementById('add-form');
+  const menuDiv = document.getElementById('menu-division');
+  const contentDiv = document.getElementById('content-division');
     addForm.style.display = 'none';
     menuDiv.style.filter = 'none';
     contentDiv.style.filter = 'none';

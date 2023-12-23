@@ -3,7 +3,7 @@
     padding-top: 22px;
 }
 
-.table-buttons {
+.add-buttons {
     display: inline-block;
     padding: 8px 20px;
     font-size: 15px;
@@ -20,9 +20,19 @@
     }
   }
 
-#dish-table {
+#users-table {
     width: 100%;
     padding-top: 25px;
+}
+
+.anonymous {
+    filter: blur(4px); /* Adjust the blur amount as needed */
+    transition: filter 0.3s ease; /* Add a smooth transition effect */
+    cursor: pointer; /* Change cursor to pointer on hover */
+  }
+  
+.anonymous:hover {
+    filter: blur(0); /* Remove blur on hover */
 }
 
 .form-content {
@@ -32,6 +42,7 @@
     width: 80%;
     padding: 50px;
     border-radius: 8px;
+    overflow: auto;
 }
 
 #update-form, #add-form {
@@ -42,10 +53,9 @@
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
 }
 
-  #update-form label, #add-form label {
+#update-form label, #add-form label {
     font-size: large;
     font-weight: 200;
     padding-top: 25px;
@@ -92,26 +102,27 @@
     }
   }
 
-#updateDishForm,
-#addDishForm {
-    display: flex;
-    flex-direction: column;
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  transition: color 0.2s;
-  &:hover,
-  &:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
+  #updateUserForm,
+  #addUserForm {
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
   }
-}
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    transition: color 0.2s;
+    &:hover,
+    &:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    }
+  }
 
-td:last-child {
-  text-align: right;
+  td:last-child {
+    text-align: right;
 }

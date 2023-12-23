@@ -86,6 +86,7 @@ a {
     border: none;
     background: none;
     cursor: pointer;
+    padding-bottom: 15px;
 }
 
 #profile-pic {
@@ -95,8 +96,60 @@ a {
 }
 
 #profile-name {
-    font-size: small;
+    font-size: 15px;
     font-weight: 400;
+}
+
+#dropdown-content {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    background-color: white;
+    width: 125px;
+    z-index: 10;
+    position: absolute;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 6px 0 rgba(0,0,0,0.1);
+}
+
+#dropdown-content a {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 12px;
+    color: black;
+    font-weight: 500;
+    font-size: 15px;
+    border: 0;
+}
+
+#dropdown-content a:hover {
+    background-color: #f5f5f5; /* Bootstrap hover background color */
+    color: #212529; /* Bootstrap hover text color */
+}
+
+.dropdown-item-text {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+th {
+    text-align: left;
+    opacity: 0.8;
+    font-size: 18px;
+    font-weight: 500px;
+}
+
+td {
+    padding-top: 20px;
+}
+
+.table-divider {
+    opacity: 0.15;
+    border-bottom: 1px solid black;
 }
 
 .material-symbols-outlined {

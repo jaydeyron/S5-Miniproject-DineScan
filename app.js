@@ -122,7 +122,71 @@ app.get('/api/payment-data', isAuthenticated, (req, res) => {
 });
 
 app.get("/admin-dashboard/access-control", isAuthenticated, (req, res) => {
-  res.render("admin-dashboard/access-control.ejs", { username: req.session.username });
+  // Acquire a connection from the pool
+  pool.getConnection((error, connection) => {
+    if (error) {
+      console.error("Error acquiring a connection from the pool:", error);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    // Query to fetch all staff members from the "users" table
+    const query = 'SELECT * FROM users WHERE role = "staff"';
+
+    connection.query(query, (error, results, fields) => {
+      // Release the connection back to the pool
+      connection.release();
+
+      if (error) {
+        console.error("Error querying database:", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        // Render the EJS template with the retrieved staff details
+        res.render("admin-dashboard/access-control.ejs", {
+          username: req.session.username,
+          staff: results, // Pass the staff data to the template
+        });
+      }
+    });
+  });
+});
+
+app.post('/api/add-user', isAuthenticated, (req, res) => {
+  const { firstName, lastName, role, username, password } = req.body;
+  // Perform the add user logic here
+  pool.query(
+    'INSERT INTO users (first_name, last_name, role, username, password) VALUES (?, ?, ?, ?, ?)',
+    [firstName, lastName, role, username, password],
+    (error, results) => {
+      if (error) {
+        console.error('Error adding new user:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        // Redirect to the access-control route after adding the user
+        res.redirect("/admin-dashboard/access-control");
+      }
+    }
+  );
+});
+
+app.post('/api/update-user/:userId', isAuthenticated, (req, res) => {
+  const userId = req.params.userId;
+  const { firstName, lastName, role, username, password } = req.body;
+
+  // Perform the update logic here
+  pool.query(
+    'UPDATE users SET first_name = ?, last_name = ?, role = ?, username = ?, password = ? WHERE user_id = ?',
+    [firstName, lastName, role, username, password, userId],
+    (error, results) => {
+      if (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        // Send a success response
+        res.redirect("/admin-dashboard/access-control");
+      }
+    }
+  );
 });
 
 app.get("/admin-dashboard/orders", isAuthenticated, (req, res) => {
@@ -208,9 +272,54 @@ app.post('/api/add-dish',isAuthenticated, (req, res) => {
   );
 })
 
-app.get("/admin-dashboard/transactions", isAuthenticated, (req, res) => {
-  res.render("admin-dashboard/transactions.ejs", { username: req.session.username });
+app.get("/admin-dashboard/transactions", (req, res) => {
+  res.redirect("/admin-dashboard/transactions/1");
 });
+
+app.get("/admin-dashboard/transactions/:page", isAuthenticated, (req, res) => {
+  
+  const itemsPerPage = 10;
+  const page = req.params.page || 1;
+  const offset = (page - 1) * itemsPerPage;
+
+  const query = `
+    SELECT payment.payment_id, customer.customer_name, payment.card_number, payment.card_expiration_date, payment.card_holder_name, payment.upi_id, payment.payment_type, 
+           payment.total_amount, payment.payment_date, payment.transaction_status
+    FROM payment
+    JOIN customer ON payment.payment_id = customer.payment_id
+    ORDER BY payment.payment_date DESC
+    LIMIT ${itemsPerPage} OFFSET ${offset};
+  `;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      console.error('Error fetching transactions:', error);
+      res.status(500).send('Internal Server Error');
+    } else {
+      // Calculate the total number of pages
+      const queryCount = 'SELECT COUNT(*) AS total FROM payment;';
+      pool.query(queryCount, (error, resultCount) => {
+        if (error) {
+          console.error('Error counting transactions:', error);
+          res.status(500).send('Internal Server Error');
+        } else {
+          const totalTransactions = resultCount[0].total;
+          const totalPages = Math.ceil(totalTransactions / itemsPerPage);
+
+          res.render("admin-dashboard/transactions.ejs", { 
+            username: req.session.username, 
+            transactions: results, 
+            currentPage: parseInt(page), 
+            totalPages: totalPages 
+          });
+        }
+      });
+    }
+  });
+});
+
+
+
 
 // defines a route to menu
 app.get(["/menu/:table_num", "/menu"], (req, res) => {

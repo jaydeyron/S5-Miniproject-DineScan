@@ -1,0 +1,39 @@
+
+#main-division {
+    padding-top: 22px;
+}
+
+#transactions-table {
+    width: 100%;
+    padding-top: 25px;
+}
+
+#pagination {
+    padding-top: 22px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  #pagination a {
+    color: #2a3d56;
+    padding: 8px 14px;
+    text-decoration: none;
+    font-size: 16px;
+    border: 1px solid #2a3d56;
+    margin: 0 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  #pagination a.active {
+    background-color: #2a3d56;
+    color: white;
+  }
+  
+  #pagination a:hover:not(.active) {
+    background-color: #2a3d56;
+    color: white;
+  }
+  
