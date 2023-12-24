@@ -85,38 +85,39 @@ VALUES
   ('UPI', 1200.00, '2023-02-14 18:05:00', 'Failed', NULL, NULL, NULL, 'elijah.moore@upi');
 
 -- Sample data for customer table
-INSERT INTO customer (payment_id, customer_name, phone_num, email, order_date, table_num)
+INSERT INTO customer (payment_id, customer_name, phone_num, email, order_date, table_num, order_status)
 VALUES
-  (1, 'Michael Smith', 9876543210, 'michael.smith@example.com', '2023-01-15', 5),
-  (2, 'Jennifer Johnson', 8765432109, 'jennifer.johnson@example.com', '2023-01-16', 8),
-  (3, 'Christopher Davis', 7654321098, 'christopher.davis@example.com', '2023-01-17', 12),
-  (4, 'Amanda Wilson', 6543210987, 'amanda.wilson@example.com', '2023-01-18', 3),
-  (5, 'Brian Miller', 5432109876, 'brian.miller@example.com', '2023-01-19', 7),
-  (6, 'Emily Taylor', 4321098765, 'emily.taylor@example.com', '2023-01-20', 10),
-  (7, 'Matthew Brown', 3210987654, 'matthew.brown@example.com', '2023-01-21', 2),
-  (8, 'Sophia Garcia', 2109876543, 'sophia.garcia@example.com', '2023-01-22', 6),
-  (9, 'Daniel Martinez', 1098765432, 'daniel.martinez@example.com', '2023-01-23', 9),
-  (10, 'Olivia White', 9876543210, 'olivia.white@example.com', '2023-01-24', 4),
-  (11, 'James Taylor', 8765432109, 'james.taylor@example.com', '2023-01-25', 8),
-  (12, 'Mia Davis', 7654321098, 'mia.davis@example.com', '2023-01-26', 11),
-  (13, 'Ethan Wilson', 6543210987, 'ethan.wilson@example.com', '2023-01-27', 5),
-  (14, 'Ava Miller', 5432109876, 'ava.miller@example.com', '2023-01-28', 7),
-  (15, 'Logan Brown', 4321098765, 'logan.brown@example.com', '2023-01-29', 10),
-  (16, 'Emma Garcia', 3210987654, 'emma.garcia@example.com', '2023-01-30', 3),
-  (17, 'Lucas Martinez', 2109876543, 'lucas.martinez@example.com', '2023-01-31', 6),
-  (18, 'Isabella White', 1098765432, 'isabella.white@example.com', '2023-02-01', 9),
-  (19, 'Alexander Taylor', 9876543210, 'alexander.taylor@example.com', '2023-02-02', 4),
-  (20, 'Madison Davis', 8765432109, 'madison.davis@example.com', '2023-02-03', 8),
-  (21, 'Jackson Wilson', 7654321098, 'jackson.wilson@example.com', '2023-02-04', 11),
-  (22, 'Avery Miller', 6543210987, 'avery.miller@example.com', '2023-02-05', 5),
-  (23, 'Brooklyn Brown', 5432109876, 'brooklyn.brown@example.com', '2023-02-06', 7),
-  (24, 'Carter Garcia', 4321098765, 'carter.garcia@example.com', '2023-02-07', 10),
-  (25, 'Chloe Martinez', 3210987654, 'chloe.martinez@example.com', '2023-02-08', 3),
-  (26, 'Elijah White', 2109876543, 'elijah.white@example.com', '2023-02-09', 6),
-  (27, 'Grace Taylor', 1098765432, 'grace.taylor@example.com', '2023-02-10', 9),
-  (28, 'Aiden Davis', 9876543210, 'aiden.davis@example.com', '2023-02-11', 4),
-  (29, 'Zoe Wilson', 8765432109, 'zoe.wilson@example.com', '2023-02-12', 8),
-  (30, 'Jackson Brown', 7654321098, 'jackson.brown@example.com', '2023-02-13', 11);
+  (1, 'Michael Smith', 9876543210, 'michael.smith@example.com', '2023-01-15 12:30:00', 5, 'Completed'),
+  (2, 'Jennifer Johnson', 8765432109, 'jennifer.johnson@example.com', '2023-01-16 13:45:00', 8, 'Completed'),
+  (3, 'Christopher Davis', 7654321098, 'christopher.davis@example.com', '2023-01-17 14:20:00', 12, 'Completed'),
+  (4, 'Amanda Wilson', 6543210987, 'amanda.wilson@example.com', '2023-01-18 15:10:00', 3, 'Completed'),
+  (5, 'Brian Miller', 5432109876, 'brian.miller@example.com', '2023-01-19 16:05:00', 7, 'Completed'),
+  (6, 'Emily Taylor', 4321098765, 'emily.taylor@example.com', '2023-01-20 17:30:00', 10, 'Completed'),
+  (7, 'Matthew Brown', 3210987654, 'matthew.brown@example.com', '2023-01-21 18:15:00', 2, 'Completed'),
+  (8, 'Sophia Garcia', 2109876543, 'sophia.garcia@example.com', '2023-01-22 19:20:00', 6, 'Completed'),
+  (9, 'Daniel Martinez', 1098765432, 'daniel.martinez@example.com', '2023-01-23 20:45:00', 9, 'Completed'),
+  (10, 'Olivia White', 9876543210, 'olivia.white@example.com', '2023-01-24 21:10:00', 4, 'Completed'),
+  (11, 'James Taylor', 8765432109, 'james.taylor@example.com', '2023-01-25 22:25:00', 8, 'Completed'),
+  (12, 'Mia Davis', 7654321098, 'mia.davis@example.com', '2023-01-26 23:50:00', 11, 'Completed'),
+  (13, 'Ethan Wilson', 6543210987, 'ethan.wilson@example.com', '2023-01-27 14:30:00', 5, 'Completed'),
+  (14, 'Ava Miller', 5432109876, 'ava.miller@example.com', '2023-01-28 15:45:00', 7, 'Completed'),
+  (15, 'Logan Brown', 4321098765, 'logan.brown@example.com', '2023-01-29 16:20:00', 10, 'Completed'),
+  (16, 'Emma Garcia', 3210987654, 'emma.garcia@example.com', '2023-01-30 17:35:00', 3, 'Completed'),
+  (17, 'Lucas Martinez', 2109876543, 'lucas.martinez@example.com', '2023-01-31 18:10:00', 6, 'Completed'),
+  (18, 'Isabella White', 1098765432, 'isabella.white@example.com', '2023-02-01 19:25:00', 9, 'Completed'),
+  (19, 'Alexander Taylor', 9876543210, 'alexander.taylor@example.com', '2023-02-02 20:50:00', 4, 'Completed'),
+  (20, 'Madison Davis', 8765432109, 'madison.davis@example.com', '2023-02-03 21:15:00', 8, 'Completed'),
+  (21, 'Jackson Wilson', 7654321098, 'jackson.wilson@example.com', '2023-02-04 22:30:00', 11, 'Completed'),
+  (22, 'Avery Miller', 6543210987, 'avery.miller@example.com', '2023-02-05 23:55:00', 5, 'Completed'),
+  (23, 'Brooklyn Brown', 5432109876, 'brooklyn.brown@example.com', '2023-02-06 14:10:00', 7, 'Completed'),
+  (24, 'Carter Garcia', 4321098765, 'carter.garcia@example.com', '2023-02-07 15:25:00', 10, 'Completed'),
+  (25, 'Chloe Martinez', 3210987654, 'chloe.martinez@example.com', '2023-02-08 16:50:00', 3, 'Completed'),
+  (26, 'Elijah White', 2109876543, 'elijah.white@example.com', '2023-02-09 17:15:00', 6, 'Preparing'),
+  (27, 'Grace Taylor', 1098765432, 'grace.taylor@example.com', '2023-02-10 18:30:00', 9, 'Preparing'),
+  (28, 'Aiden Davis', 9876543210, 'aiden.davis@example.com', '2023-02-11 19:55:00', 4, 'Preparing'),
+  (29, 'Zoe Wilson', 8765432109, 'zoe.wilson@example.com', '2023-02-12 20:20:00', 8, 'Preparing'),
+  (30, 'Jackson Brown', 7654321098, 'jackson.brown@example.com', '2023-02-13 21:35:00', 11, 'Preparing'),
+  (31, 'Elijah Moore', 9458284724, 'elijah.moore@example.com', '2023-11-15 08:30:00', 8, 'Preparing');
 
 -- Sample data for kitchen table
 INSERT INTO kitchen (order_id, dish_id, quantity)
@@ -150,6 +151,9 @@ VALUES
   (27, 10, 3), -- Grace Taylor ordered 3 servings of Butter Chicken
   (28, 15, 2), -- Aiden Davis ordered 2 servings of Paneer Tikka
   (29, 20, 1), -- Zoe Wilson ordered 1 serving of Rogan Josh
-  (30, 25, 3); -- Jackson Brown ordered 3 servings of Chicken Biryani
+  (30, 25, 3), -- Jackson Brown ordered 3 servings of Chicken Biryani
+  (31, 5, 2),
+  (31, 21, 7),
+  (31, 13, 3);
 
 COMMIT;

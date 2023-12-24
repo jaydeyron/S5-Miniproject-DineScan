@@ -74,7 +74,11 @@
                             <td><%= user.role %></td>
                             <td><%= user.username %></td>
                             <td><span  class="anonymous"><%= user.password %></span></td>
-                            <td><button class="add-buttons" onclick="openUpdateForm( '<%= user.user_id %>','<%= user.first_name %>','<%= user.last_name %>','<%= user.role %>','<%= user.username %>','<%= user.password %>')">Edit</button></td>
+                            <td>
+                                <button class="add-buttons" onclick="openUpdateForm( '<%= user.user_id %>','<%= user.first_name %>','<%= user.last_name %>','<%= user.role %>','<%= user.username %>','<%= user.password %>')">Update</button>
+                                <span style="padding: 5px;"></span>
+                                <button class="add-buttons" onclick="confirmRemove( '<%= user.first_name %>','<%= user.last_name %>','<%= user.user_id %>' )">Remove</button>
+                            </td>
                           </tr>
                           <tr>
                             <td class="table-divider" colspan="6"></td>

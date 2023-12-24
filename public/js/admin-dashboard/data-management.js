@@ -1,24 +1,32 @@
 function confirmRemove(dishName, dishId) {
-    var confirmation = confirm("Are you sure you want to remove the dish '" + dishName + "'?");
-    if (confirmation) {
-      fetch(`/api/remove-dish/${dishId}`, {
-        method: 'DELETE',
-      })
-      .then(response => {
-        if (response.ok) {
-          // If the request was successful, redirect
-          window.location.href = "/admin-dashboard/data-management";
-        } else {
-          console.error('Error removing dish:', response.statusText);
-        }
-      })
-      .catch(error => {
-        console.error('Error removing dish:', error);
-      });
-    } else {
-      // Handle the case where the user canceled the action
-    }
+  var confirmation = confirm("Are you sure you want to remove the dish '" + dishName + "'?");
+  if (confirmation) {
+    fetch(`/api/remove-dish/${dishId}`, {
+      method: 'DELETE',
+    })
+    .then(response => {
+      if (response.ok) {
+        // If the request was successful, show a success message
+        window.location.href = "/admin-dashboard/data-management";
+      } else if (response.status === 400) {
+        // Handle the case where the dish was not found
+        alert(`Dish '${dishName}' cannot be removed as it is used in previous orders.`);
+      } else if (response.status === 500) {
+        // Handle the case where there was a server error
+        alert('Internal Server Error. Please try again later.');
+      } else {
+        // Handle other response statuses if needed
+        console.error('Error removing dish:', response.statusText);
+      }
+    })
+    .catch(error => {
+      // Handle network errors
+      console.error('Error removing dish:', error);
+    });
+  } else {
+    
   }
+}
   
 // Add this JavaScript code to your existing script or in a new script file
 

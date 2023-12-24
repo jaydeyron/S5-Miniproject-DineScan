@@ -189,8 +189,129 @@ app.post('/api/update-user/:userId', isAuthenticated, (req, res) => {
   );
 });
 
-app.get("/admin-dashboard/orders", isAuthenticated, (req, res) => {
-  res.render("admin-dashboard/orders.ejs", { username: req.session.username });
+// Add this route to handle user removal
+app.delete('/api/remove-user/:userId', isAuthenticated, (req, res) => {
+  const userId = req.params.userId;
+
+  // Perform the removal logic here, for example:
+  pool.query('DELETE FROM users WHERE user_id = ?', [userId], (error, results) => {
+    if (error) {
+      console.error('Error removing user:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      // Send a success response
+      res.json({ message: 'User removed successfully' });
+    }
+  });
+});
+
+function formatDateTime(dateTimeString) {
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+  const dateTime = new Date(dateTimeString);
+  const formattedDateTime = dateTime.toLocaleString('en-GB', options);
+  return formattedDateTime.replace(/\//g, '-'); // Replace all occurrences of '/'
+}
+
+app.get("/admin-dashboard/orders", (req, res) => {
+  res.redirect("/admin-dashboard/orders/1");
+});
+
+// Add this route to handle orders
+app.get("/admin-dashboard/orders/:page", isAuthenticated, (req, res) => {
+  const itemsPerPage = 10;
+  const page = req.params.page;
+  const offset = (page - 1) * itemsPerPage;
+
+  // Acquire a connection from the pool
+  pool.getConnection((error, connection) => {
+    if (error) {
+      console.error("Error acquiring a connection from the pool:", error);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    // Query to fetch total number of orders
+    const countQuery = 'SELECT COUNT(DISTINCT customer.order_id) AS total FROM customer';
+
+    connection.query(countQuery, (error, resultCount) => {
+      if (error) {
+        console.error("Error counting orders:", error);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      const totalOrders = resultCount[0].total;
+
+      // Query to fetch orders with ordered dishes details with pagination
+      const query = `
+        SELECT 
+          customer.order_id, 
+          customer.table_num, 
+          customer.order_date, 
+          customer.order_status, 
+          GROUP_CONCAT(CONCAT(dishes.dish_name, ' x ', kitchen.quantity)) as ordered_dishes
+        FROM customer
+        LEFT JOIN kitchen ON customer.order_id = kitchen.order_id
+        LEFT JOIN dishes ON kitchen.dish_id = dishes.dish_id
+        GROUP BY customer.order_id
+        ORDER BY customer.order_date DESC
+        LIMIT ${itemsPerPage} OFFSET ${offset};
+      `;
+
+      connection.query(query, (error, results, fields) => {
+        // Release the connection back to the pool
+        connection.release();
+
+        if (error) {
+          console.error("Error querying database:", error);
+          res.status(500).send("Internal Server Error");
+        } else {
+          // Loop through each result to format the order_date
+          results.forEach(result => {
+            result.order_date = formatDateTime(result.order_date);
+          });
+
+          // Render the EJS template with the retrieved order details and pagination data
+          res.render("admin-dashboard/orders.ejs", { 
+            username: req.session.username, 
+            orders: results,
+            currentPage: parseInt(page),
+            totalPages: Math.ceil(totalOrders / itemsPerPage)
+          });
+        }
+      });
+    });
+  });
+});
+
+app.post('/api/update-order-status/:orderId', isAuthenticated, (req, res) => {
+  const orderId = req.params.orderId;
+  const { orderStatus } = req.body;
+
+  // Acquire a connection from the pool
+  pool.getConnection((error, connection) => {
+    if (error) {
+      console.error('Error acquiring a connection from the pool:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+
+    // Perform the update logic here
+    const query = 'UPDATE customer SET order_status = ? WHERE order_id = ?';
+    connection.query(query, [orderStatus, orderId], (error, results) => {
+      // Release the connection back to the pool
+      connection.release();
+
+      if (error) {
+        console.error('Error updating order status:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        // Send a success response
+        const referer = req.get('referer');
+        res.redirect(referer);
+      }
+    });
+  });
 });
 
 app.get("/admin-dashboard/report", isAuthenticated, (req, res) => {
@@ -222,14 +343,27 @@ app.get("/admin-dashboard/data-management", isAuthenticated, (req, res) => {
 app.delete('/api/remove-dish/:dishId', isAuthenticated, (req, res) => {
   const dishId = req.params.dishId;
 
-  // Perform the removal logic here, for example:
-  pool.query('DELETE FROM dishes WHERE dish_id = ?', [dishId], (error, results) => {
-    if (error) {
-      console.error('Error removing dish:', error);
+  // Check if there is a foreign key reference in the kitchen table
+  const checkQuery = 'SELECT * FROM kitchen WHERE dish_id = ? LIMIT 1';
+  pool.query(checkQuery, [dishId], (checkError, checkResults) => {
+    if (checkError) {
+      console.error('Error checking foreign key reference:', checkError);
       res.status(500).json({ error: 'Internal Server Error' });
+    } else if (checkResults.length > 0) {
+      // There is a foreign key reference, handle accordingly
+      res.status(400).json({ error: 'Cannot remove dish. It is referenced in the kitchen table.' });
     } else {
-      // Send a success response
-      res.json({ message: 'Dish removed successfully' });
+      // No foreign key reference, proceed with deletion
+      const deleteQuery = 'DELETE FROM dishes WHERE dish_id = ?';
+      pool.query(deleteQuery, [dishId], (deleteError, deleteResults) => {
+        if (deleteError) {
+          console.error('Error removing dish:', deleteError);
+          res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+          // Send a success response
+          res.json({ message: 'Dish removed successfully' });
+        }
+      });
     }
   });
 });
@@ -305,7 +439,6 @@ app.get("/admin-dashboard/transactions/:page", isAuthenticated, (req, res) => {
         } else {
           const totalTransactions = resultCount[0].total;
           const totalPages = Math.ceil(totalTransactions / itemsPerPage);
-
           res.render("admin-dashboard/transactions.ejs", { 
             username: req.session.username, 
             transactions: results, 
@@ -317,9 +450,6 @@ app.get("/admin-dashboard/transactions/:page", isAuthenticated, (req, res) => {
     }
   });
 });
-
-
-
 
 // defines a route to menu
 app.get(["/menu/:table_num", "/menu"], (req, res) => {

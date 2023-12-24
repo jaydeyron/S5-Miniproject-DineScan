@@ -1,0 +1,28 @@
+
+#main-division {
+    padding-top: 22px;
+}
+
+#dateRangePicker {
+    font-weight: 200;
+    font-size: medium;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.form-buttons {
+    display: inline-block;
+    padding: 8px 20px;
+    font-size: 15px;
+    text-align: center;
+    border: 1.5px solid #172233;
+    color: #172233;
+    background-color: #fff;
+    border-radius: 10px;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+    &:hover {
+        background-color: #172233;
+        color: #fff;
+    }
+  }

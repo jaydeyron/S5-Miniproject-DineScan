@@ -1,3 +1,29 @@
+function confirmRemove(firstName, lastName, userId) {
+  var confirmation = confirm("Are you sure you want to remove the user '" + firstName + ' ' + lastName + "'?");
+  if (confirmation) {
+    fetch(`/api/remove-user/${userId}`, {
+      method: 'DELETE',
+    })
+    .then(response => {
+      if (response.ok) {
+        // If the request was successful, show a success message
+        window.location.href = "/admin-dashboard/access-control";
+      } else if (response.status === 500) {
+        // Handle the case where there was a server error
+        alert('Internal Server Error. Please try again later.');
+      } else {
+        // Handle other response statuses if needed
+        console.error('Error removing user:', response.statusText);
+      }
+    })
+    .catch(error => {
+      // Handle network errors
+      console.error('Error removing user:', error);
+    });
+  } else {
+    
+  }
+}
 
 function openAddForm() {
     const userHeading = document.getElementById('add-form-header');

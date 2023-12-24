@@ -60,7 +60,6 @@
                             <th>Amount</th>
                             <th>Payment status</th>
                             <th>Payment details</th>
-                            <th></th>
                         </tr>
                         <tr>
                             <td colspan="6" style=" border-bottom: 1px solid #172233;"></td>
@@ -102,12 +101,16 @@
             <div id="pagination">
                 <a href="<%= currentPage > 1 ? '/admin-dashboard/transactions/' + (currentPage - 1) : '#' %>">&laquo;</a>
                 
-                <% for (let i = 1; i <= totalPages; i++) { %>
+                <% const startPage = Math.max(1, currentPage - 5); %>
+                <% const endPage = Math.min(totalPages, startPage + 9); %>
+                
+                <% for (let i = startPage; i <= endPage; i++) { %>
                   <a href="/admin-dashboard/transactions/<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
                 <% } %>
                 
                 <a href="<%= currentPage < totalPages ? '/admin-dashboard/transactions/' + (currentPage + 1) : '#' %>">&raquo;</a>
-              </div>              
+              </div>
+                           
         </div>
     </body>
 </html>

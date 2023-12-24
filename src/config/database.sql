@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS customer (
   phone_num BIGINT NOT NULL,
   email VARCHAR(255),
   order_date DATETIME NOT NULL,
+  order_status ENUM('Preparing', 'Completed') NOT NULL,
   table_num INT NOT NULL,
   FOREIGN KEY (payment_id) REFERENCES payment(payment_id)
 );

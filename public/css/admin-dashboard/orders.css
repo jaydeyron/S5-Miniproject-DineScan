@@ -3,3 +3,136 @@
     padding-top: 22px;
 }
 
+.order-buttons {
+    display: inline-block;
+    padding: 8px 20px;
+    font-size: 15px;
+    text-align: center;
+    border: 1.5px solid #172233;
+    color: #172233;
+    background-color: #fff;
+    border-radius: 10px;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+    &:hover {
+        background-color: #172233;
+        color: #fff;
+    }
+  }
+
+#transactions-table {
+    width: 100%;
+}
+
+.form-content {
+    background-color: white;
+    margin: 5% auto;
+    border: 1px solid #888;
+    width: 80%;
+    padding: 50px;
+    border-radius: 8px;
+    overflow: auto;
+}
+
+#update-form {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#update-form label {
+    font-size: large;
+    font-weight: 200;
+    padding-top: 25px;
+    padding-bottom: 15px;
+  }
+
+  #update-form input,
+  #update-form select {
+    width: 100%;
+    padding: 10px;
+    font-size: large;
+    font-weight: 200;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+    transition: border 0.15s;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  #update-form button {
+    background-color: #1c2a3e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 40px;
+    transition: background-color 0.3s;
+    &:hover {
+      background-color: #2a3d56;
+      cursor: pointer;
+    }
+  }
+
+  #updateStatusForm {
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    transition: color 0.2s;
+    &:hover,
+    &:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    }
+  }
+
+#pagination {
+    padding-top: 22px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  #pagination a {
+    color: #2a3d56;
+    padding: 8px 14px;
+    text-decoration: none;
+    font-size: 16px;
+    border: 1px solid #2a3d56;
+    margin: 0 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  #pagination a.active {
+    background-color: #2a3d56;
+    color: white;
+  }
+  
+  #pagination a:hover:not(.active) {
+    background-color: #2a3d56;
+    color: white;
+  }
+  
