@@ -1,4 +1,4 @@
-function confirmRemove(firstName, lastName, userId) {
+function confirmRemove(firstName, lastName, userId, role) {
   var confirmation = confirm("Are you sure you want to remove the user '" + firstName + ' ' + lastName + "'?");
   if (confirmation) {
     fetch(`/api/remove-user/${userId}`, {
@@ -6,8 +6,7 @@ function confirmRemove(firstName, lastName, userId) {
     })
     .then(response => {
       if (response.ok) {
-        // If the request was successful, show a success message
-        window.location.href = "/admin-dashboard/access-control";
+        window.location.href = `/${role}-dashboard/access-control`;
       } else if (response.status === 500) {
         // Handle the case where there was a server error
         alert('Internal Server Error. Please try again later.');

@@ -80,6 +80,112 @@ app.get("/admin-dashboard", (req, res) => {
   res.redirect("/admin-dashboard/overview");
 });
 
+app.get("/staff-dashboard", (req, res) => {
+  res.redirect("/staff-dashboard/overview");
+});
+
+app.get("/superuser-dashboard", (req, res) => {
+  res.redirect("/superuser-dashboard/overview");
+});
+
+app.get("/staff-dashboard/overview", isAuthenticated, (req, res) => {
+  res.render("staff-dashboard/overview.ejs", { username: req.session.username });
+});
+
+app.get("/staff-dashboard/data-management", isAuthenticated, (req, res) => {
+  pool.getConnection((error, connection) => {
+    const query = "SELECT * FROM dishes";
+    connection.query(query, (error, results, fields) => {
+      // Release the connection back to the pool
+      connection.release();
+
+      if (error) {
+        console.error("Error querying database:", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        // Render the EJS template with the retrieved dish details
+        res.render("staff-dashboard/data-management.ejs", { username: req.session.username, dishes: results , role: req.session.role });
+      }
+    });
+  })
+});
+
+app.get("/staff-dashboard/orders", (req, res) => {
+  res.redirect("/staff-dashboard/orders/1");
+});
+
+// Add this route to handle orders
+app.get("/staff-dashboard/orders/:page", isAuthenticated, (req, res) => {
+  const itemsPerPage = 10;
+  const page = req.params.page;
+  const offset = (page - 1) * itemsPerPage;
+
+  // Acquire a connection from the pool
+  pool.getConnection((error, connection) => {
+    if (error) {
+      console.error("Error acquiring a connection from the pool:", error);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    // Query to fetch total number of orders
+    const countQuery = 'SELECT COUNT(DISTINCT customer.order_id) AS total FROM customer';
+
+    connection.query(countQuery, (error, resultCount) => {
+      if (error) {
+        console.error("Error counting orders:", error);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      const totalOrders = resultCount[0].total;
+
+      // Query to fetch orders with ordered dishes details with pagination
+      const query = `
+        SELECT 
+          customer.order_id, 
+          customer.table_num, 
+          customer.order_date, 
+          customer.order_status, 
+          GROUP_CONCAT(CONCAT(dishes.dish_name, ' x ', kitchen.quantity)) as ordered_dishes
+        FROM customer
+        LEFT JOIN kitchen ON customer.order_id = kitchen.order_id
+        LEFT JOIN dishes ON kitchen.dish_id = dishes.dish_id
+        GROUP BY customer.order_id
+        ORDER BY customer.order_date DESC
+        LIMIT ${itemsPerPage} OFFSET ${offset};
+      `;
+
+      connection.query(query, (error, results, fields) => {
+        // Release the connection back to the pool
+        connection.release();
+
+        if (error) {
+          console.error("Error querying database:", error);
+          res.status(500).send("Internal Server Error");
+        } else {
+          // Loop through each result to format the order_date
+          results.forEach(result => {
+            result.order_date = formatDateTime(result.order_date);
+          });
+
+          // Render the EJS template with the retrieved order details and pagination data
+          res.render("staff-dashboard/orders.ejs", { 
+            username: req.session.username, 
+            orders: results,
+            currentPage: parseInt(page),
+            totalPages: Math.ceil(totalOrders / itemsPerPage)
+          });
+        }
+      });
+    });
+  });
+});
+
+app.get("/staff-dashboard/settings", isAuthenticated, (req, res) => {
+  res.render("staff-dashboard/settings.ejs", { username: req.session.username });
+});
+
 app.get("/admin-dashboard/overview", isAuthenticated, (req, res) => {
   res.render("admin-dashboard/overview.ejs", { username: req.session.username });
 });
@@ -144,7 +250,8 @@ app.get("/admin-dashboard/access-control", isAuthenticated, (req, res) => {
         // Render the EJS template with the retrieved staff details
         res.render("admin-dashboard/access-control.ejs", {
           username: req.session.username,
-          staff: results, // Pass the staff data to the template
+          staff: results,
+          role: req.session.role
         });
       }
     });
@@ -163,7 +270,8 @@ app.post('/api/add-user', isAuthenticated, (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
       } else {
         // Redirect to the access-control route after adding the user
-        res.redirect("/admin-dashboard/access-control");
+        const referer = req.get('referer');
+        res.redirect(referer);
       }
     }
   );
@@ -183,7 +291,8 @@ app.post('/api/update-user/:userId', isAuthenticated, (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
       } else {
         // Send a success response
-        res.redirect("/admin-dashboard/access-control");
+        const referer = req.get('referer');
+        res.redirect(referer);
       }
     }
   );
@@ -334,7 +443,7 @@ app.get("/admin-dashboard/data-management", isAuthenticated, (req, res) => {
         res.status(500).send("Internal Server Error");
       } else {
         // Render the EJS template with the retrieved dish details
-        res.render("admin-dashboard/data-management.ejs", { username: req.session.username, dishes: results });
+        res.render("admin-dashboard/data-management.ejs", { username: req.session.username, dishes: results, role: req.session.role });
       }
     });
   })
@@ -383,7 +492,8 @@ app.post('/api/update-dish/:dishId', isAuthenticated, (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
       } else {
         // Send a success response
-        res.redirect("/admin-dashboard/data-management")
+        const referer = req.get('referer');
+        res.redirect(referer);
       }
     }
   );
@@ -400,7 +510,8 @@ app.post('/api/add-dish',isAuthenticated, (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
       } else {
         // Send a success response
-        res.redirect("/admin-dashboard/data-management")
+        const referer = req.get('referer');
+        res.redirect(referer);
       }
     }
   );
@@ -452,11 +563,67 @@ app.get("/admin-dashboard/transactions/:page", isAuthenticated, (req, res) => {
 });
 
 // defines a route to menu
-app.get(["/menu/:table_num", "/menu"], (req, res) => {
-  // :table_num dictates the number of the table from the QR code
+app.get("/menu/:table_num", (req, res) => {
   const tableNumber = req.params.table_num;
-  res.render("menu");
+
+  // Acquire a connection from the pool
+  pool.getConnection((error, connection) => {
+    if (error) {
+      console.error("Error acquiring a connection from the pool:", error);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    // Query to fetch all dishes
+    const dishesQuery = "SELECT * FROM dishes";
+
+    // Query to fetch restaurant information
+    const restaurantQuery = "SELECT * FROM restaurant";
+
+    // Query to fetch all categories
+    const categoriesQuery = "SELECT * FROM categories";
+
+    // Execute queries in parallel using nested callbacks
+    connection.query(dishesQuery, (error, dishesResults) => {
+      if (error) {
+        console.error("Error querying dishes:", error);
+        connection.release();
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      connection.query(restaurantQuery, (error, restaurantResults) => {
+        if (error) {
+          console.error("Error querying restaurant:", error);
+          connection.release();
+          res.status(500).send("Internal Server Error");
+          return;
+        }
+
+        connection.query(categoriesQuery, (error, categoriesResults) => {
+          if (error) {
+            console.error("Error querying categories:", error);
+            connection.release();
+            res.status(500).send("Internal Server Error");
+            return;
+          }
+
+          // Release the connection back to the pool
+          connection.release();
+
+          // Render the EJS template with the retrieved data
+          res.render("menu", {
+            dishes: dishesResults,
+            restaurant: restaurantResults[0],
+            categories: categoriesResults,
+            table_num: tableNumber,
+          });
+        });
+      });
+    });
+  });
 });
+
 
 // defines a route to the payment gateway
 app.get("/payment", (req, res) => {
@@ -499,14 +666,17 @@ app.post("/login", (req, res) => {
           // Authentication successful
           req.session.authenticated = true;
           req.session.username = username;
-
           const role = results[0].role;
+          req.session.role = role;
           if (role == "admin") {
             console.log("Authentication successful: Redirected to admin dashboard");
-            res.redirect("admin-dashboard");
+            res.redirect("/admin-dashboard");
           } else if (role == "staff") {
             console.log("Authentication successful: Redirected to staff dashboard");
-            res.redirect("staff-dashboard");
+            res.redirect("/staff-dashboard");
+          } else if (role == "superuser") {
+            console.log("/Authentication successful: Redirected to superuser dashboard");
+            res.redirect("superuser-dashboard");
           }
         } else {
           // Authentication failed

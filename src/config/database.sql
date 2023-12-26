@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
   user_id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  role ENUM('admin', 'staff') NOT NULL,
+  role ENUM('admin', 'staff', 'superuser') NOT NULL,
   profile_photo_url TEXT,
   first_name VARCHAR(255),
   last_name VARCHAR(255),
@@ -22,7 +22,13 @@ CREATE TABLE IF NOT EXISTS dishes (
   dish_name VARCHAR(255) NOT NULL,
   price DECIMAL(10, 2) NOT NULL,
   vegetarian BOOLEAN NOT NULL,
-  available INT NOT NULL
+  available INT NOT NULL,
+  dish_description TEXT,
+  dish_photo TEXT,
+  calories INT,
+  protein INT,
+  fat INT,
+  carb INT
 );
 
 -- Payment table
@@ -58,4 +64,22 @@ CREATE TABLE IF NOT EXISTS kitchen (
   quantity INT NOT NULL,
   FOREIGN KEY (order_id) REFERENCES customer(order_id),
   FOREIGN KEY (dish_id) REFERENCES dishes(dish_id)
+);
+
+-- Restaurant table
+CREATE TABLE restaurant (
+    restaurant_name VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    restaurant_phone_num VARCHAR(20),
+    restaurant_email VARCHAR(255),
+    description TEXT,
+    logo_url VARCHAR(255)
+);
+
+-- Categories table
+CREATE TABLE IF NOT EXISTS categories (
+  dish_id INT NOT NULL,
+  category VARCHAR(255) NOT NULL,
+  FOREIGN KEY (dish_id) REFERENCES dishes(dish_id),
+  UNIQUE KEY unique_dish_category (dish_id, category)
 );

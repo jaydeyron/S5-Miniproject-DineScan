@@ -1,4 +1,4 @@
-function confirmRemove(dishName, dishId) {
+function confirmRemove(dishName, dishId, role) {
   var confirmation = confirm("Are you sure you want to remove the dish '" + dishName + "'?");
   if (confirmation) {
     fetch(`/api/remove-dish/${dishId}`, {
@@ -7,7 +7,7 @@ function confirmRemove(dishName, dishId) {
     .then(response => {
       if (response.ok) {
         // If the request was successful, show a success message
-        window.location.href = "/admin-dashboard/data-management";
+        window.location.href = `/${role}-dashboard/data-management`;
       } else if (response.status === 400) {
         // Handle the case where the dish was not found
         alert(`Dish '${dishName}' cannot be removed as it is used in previous orders.`);

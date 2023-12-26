@@ -1,282 +1,190 @@
-.navigation {
-  position: relative;
-  margin-top: 40px;
-  margin-left: 80px;
-  margin-right: 80px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 2em;
-  overflow: hidden;
+
+body {
+    margin: 0;
+    background-color: black;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    height: 100vh;
 }
 
-.logo {
-  color: #426b1f;
-  flex: 1;
-  font: 500 32px/100% "Newsreader", sans-serif;
+#title-division {
+    padding-top: 22px;
+    display: flex;
+    justify-content: space-around;
 }
 
-.aboutus-button:hover {
-  background-color: rgba(255, 255, 255, 0.778);
-  color: rgba(0, 0, 0, 0.620);
+#restaurant-name {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.aboutus-button {
-  color: #000000;
-  text-decoration: none;
-  font: 400 16px/130% "Inter", sans-serif;
+#dinescan-logo {
+    height: 25px;
+    width: 25px;
 }
 
-.admin-button:hover {
-  color: #ffffff;
-  background-color: #5a793e;
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+#about-link {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-.admin-button {
-  color: rgb(255, 255, 255);
-  font-size: 16px;
-  background: #426b1f;
-  border-style: inherit;
-  border-radius: 24px;
-  border-color: #5a793e;
-  cursor: pointer;
-  padding: 10px 20px 10px 20px;
-  overflow: hidden;
-}
-
-.restaurant-heading {
-  margin-top: 60px;
-  padding-left: 80px;
-  padding-right: 80px;
-  overflow: hidden;
-}
-
-.restaurant-name {
-  color: #000000;
-  margin-bottom: 10px;
-  font: 350 60px/140% "Newsreader", sans-serif;
-  display: flex;
-}
-
-.divider {
-  border-style: solid;
-  border-color: #e6e6e6;
-  border-width: 2px 0 0 0;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  transform-origin: 0 0;
-  transform: rotate(0deg) scale(1, 1);
-}
-
-.menu {
-  margin-top: 40px;
+#content-division {
+    padding: 12px;
 }
 
 .dish-box {
-  background: #fafaf5;
-  margin-left: 80px;
-  margin-right: 80px;
-  margin-top: 30px;
-  border-radius: 24px;
-  border-style: solid;
-  border-color: #e6e6e6;
-  border-width: 2px;
-  height: 160px;
-  overflow: hidden;
-  display: flex;
-  transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: #171919;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
-.dish-box:hover {
-  transform: scale(1.01);
+.dish-image {
+    height: 140px;
+    width: auto;
+    border-radius: 10px;
 }
 
-.dish-pic {
-  height: 160px;
-  width: 260px;
-  border-radius: 20px;
-}
-
-.dish-name {
-  color: #000000;
-  font: 600 20px/130% "Inter", sans-serif;
-  padding: 30px;
-  flex-grow: 1;
-}
-
-.price-cart {
-  display: flex;
-  padding-right: 20px;
-  flex-direction: column;
-}
-
-.dish-price {
-  color: #000000;
-  padding-top: 50px;
-  padding-left: 20px;
-  padding-bottom: 20px;
-  font: 500 20px/130% "Inter", sans-serif;
-}
-
-.add-to-cart-button {
-  color: rgb(255, 255, 255);
-  font-size: 16px;
-  background: #426b1f;
-  border-style: inherit;
-  border-radius: 24px;
-  border-color: #5a793e;
-  cursor: pointer;
-  padding: 10px 20px 10px 20px;
-  overflow: hidden;
-  transition: transform 0.3s ease-in-out;
-}
-
-.add-to-cart-button:hover {
-  color: #ffffff;
-  transform: scale(1.04);
-  background-color: #5a793e;
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-}
-
-.add-to-cart-button:active {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-}
-
-.cart {
-  margin-left: 80px;
-  margin-right: 80px;
-  margin-top: 30px;
-}
-
-#cart-items {
-  list-style-type: none;
-  display: flex;
-  flex-direction: column;
-}
-
-.sticky-cart {
-  border-style: solid;
-  border-color: #e6e6e6;
-  border-radius: 50px;
-  border-width: 2px;
-  color: #000000;
-  background-color: #f7f7ee;
-  padding-top: 30px;
-  margin-left: 60px;
-  margin-right: 60px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding-left: 80px;
-  padding-right: 80px;
-  text-align: left;
-  animation: slide-in 0.5s ease-in-out; 
-  font: 420 24px/100% "Open Sans", sans-serif;
-  position:sticky;
-  position:-webkit-sticky;
-  bottom:0;
-}
-
-.checkout-button {
-  color: rgb(255, 255, 255);
-  margin: 20px;
-  font-size: 20px;
-  text-align: center;
-  background: #426b1f;
-  border-style: inherit;
-  border-radius: 24px;
-  border-color: #5a793e;
-  cursor: pointer;
-  padding: 10px 20px 10px 20px;
-  overflow: hidden;
-  transition: transform 0.3s ease-in-out;
-}
-
-.checkout-button:hover {
-  transform: scale(1.02);
-  color: #ffffff;
-  background-color: #5a793e;
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-}
-
-.plus-button {
-  color: rgb(255, 255, 255);
-  margin: 20px;
-  font-size: 20px;
-  text-align: center;
-  background: #426b1f;
-  border-style: inherit;
-  border-radius: 24px;
-  border-color: #5a793e;
-  cursor: pointer;
-  padding: 10px 15px 10px 15px;
-  overflow: hidden;
-  transition: transform 0.3s ease-in-out;
-}
-
-.plus-button:hover {
-  color: #ffffff;
-  background-color: #5a793e;
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-  transform: scale(1.04);
-}
-
-.minus-button {
-  color: rgb(255, 255, 255);
-  margin: 20px;
-  font-size: 20px;
-  text-align: center;
-  background: #426b1f;
-  border-style: inherit;
-  border-radius: 24px;
-  border-color: #5a793e;
-  cursor: pointer;
-  padding: 10px 18px 10px 18px;
-  overflow: hidden;
-  transition: transform 0.3s ease-in-out;
-}
-
-.minus-button:hover {
-  color: #ffffff;
-  background-color: #5a793e;
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-  transform: scale(1.04);
-}
-
-.list-items{
-  font: 420 20px/100% "Newsreader", sans-serif;
-}
-
-@media (max-width: 768px) {
-  .navigation {
-    margin: 20px;
-  }
-
-  .dish-box {
-    margin: 10px;
-  }
-
-  .dish-name, .dish-price {
-    padding: 10px;
-  }
-}
-
-@media (max-width: 576px) {
-  .dish-box {
+.dish-details {
+    display: flex;
     flex-direction: column;
-  }
+    justify-content: center;
+}
 
-  .dish-pic {
-    width: 100px;
-  }
+.dish-veg {
+    align-self: center;
+}
 
-  .dish-name, .dish-price {
-    padding: 5px;
-  }
+.dish-image-section {
+    display: flex;
+    flex-direction: column;
+}
 
-  .add-to-cart-button {
-    font-size: 14px;
-  }
+.cart-button {
+    display: inline-block;
+    padding: 8px 20px;
+    font-size: 15px;
+    text-align: center;
+    border: 1.5px solid black;
+    color: white;
+    background-color: #151717;
+    border-radius: 10px;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+    &:active {
+        background-color: black;
+        color: #fff;
+    }
+}
+
+#overlay {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 1);
+    justify-content: center;
+    align-items: center;
+    transition: left 0.5s ease;
+}
+
+.overlay-content {
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    border-radius: 10px;
+    text-align: center;
+    overflow: auto;
+}
+
+#overlay.active {
+    left: 0;
+}
+
+.close-veg {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 22px;
+}
+
+.overlay-image {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.summary-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.dish-summary-name {
+    font-size: 30px;
+    font-weight: 500;
+    padding-bottom: 10px;
+}
+
+.dish-summary {
+    text-align: justify;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-weight: bold;
+}
+
+.close {
+    display: flex;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    transition: color 0.2s;
+    padding-left: 12px;
+    &:hover,
+    &:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    }
+}
+
+.material-symbols-outlined.vegetarian {
+    font-size: 18px;
+    color: green;
+    border: 1px solid green;
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 200,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+.material-symbols-outlined.non-vegetarian {
+    font-size: 18px;
+    color: brown;
+    border: 1px solid brown;
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 100,
+    'GRAD' 0,
+    'opsz' 20
 }

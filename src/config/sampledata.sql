@@ -1,7 +1,7 @@
 -- Sample data for users table
 INSERT INTO users (username, password, role, first_name, last_name, email)
 VALUES
-  ('yohanjose', 'thundil', 'staff', 'Yohan', 'Jose', 'thundil.yohan@hub.com'),
+  ('yohan', 'thundil', 'admin', 'Yohan', 'Jose', 'thundil.yohan@hub.com'),
   ('johnsmith', 'johnpassword', 'staff', 'John', 'Smith', 'john.smith@example.com'),
   ('janedoe', 'janepassword', 'staff', 'Jane', 'Doe', 'jane.doe@example.com'),
   ('michaeljones', 'michaelpassword', 'staff', 'Michael', 'Jones', 'michael.jones@example.com'),
@@ -13,7 +13,7 @@ VALUES
   ('ryanjackson', 'ryanpassword', 'staff', 'Ryan', 'Jackson', 'ryan.jackson@example.com'),
   ('oliviaadams', 'oliviapassword', 'admin', 'Olivia', 'Adams', 'olivia.adams@example.com'),
   ('abhaysooraj', 'anadearmas', 'staff', 'Abhay', 'Sooraj', 'abhay.s00raj@example.com'),
-  ('jay', '188502', 'admin', 'Jay', 'C', 'jay.deyron@example.com');
+  ('jay', '188502', 'superuser', 'Jay', 'C', 'jay.deyron@example.com');
 
 -- Sample data for dishes table
 INSERT INTO dishes (dish_name, price, vegetarian, available)
@@ -155,5 +155,23 @@ VALUES
   (31, 5, 2),
   (31, 21, 7),
   (31, 13, 3);
+
+-- Sample data for restaurant table
+
+INSERT INTO restaurant (
+  restaurant_name,
+  address,
+  restaurant_phone_num,
+  restaurant_email,
+  description,
+  logo_url
+) VALUES (
+  'Sakura Sushi House',
+  '456 Cherry Blossom Lane, Tokyo',
+  '+81 90-1234-5678',
+  'info@sakurasushi.com',
+  'Experience the finest sushi and Japanese cuisine in a traditional setting.',
+  'https://example.com/sakurasushi_logo.png'
+);
 
 COMMIT;
