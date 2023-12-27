@@ -3,15 +3,16 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-        <link rel="stylesheet" href="/css/admin-dashboard/admin-dashboard-common.css">
-        <link rel="stylesheet" href="/css/admin-dashboard/transactions.css">
-        <script src="/js/admin-dashboard/admin-dashboard-common.js"></script>
-        <script src="/js/admin-dashboard/transactions.js"></script>
+        <link rel="stylesheet" href="/css/dashboard-common.css">
+        <link rel="stylesheet" href="/css/transactions.css">
+        <script src="/js/dashboard-common.js"></script>
+        <script src="/js/transactions.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
-        <title>Admin Dashboard</title>
+        <% function capitalizeFirstLetter(str) { return str.charAt(0).toUpperCase() + str.slice(1); } %>
+        <title><%= capitalizeFirstLetter(role) %> Dashboard</title>
     </head>
     <body>
         <div id="menu-division">

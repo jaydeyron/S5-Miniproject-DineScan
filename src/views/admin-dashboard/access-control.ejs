@@ -3,15 +3,16 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-        <link rel="stylesheet" href="/css/admin-dashboard/admin-dashboard-common.css">
-        <link rel="stylesheet" href="/css/admin-dashboard/access-control.css">
-        <script src="/js/admin-dashboard/admin-dashboard-common.js"></script>
-        <script src="/js/admin-dashboard/access-control.js"></script>
+        <link rel="stylesheet" href="/css/dashboard-common.css">
+        <link rel="stylesheet" href="/css/access-control.css">
+        <script src="/js/dashboard-common.js"></script>
+        <script src="/js/access-control.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
-        <title>Admin Dashboard</title>
+        <% function capitalizeFirstLetter(str) { return str.charAt(0).toUpperCase() + str.slice(1); } %>
+        <title><%= capitalizeFirstLetter(role) %> Dashboard</title>
     </head>
     <body>
         <div id="menu-division">
@@ -75,9 +76,9 @@
                             <td><%= user.username %></td>
                             <td><span  class="anonymous"><%= user.password %></span></td>
                             <td>
-                                <button class="add-buttons" onclick="openUpdateForm( '<%= user.user_id %>','<%= user.first_name %>','<%= user.last_name %>','<%= user.role %>','<%= user.username %>','<%= user.password %>')">Update</button>
+                                <button class="add-buttons" onclick="openUpdateForm( '<%= user.user_id %>','<%= user.first_name %>','<%= user.last_name %>','<%= user.username %>','<%= user.password %>')">Update</button>
                                 <span style="padding: 5px;"></span>
-                                <button class="add-buttons" onclick="confirmRemove( '<%= user.first_name %>','<%= user.last_name %>','<%= user.user_id %>' )">Remove</button>
+                                <button class="add-buttons" onclick="confirmRemove( '<%= user.first_name %>','<%= user.last_name %>','<%= user.user_id %>', '<%= role %>' )">Remove</button>
                             </td>
                           </tr>
                           <tr>
@@ -97,10 +98,7 @@
                     <input type="text" id="add-firstName" name="firstName" required>
               
                     <label for="lastName">Last Name :</label>
-                    <input type="text" id="add-lastName" name="lastName" required>
-              
-                    <label for="role">Role (Admin/Staff) :</label>
-                    <input type="text" id="add-role" name="role" required>
+                    <input type="text" id="add-lastName" name="lastName" required>                            
               
                     <label for="username">Username :</label>
                     <input type="text" id="add-username" name="username" required>
@@ -121,10 +119,7 @@
                     <input type="text" id="update-firstName" name="firstName" required>
               
                     <label for="lastName">Last Name :</label>
-                    <input type="text" id="update-lastName" name="lastName" required>
-              
-                    <label for="role">Role (Admin/Staff) :</label>
-                    <input type="text" id="update-role" name="role" required>
+                    <input type="text" id="update-lastName" name="lastName" required>                            
               
                     <label for="username">Username :</label>
                     <input type="text" id="update-username" name="username" required>

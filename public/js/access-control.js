@@ -31,7 +31,7 @@ function openAddForm() {
     const menuDiv = document.getElementById('menu-division');
     const contentDiv = document.getElementById('content-division');
 
-    formAction.action = `/api/add-user`;
+    formAction.action = `/api/add-staff`;
     console.log(formAction.action);
 
     userHeading.textContent = `Add New User :`;
@@ -49,7 +49,7 @@ function closeAddForm() {
     contentDiv.style.filter = 'none';
   }
 
-function openUpdateForm(userId, firstName, lastName, role, username, password) {
+function openUpdateForm(userId, firstName, lastName, username, password) {
     const updateForm = document.getElementById('update-form');
     const userHeading = document.getElementById('update-form-header');
     const menuDiv = document.getElementById('menu-division');
@@ -58,13 +58,12 @@ function openUpdateForm(userId, firstName, lastName, role, username, password) {
     userHeading.textContent = `Update User : ${firstName}`;
   
     // Use backticks (`) to create a template literal
-    formAction.action = `/api/update-user/${userId}`;
+    formAction.action = `/api/update-staff/${userId}`;
     console.log(formAction.action);
   
     // Populate the form fields with the existing data
     document.getElementById('update-firstName').value = firstName;
     document.getElementById('update-lastName').value = lastName;
-    document.getElementById('update-role').value = role;
     document.getElementById('update-username').value = username;
     document.getElementById('update-password').value = password;
   
