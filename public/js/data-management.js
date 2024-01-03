@@ -30,7 +30,7 @@ function confirmRemove(dishName, dishId, role) {
   
 // Add this JavaScript code to your existing script or in a new script file
 
-function openUpdateForm(dishId, dishName, price, vegetarian, available) {
+function openUpdateForm(dishId, dishName, price, vegetarian, available, dishDescription, dishPhoto, calories, protein, fat, carb) {
   const updateForm = document.getElementById('update-form');
   const menuDiv = document.getElementById('menu-division');
   const contentDiv = document.getElementById('content-division');
@@ -47,6 +47,12 @@ function openUpdateForm(dishId, dishName, price, vegetarian, available) {
   document.getElementById('update-price').value = price;
   document.getElementById('update-vegetarian').value = vegetarian;
   document.getElementById('update-available').value = available;
+  document.getElementById('update-dishDescription').value = dishDescription;
+  document.getElementById('update-dishPhoto').value = dishPhoto;
+  document.getElementById('update-calories').value = calories;
+  document.getElementById('update-protein').value = protein;
+  document.getElementById('update-fat').value = fat;
+  document.getElementById('update-carb').value = carb;
 
   updateForm.style.display = 'flex';
   menuDiv.style.filter = 'blur(5px)';
@@ -76,13 +82,52 @@ function openAddForm() {
     addForm.style.display = 'flex';
     menuDiv.style.filter = 'blur(5px)';
     contentDiv.style.filter = 'blur(5px)';
+    
+    const addDropzone = document.getElementById('add-dropzone');
 }
 
 function closeAddForm() {
   const addForm = document.getElementById('add-form');
   const menuDiv = document.getElementById('menu-division');
   const contentDiv = document.getElementById('content-division');
-    addForm.style.display = 'none';
-    menuDiv.style.filter = 'none';
-    contentDiv.style.filter = 'none';
+  addForm.style.display = 'none';
+  menuDiv.style.filter = 'none';
+  contentDiv.style.filter = 'none';
 }
+
+// Initialize Dropzone for the add-form
+Dropzone.autoDiscover = false;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const addDropzone = new Dropzone("#add-dropzone", {
+                url: "/api/upload-dish-image", // Replace with the actual server endpoint for file uploads
+                acceptedFiles: "image/*",
+                paramName: "file",
+                maxFiles: 1,
+                clickable: "#add-dropzone",
+                autoProcessQueue: true, // Enable automatic file processing
+                init: function () {
+                  // Your custom initialization code here
+                  this.on("success", function (file, response) {
+                      // This code runs after a successful upload
+                      document.getElementById('add-dishPhoto').value = response.imagePath;                      
+                    });        
+              },
+            });
+
+            const updateDropzone = new Dropzone("#update-dropzone", {
+              url: "/api/upload-dish-image", // Replace with the actual server endpoint for file uploads
+              acceptedFiles: "image/*",
+              paramName: "file",
+              maxFiles: 1,
+              clickable: "#update-dropzone",
+              autoProcessQueue: true, // Enable automatic file processing
+              init: function () {
+                // Your custom initialization code here
+                this.on("success", function (file, response) {
+                    // This code runs after a successful upload
+                    document.getElementById('update-dishPhoto').value = response.imagePath;       
+                  });              
+            },
+          });
+});

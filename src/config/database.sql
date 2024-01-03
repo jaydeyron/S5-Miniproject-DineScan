@@ -72,8 +72,7 @@ CREATE TABLE restaurant (
     address VARCHAR(255) NOT NULL,
     restaurant_phone_num VARCHAR(20),
     restaurant_email VARCHAR(255),
-    description TEXT,
-    logo_url VARCHAR(255)
+    description TEXT    
 );
 
 -- Categories table
@@ -83,3 +82,6 @@ CREATE TABLE IF NOT EXISTS categories (
   FOREIGN KEY (dish_id) REFERENCES dishes(dish_id),
   UNIQUE KEY unique_dish_category (dish_id, category)
 );
+
+-- Veg, Non-veg, Appetizers, Soups, Salads, Noodles and rice,
+-- Curries, Sushi and sashimi, Grills and barbeque, Deserts, Beverages

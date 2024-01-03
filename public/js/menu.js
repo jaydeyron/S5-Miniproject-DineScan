@@ -10,13 +10,13 @@ function openDishSummary(dish) {
     // Update overlay content
     overlayContent.innerHTML = `
     <div class="close-veg">
-                <span class="material-symbols-outlined close" onclick="closeDishSummary()">arrow_back</span>
-                <span class="material-symbols-outlined ${ dish.vegetarian ? 'vegetarian' : 'non-vegetarian' } dish-veg">
+                <span class="material-symbols-outlined close" onclick="closeDishSummary()" style="padding-left: 22px;" >arrow_back</span>
+                <span class="material-symbols-outlined ${ dish.vegetarian ? 'vegetarian' : 'non-vegetarian' } dish-veg" style="margin-right: 15px;" >
                     ${ dish.vegetarian ? 'fiber_manual_record' : 'change_history'}
                   </span>
             </div>
             <div class="overlay-content">
-                <img class="overlay-image" src="${dish.image_url }">
+                <img class="overlay-image" src="/images/uploads/${ dish.dish_photo }">
                 <span class="dish-summary-name">${ dish.dish_name }</span>
                 <span style="font-size: 20px; font-weight: bold;">Nutritional value per 100g</span>
                 <div class="stats">
@@ -48,15 +48,17 @@ function openDishSummary(dish) {
 // Helper function to close dish summary
 function closeDishSummary() {
     const overlayContent = document.getElementById("overlay");
-  // Close the overlay
-  overlayContent.style.display = "none";
-  // Remove the "active" class to transition out
-  overlayContent.classList.remove("active");
-
-  // Hide the overlay after the transition is complete
-  setTimeout(function() {
-      overlayContent.style.display = "none";
-  }, 500); // The transition duration is 0.5s, so set timeout accordingly
-  // Enable scrolling
-  document.body.style.overflow = "auto";
+  
+    // Add a delay before removing the "active" class
+    setTimeout(function() {
+        overlayContent.classList.remove("active");
+    }, 0);
+  
+    // Hide the overlay after the transition is complete
+    setTimeout(function() {
+        overlayContent.style.display = "none";
+    }, 500); // The transition duration is 0.5s, so set timeout accordingly
+  
+    // Enable scrolling
+    document.body.style.overflow = "auto";
 }

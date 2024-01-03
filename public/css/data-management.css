@@ -32,6 +32,7 @@
     width: 80%;
     padding: 50px;
     border-radius: 8px;
+    overflow: auto;
 }
 
 #update-form, #add-form {
@@ -54,8 +55,10 @@
 
   #update-form input,
   #update-form select,
+  #update-form textarea,
   #add-form input,
-  #add-form select {
+  #add-form select,
+  #add-form textarea {
     width: 100%;
     padding: 10px;
     font-size: large;
@@ -114,4 +117,15 @@
 
 td:last-child {
   text-align: right;
+}
+
+#add-dropzone, #update-dropzone {
+  position: relative;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  &:hover {
+    background-color: whitesmoke;
+  }
 }

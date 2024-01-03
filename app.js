@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const mysql2 = require("mysql2");
 const dotenv = require("dotenv");
 const session = require("express-session");
+const multer = require("multer");
+const fs = require("fs");
 
 // define constants
 const app = express();
@@ -21,6 +23,27 @@ app.use(express.static(path.join(__dirname, "public")));
 // set the view engine to EJS
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "src/views"));
+
+// setting up multer to handle file uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Specify the directory where you want to store the uploaded images
+    const uploadDir = path.join(__dirname, "public/images/uploads");
+    // Create the directory if it doesn't exist
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Generate a unique filename for the uploaded image
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const fileExtension = path.extname(file.originalname);
+    cb(null, file.fieldname + "-" + uniqueSuffix + fileExtension);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 // create a connection to the MySQL server
 const pool = mysql2.createPool({
@@ -127,6 +150,19 @@ app.get("/logout", (req, res) => {
       res.redirect("/login");
     }
   });
+});
+
+app.post("/api/upload-dish-image", upload.single("file"), (req, res) => {
+  // Check if a file was provided in the request
+  if (!req.file) {
+    return res.status(400).json({ error: "No image file provided" });
+    console.log('no image');
+  }
+
+  // Get the file path of the uploaded image
+  const imagePath = req.file.filename;
+  // Return the image path in the response
+  res.json({ imagePath });
 });
 
 app.get("/admin-dashboard", (req, res) => {
@@ -256,7 +292,8 @@ app.get("/admin-dashboard/settings", isAuthenticated, (req, res) => {
 
 app.get("/admin-dashboard/data-management", isAuthenticated, (req, res) => {
   pool.getConnection((error, connection) => {
-    const query = "SELECT * FROM dishes";
+    const query = "SELECT * FROM dishes ORDER BY dish_name";
+
     connection.query(query, (error, results, fields) => {
       // Release the connection back to the pool
       connection.release();
@@ -326,9 +363,13 @@ app.get("/staff-dashboard/overview", isAuthenticated, (req, res) => {
   res.render("staff-dashboard/overview.ejs", { username: req.session.username, role: req.session.role });
 });
 
+app.get("/superuser-dashboard/data-management", isAuthenticated, (req, res) => {
+  res.redirect("/admin-dashboard/data-management");
+});
+
 app.get("/staff-dashboard/data-management", isAuthenticated, (req, res) => {
   pool.getConnection((error, connection) => {
-    const query = "SELECT * FROM dishes";
+    const query = "SELECT * FROM dishes ORDER BY dish_name";
     connection.query(query, (error, results, fields) => {
       // Release the connection back to the pool
       connection.release();
@@ -669,33 +710,83 @@ app.delete('/api/remove-dish/:dishId', isAuthenticated, (req, res) => {
   });
 });
 
-// Add this route to handle dish updates
+app.post('/api/remove-file', async (req, res) => {
+  try {
+      const imagePath = req.body.imagePath;
+
+      // Assuming the imagePath is relative to the 'public/images/uploads' directory
+      const filePath = path.join(__dirname, 'public/images/uploads', imagePath);
+
+      // Check if the file exists before attempting to delete
+      const fileExists = await fs.access(filePath)
+          .then(() => true)
+          .catch(() => false);
+
+      if (fileExists) {
+          // Remove the file
+          await fs.unlink(filePath);
+          res.status(200).json({ message: 'File removed successfully' });
+      } else {
+          res.status(404).json({ error: 'File not found' });
+      }
+  } catch (error) {
+      console.error('Error removing file:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.post('/api/update-dish/:dishId', isAuthenticated, (req, res) => {
   const dishId = req.params.dishId;
-  const { dishName, price, vegetarian, available } = req.body;
+  const { dishName, price, vegetarian, available, dishDescription, dishPhoto, calories, protein, fat, carb } = req.body;
 
-  // Perform the update logic here
+  // Select the current dish_photo from the database
   pool.query(
-    'UPDATE dishes SET dish_name = ?, price = ?, vegetarian = ?, available = ? WHERE dish_id = ?',
-    [dishName, price, vegetarian, available, dishId],
-    (error, results) => {
-      if (error) {
-        console.error('Error updating dish:', error);
+    'SELECT dish_photo FROM dishes WHERE dish_id = ?',
+    [dishId],
+    (selectError, selectResults) => {
+      if (selectError) {
+        console.error('Error selecting dish_photo:', selectError);
         res.status(500).json({ error: 'Internal Server Error' });
       } else {
-        // Send a success response
-        const referer = req.get('referer');
-        res.redirect(referer);
+        const currentDishPhoto = selectResults[0].dish_photo;
+
+        // Perform the update logic here
+        pool.query(
+          'UPDATE dishes SET dish_name = ?, price = ?, vegetarian = ?, available = ?, dish_description = ?, dish_photo = ?, calories = ?, protein = ?, fat = ?, carb = ? WHERE dish_id = ?',
+          [dishName, price, vegetarian, available, dishDescription, dishPhoto, calories, protein, fat, carb, dishId],
+          (updateError, updateResults) => {
+            if (updateError) {
+              console.error('Error updating dish:', updateError);
+              res.status(500).json({ error: 'Internal Server Error' });
+            } else {
+              // If dishPhoto is updated, delete the old image file
+              if (currentDishPhoto && currentDishPhoto !== dishPhoto) {
+                // Use fs.unlink to delete the old image file
+                fs.unlink(path.join(__dirname, "public/images/uploads", currentDishPhoto), (unlinkError) => {
+                  if (unlinkError) {
+                    console.error('Error deleting old image file:', unlinkError);
+                  } else {
+                    console.log('Old image file deleted successfully');
+                  }
+                });
+              }
+
+              // Send a success response
+              const referer = req.get('referer');
+              res.redirect(referer);
+            }
+          }
+        );
       }
     }
   );
 });
 
 app.post('/api/add-dish',isAuthenticated, (req, res) => {
-  const { dishName, price, vegetarian, available } = req.body;
+  const { dishName, price, vegetarian, available, dishDescription, dishPhoto, calories, protein, fat, carb } = req.body;
   pool.query(
-    'INSERT INTO dishes (dish_name, price, vegetarian, available) VALUES (?, ?, ?, ?)',
-    [dishName, price, vegetarian, available],
+    'INSERT INTO dishes (dish_name, price, vegetarian, available, dish_description, dish_photo, calories, protein, fat, carb) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [dishName, price, vegetarian, available, dishDescription, dishPhoto, calories, protein, fat, carb],
     (error, results) => {
       if (error) {
         console.error('Error adding new dish:', error);

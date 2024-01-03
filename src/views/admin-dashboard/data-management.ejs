@@ -4,9 +4,13 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">    
         <link rel="stylesheet" href="/css/dashboard-common.css">
+        <link rel="stylesheet" href="/css/data-management.css">
+        <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" integrity="sha512-WBRxX+7EojrO5fU6suW5aixtPLcXoB5Aq5bsPbqoYPz+znJVlQk/cZ9U2FJlWwnX5R6Gl9A2uU9eVe2o0pwbLQ==" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js" integrity="sha512-FuXlmfsNb0/6d/R5eNPGqYiVOxW8qxTBE3T+R8M6tAZrT+faa5/8+TGGtznRrhRcBjwQQlNw3RQJbACJCh7C3Q==" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>                
         <script src="/js/dashboard-common.js"></script>
         <script src="/js/data-management.js"></script>
-        <link rel="stylesheet" href="/css/data-management.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -76,7 +80,7 @@
                                 <td><%= dish.vegetarian ? 'Veg' : 'Non-Veg' %></td>
                                 <td><%= dish.available %></td>
                                 <td>
-                                    <button class="table-buttons" onclick="openUpdateForm('<%= dish.dish_id %>','<%= dish.dish_name %>','<%= dish.price %>','<%= dish.vegetarian %>','<%= dish.available %>')">Update</button>
+                                    <button class="table-buttons" onclick="openUpdateForm('<%= dish.dish_id %>','<%= dish.dish_name %>','<%= dish.price %>','<%= dish.vegetarian %>','<%= dish.available %>','<%= dish.dish_description %>','<%= dish.dish_photo %>','<%= dish.calories %>','<%= dish.protein %>','<%= dish.fat %>','<%= dish.carb %>')">Update</button>
                                     <span style="padding: 5px;"></span>
                                     <button class="table-buttons" onclick="confirmRemove('<%= dish.dish_name %>','<%= dish.dish_id %>','<%= role %>')">Remove</button>
                                 </td>
@@ -105,7 +109,27 @@
               
                     <label for="available">Available :</label>
                     <input type="text" id="update-available" name="available" required>
-              
+                    
+                    <label for="dishDescription">Description:</label>
+                    <textarea id="update-dishDescription" name="dishDescription" rows="4"></textarea>
+                                        
+                    <label for="dishPhoto">Photo:</label>
+                    <div id="update-dropzone" class="dropzone" name="image">                    
+                    </div>
+                    <input type="hidden" id="update-dishPhoto" name="dishPhoto">
+                    
+                    <label for="calories">Calories:</label>
+                    <input type="text" id="update-calories" name="calories">
+                    
+                    <label for="protein">Protein:</label>
+                    <input type="text" id="update-protein" name="protein">
+                    
+                    <label for="fat">Fat:</label>
+                    <input type="text" id="update-fat" name="fat">
+                    
+                    <label for="carb">Carbohydrates:</label>
+                    <input type="text" id="update-carb" name="carb">
+
                     <button type="submit">Update</button>
                 </form>
             </div>
@@ -126,7 +150,27 @@
               
                     <label for="available">Available :</label>
                     <input type="text" id="add-available" name="available" required>
-              
+
+                    <label for="dishDescription">Description:</label>
+                    <textarea id="add-dishDescription" name="dishDescription" rows="4"></textarea>
+                    
+                    <label for="dishPhoto">Photo:</label>
+                    <div id="add-dropzone" class="dropzone">
+                    </div>
+                    <input type="hidden" id="add-dishPhoto" name="dishPhoto">
+                    
+                    <label for="calories">Calories:</label>
+                    <input type="text" id="add-calories" name="calories">
+                    
+                    <label for="protein">Protein:</label>
+                    <input type="text" id="add-protein" name="protein">
+                    
+                    <label for="fat">Fat:</label>
+                    <input type="text" id="add-fat" name="fat">
+                    
+                    <label for="carb">Carbohydrates:</label>
+                    <input type="text" id="add-carb" name="carb">
+
                     <button type="submit">Add</button>
                 </form>
             </div>

@@ -31,7 +31,7 @@
                   <span style="padding-bottom: 15px;">Rs. <%= dish.price %></span>
                 </div>
                 <div class="dish-image-section">
-                  <img class="dish-image" src="<%= dish.image_url %>">
+                  <img class="dish-image" src="/images/uploads/<%= dish.dish_photo %>">
                   <button class="cart-button" onclick="event.stopPropagation();">Add</button>
                 </div>
               </div>
@@ -39,5 +39,11 @@
           </div>
         <div id="overlay">
         </div>
+        <div id="restaurant-description">
+          <p style="font-size: larger;"><strong><%= restaurant.description %></strong></p>
+          <p><strong>Address:</strong> <%= restaurant.address %></p>
+          <p><strong>Phone Number:</strong> <%= restaurant.restaurant_phone_num %></p>
+          <p><strong>Email:</strong> <%= restaurant.restaurant_email %></p>
+        </div>      
     </body>
 </html>

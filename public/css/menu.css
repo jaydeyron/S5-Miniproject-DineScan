@@ -43,6 +43,17 @@ body {
     background-color: #171919;
     border-radius: 6px;
     cursor: pointer;
+    position: relative;
+}
+
+.dish-box::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%; /* Center the border */
+    width: 90%; /* Adjust the width to cover 90% */
+    margin-left: -45%; /* Offset by half of the width to center it */
+    border-bottom: 0.25px solid white; /* Adjust the thickness of the border */
 }
 
 .dish-image {
@@ -95,6 +106,7 @@ body {
     justify-content: center;
     align-items: center;
     transition: left 0.5s ease;
+    overflow: auto;
 }
 
 .overlay-content {
@@ -103,7 +115,6 @@ body {
     background-color: black;
     border-radius: 10px;
     text-align: center;
-    overflow: auto;
 }
 
 #overlay.active {
@@ -114,7 +125,8 @@ body {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    padding: 22px;
+    padding-top: 22px;
+    padding-bottom: 22px;
 }
 
 .overlay-image {
@@ -150,6 +162,10 @@ body {
 
 .stat-value {
     font-weight: bold;
+}
+
+.stats {
+    padding: 20px;
 }
 
 .close {
