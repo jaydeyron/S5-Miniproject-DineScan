@@ -71,7 +71,7 @@ pool.getConnection((err, connection) => {
 // session middleware
 app.use(session({
   secret: '188502',
-  resave: false,
+  resave: true,
   saveUninitialized: true,
   cookie: {
     secure: false, // Set to true if using HTTPS

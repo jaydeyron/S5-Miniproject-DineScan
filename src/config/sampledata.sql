@@ -164,7 +164,6 @@ INSERT INTO restaurant (
   restaurant_phone_num,
   restaurant_email,
   description,
-  logo_url
 ) VALUES (
   'Sakura Sushi House',
   '456 Cherry Blossom Lane, Tokyo',
