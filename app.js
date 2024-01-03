@@ -73,7 +73,12 @@ app.use(session({
   secret: '188502',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }
+  cookie: {
+    secure: false, // Set to true if using HTTPS
+    maxAge: 3600000, // Set the session to expire after a certain time (in milliseconds)
+    httpOnly: true,
+    sameSite: 'strict' // Better security by restricting how cookies are sent with cross-site requests
+  }
 }));
 
 app.get("/login", (req, res) => {
