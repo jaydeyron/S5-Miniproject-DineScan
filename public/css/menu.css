@@ -5,6 +5,7 @@ body {
     font-family: 'Roboto', sans-serif;
     color: white;
     height: 100vh;
+    -webkit-tap-highlight-color: transparent;
 }
 
 #title-division {
@@ -60,6 +61,7 @@ body {
     height: 140px;
     width: auto;
     border-radius: 10px;
+    padding-bottom: 10px;
 }
 
 .dish-details {
@@ -217,13 +219,13 @@ body {
 
 .counter-button {
     display: block;
-    padding: 8px 14px;
+    padding: 7px 12px;
     font-size: 15px;
     text-align: center;
     border: 1.5px solid black;
     color: white;
-    background-color: #151717;
-    border-radius: 12px;
+    background-color: rgba(128, 128, 128, 0.924);
+    border-radius: 15px;
     cursor: pointer;
 }
 

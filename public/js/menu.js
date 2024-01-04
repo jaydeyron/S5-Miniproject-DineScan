@@ -116,7 +116,7 @@ function addToCart(event, dish) {
     const counterSection = document.createElement('div');
     counterSection.classList.add('counter-section');
     counterSection.innerHTML = `
-        <button class="counter-button" onclick="decrementQuantity(event, ${dishId})">-</button>
+        <button class="counter-button" onclick="decrementQuantity(event, ${dishId})">–</button>
         <span class="quantity">${cart[dishId]}</span>
         <button class="counter-button" onclick="incrementQuantity(event, ${dishId})">+</button>
     `;

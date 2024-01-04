@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const mysql2 = require("mysql2");
 const dotenv = require("dotenv");
 const session = require("express-session");
+const MySQLStore = require('express-mysql-session')(session);
 const multer = require("multer");
 const fs = require("fs");
 
@@ -69,16 +70,31 @@ pool.getConnection((err, connection) => {
 });
 
 // session middleware
+const sessionStore = new MySQLStore({
+  host: process.env.DBMS_host,
+  user: process.env.DBMS_user,
+  password: process.env.DBMS_password,
+  database: process.env.DBMS_database,
+});
+
+// Create the session table if it doesn't exist
+sessionStore.createDatabaseTable().then(() => {
+  console.log('Session table created successfully.');
+}).catch((err) => {
+  console.error('Error creating session table:', err);
+});
+
 app.use(session({
   secret: '188502',
   resave: true,
   saveUninitialized: true,
+  store: sessionStore,
   cookie: {
-    secure: false, // Set to true if using HTTPS
-    maxAge: 3600000, // Set the session to expire after a certain time (in milliseconds)
+    secure: false,
+    maxAge: 3600000,
     httpOnly: true,
-    sameSite: 'strict' // Better security by restricting how cookies are sent with cross-site requests
-  }
+    sameSite: 'strict',
+  },
 }));
 
 app.get("/login", (req, res) => {
