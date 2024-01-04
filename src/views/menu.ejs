@@ -32,18 +32,33 @@
                 </div>
                 <div class="dish-image-section">
                   <img class="dish-image" src="/images/uploads/<%= dish.dish_photo %>">
-                  <button class="cart-button" onclick="event.stopPropagation();">Add</button>
+                  <button class="cart-button" onclick="addToCart(event, <%= JSON.stringify(dish) %>)">Add</button>
                 </div>
               </div>
             <% }); %>
           </div>
         <div id="overlay">
         </div>
+        <span style="margin: 15px;"></span>
+        <div id="view-cart-button" onclick="openOrderSummary(<%= JSON.stringify(dishes) %>)">
+          <span id="item-count">0 items added</span>
+          <span style="display: flex; align-items:center">View cart<span class="material-symbols-outlined">navigate_next</span> </span>
+        </div>
+        <div id="order-summary-overlay">
+          <span class="material-symbols-outlined close" onclick="closeOrderSummary()">arrow_back</span>
+          <div id="order-summary-content">
+              <h2 style="text-align: center">Order Summary</h2>
+              <ul id="order-summary-list"></ul>
+              <h4>Order Total : Rs. <span id="total-amount"></span></h4>        
+              <button id="checkout-button" onclick="">Checkout</button>
+          </div>
+        </div>        
         <div id="restaurant-description">
           <p style="font-size: larger;"><strong><%= restaurant.description %></strong></p>
           <p><strong>Address:</strong> <%= restaurant.address %></p>
           <p><strong>Phone Number:</strong> <%= restaurant.restaurant_phone_num %></p>
           <p><strong>Email:</strong> <%= restaurant.restaurant_email %></p>
+          <p>All rights reserved <strong>©</strong></p>
         </div>      
     </body>
 </html>

@@ -204,3 +204,108 @@ body {
     'GRAD' 0,
     'opsz' 20
 }
+
+.counter-section {
+    display: none;
+    align-items: center;
+}
+
+.counter-section.active {
+    display: flex;
+    justify-content: space-around;
+}
+
+.counter-button {
+    display: block;
+    padding: 8px 14px;
+    font-size: 15px;
+    text-align: center;
+    border: 1.5px solid black;
+    color: white;
+    background-color: #151717;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+#restaurant-description {
+    border-top: 0.25px solid white;
+    padding: 20px;
+}
+
+.dish-box:focus,
+.cart-button:focus {
+    outline: none;
+}
+
+#view-cart-button {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    bottom: 5px;
+    margin: 8px;
+    padding: 10px;
+    margin-bottom: 35px;
+    background-color: rgba(128, 128, 128, 0.924);
+    color: white;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    z-index: 1000;
+    animation: viewCartTransition 0.5s ease-in;
+}
+
+@keyframes viewCartTransition {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#order-summary-overlay {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 1);
+    justify-content: center;
+    align-items: center;
+    transition: left 0.5s ease;
+    overflow: auto;
+}
+
+#order-summary-overlay.active {
+    left: 0;
+}
+
+#order-summary-content {
+    display: flex;
+    flex-direction: column;
+}
+
+#order-summary-list {
+    font-size: large;
+    list-style-type: none;
+}
+
+#checkout-button {
+    justify-content: space-between;
+    align-items: center;
+    bottom: 5px;
+    margin: 8px;
+    padding: 10px;
+    font-size: large;
+    background-color: rgba(128, 128, 128, 0.924);
+    color: white;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    z-index: 1000;
+}
