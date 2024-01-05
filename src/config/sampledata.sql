@@ -163,14 +163,13 @@ INSERT INTO restaurant (
   address,
   restaurant_phone_num,
   restaurant_email,
-  description,
+  description
 ) VALUES (
   'Sakura Sushi House',
   '456 Cherry Blossom Lane, Tokyo',
   '+81 90-1234-5678',
   'info@sakurasushi.com',
-  'Experience the finest sushi and Japanese cuisine in a traditional setting.',
-  'https://example.com/sakurasushi_logo.png'
+  'Experience the finest sushi and Japanese cuisine in a traditional setting.'
 );
 
 COMMIT;

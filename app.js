@@ -7,12 +7,17 @@ const dotenv = require("dotenv");
 const session = require("express-session");
 const MySQLStore = require('express-mysql-session')(session);
 const multer = require("multer");
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const crypto = require('crypto');
 const fs = require("fs");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // define constants
 const app = express();
 const port = 3000;
 
+const randomImageName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
 // load the environment variables from .env file
 dotenv.config();
 // middleware to parse incoming JSON requests and parse the incoming form data
@@ -25,26 +30,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "src/views"));
 
-// setting up multer to handle file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    // Specify the directory where you want to store the uploaded images
-    const uploadDir = path.join(__dirname, "public/images/uploads");
-    // Create the directory if it doesn't exist
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
+const s3 = new S3Client({
+  credentials:{
+    accessKeyId: process.env.AWS_keyid,
+    secretAccessKey: process.env.AWS_secretkey,
   },
-  filename: function (req, file, cb) {
-    // Generate a unique filename for the uploaded image
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const fileExtension = path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + uniqueSuffix + fileExtension);
-  },
+  region: process.env.AWS_region
 });
-
-const upload = multer({ storage: storage });
 
 // create a connection to the MySQL server
 const pool = mysql2.createPool({
@@ -173,18 +165,32 @@ app.get("/logout", (req, res) => {
   });
 });
 
-app.post("/api/upload-dish-image", upload.single("file"), (req, res) => {
+app.post("/api/upload-dish-image", upload.single("file"), async (req, res) => {
   // Check if a file was provided in the request
   if (!req.file) {
     return res.status(400).json({ error: "No image file provided" });
-    console.log('no image');
   }
+  else {
+    const fileName = randomImageName();
+    const params = {
+      Bucket: process.env.AWS_bucket,
+      Key: fileName,
+      Body: req.file.buffer,
+      ContentType: req.file.mimetype,
+    };
 
-  // Get the file path of the uploaded image
-  const imagePath = req.file.filename;
-  // Return the image path in the response
-  res.json({ imagePath });
+    try {
+      await s3.send(new PutObjectCommand(params));
+
+      // Return the image path in the response
+      res.json({ fileName });
+    } catch (error) {
+      console.error("Error uploading image to S3:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
 });
+
 
 app.get("/admin-dashboard", (req, res) => {
   res.redirect("/admin-dashboard/overview");
@@ -729,31 +735,6 @@ app.delete('/api/remove-dish/:dishId', isAuthenticated, (req, res) => {
       });
     }
   });
-});
-
-app.post('/api/remove-file', async (req, res) => {
-  try {
-      const imagePath = req.body.imagePath;
-
-      // Assuming the imagePath is relative to the 'public/images/uploads' directory
-      const filePath = path.join(__dirname, 'public/images/uploads', imagePath);
-
-      // Check if the file exists before attempting to delete
-      const fileExists = await fs.access(filePath)
-          .then(() => true)
-          .catch(() => false);
-
-      if (fileExists) {
-          // Remove the file
-          await fs.unlink(filePath);
-          res.status(200).json({ message: 'File removed successfully' });
-      } else {
-          res.status(404).json({ error: 'File not found' });
-      }
-  } catch (error) {
-      console.error('Error removing file:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-  }
 });
 
 app.post('/api/update-dish/:dishId', isAuthenticated, (req, res) => {

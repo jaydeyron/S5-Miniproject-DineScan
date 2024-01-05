@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", function () {
+    document.body.style.display = 'block';
+});
+
 function openDishSummary(dish) {
     const overlayContent = document.getElementById("overlay");
     const viewCart = document.getElementById("view-cart-button");
@@ -19,7 +23,7 @@ function openDishSummary(dish) {
                   </span>
             </div>
             <div class="overlay-content">
-                <img class="overlay-image" src="/images/uploads/${ dish.dish_photo }">
+                <img class="overlay-image" src="https://dinescan.s3.ap-southeast-2.amazonaws.com/${ dish.dish_photo }">
                 <span class="dish-summary-name">${ dish.dish_name }</span>
                 <span style="font-size: 20px; font-weight: bold;">Nutritional value per 100g</span>
                 <div class="stats">

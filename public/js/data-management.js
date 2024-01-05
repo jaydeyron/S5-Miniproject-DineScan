@@ -110,8 +110,8 @@ Dropzone.autoDiscover = false;
                   // Your custom initialization code here
                   this.on("success", function (file, response) {
                       // This code runs after a successful upload
-                      document.getElementById('add-dishPhoto').value = response.imagePath;                      
-                    });        
+                      document.getElementById('add-dishPhoto').value = response.fileName;                  
+                    });
               },
             });
 

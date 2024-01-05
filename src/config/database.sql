@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
   username VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
   role ENUM('admin', 'staff', 'superuser') NOT NULL,
-  profile_photo_url TEXT,
+  profile_photo TEXT,
   first_name VARCHAR(255),
   last_name VARCHAR(255),
   email VARCHAR(255),

@@ -24,14 +24,14 @@
             <% dishes.forEach(dish => { %>
               <div class="dish-box" onclick="openDishSummary(<%= JSON.stringify(dish) %>)">
                 <span class="material-symbols-outlined <%= dish.vegetarian ? 'vegetarian' : 'non-vegetarian' %> dish-veg">
-                  fiber_manual_record
+                  <%= dish.vegetarian ? 'fiber_manual_record' : 'change_history' %>
                 </span>
                 <div class="dish-details">
                   <span style="padding-bottom: 5px;"><%= dish.dish_name %></span>
                   <span style="padding-bottom: 15px;">Rs. <%= dish.price %></span>
                 </div>
                 <div class="dish-image-section">
-                  <img class="dish-image" src="/images/uploads/<%= dish.dish_photo %>">
+                  <img class="dish-image" src="https://dinescan.s3.ap-southeast-2.amazonaws.com/<%= dish.dish_photo %>">
                   <button class="cart-button" onclick="addToCart(event, <%= JSON.stringify(dish) %>)">Add</button>
                 </div>
               </div>
