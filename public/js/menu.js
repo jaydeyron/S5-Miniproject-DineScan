@@ -55,7 +55,6 @@ function openDishSummary(dish) {
 // Helper function to close dish summary
 function closeDishSummary() {
     const overlayContent = document.getElementById("overlay");
-    const viewCart = document.getElementById("view-cart-button");
     // Add a delay before removing the "active" class
     setTimeout(function() {
         overlayContent.classList.remove("active");

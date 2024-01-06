@@ -165,7 +165,7 @@ app.get("/logout", (req, res) => {
   });
 });
 
-app.post("/api/upload-dish-image", upload.single("file"), async (req, res) => {
+app.post("/api/upload-image", upload.single("file"), async (req, res) => {
   // Check if a file was provided in the request
   if (!req.file) {
     return res.status(400).json({ error: "No image file provided" });
@@ -865,10 +865,16 @@ app.get("/menu/:table_num", (req, res) => {
   });
 });
 
+app.post('/api/checkout', (req, res) => {
+  // Access the submitted data from the request body
+  const { cart, cartName, cartPrice, totalPrice } = req.body;
 
-// defines a route to the payment gateway
-app.get("/payment", (req, res) => {
-  res.render("payment-gateway");
+  res.render("checkout", {
+      cart: JSON.stringify(cart),
+      cartName: JSON.stringify(cartName),
+      cartPrice: JSON.stringify(cartPrice),
+      totalPrice: totalPrice,
+  });
 });
 
 // defines a route to the payment successful page

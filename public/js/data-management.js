@@ -100,7 +100,7 @@ Dropzone.autoDiscover = false;
 
         document.addEventListener("DOMContentLoaded", function () {
             const addDropzone = new Dropzone("#add-dropzone", {
-                url: "/api/upload-dish-image", // Replace with the actual server endpoint for file uploads
+                url: "/api/upload-image", // Replace with the actual server endpoint for file uploads
                 acceptedFiles: "image/*",
                 paramName: "file",
                 maxFiles: 1,
@@ -116,7 +116,7 @@ Dropzone.autoDiscover = false;
             });
 
             const updateDropzone = new Dropzone("#update-dropzone", {
-              url: "/api/upload-dish-image", // Replace with the actual server endpoint for file uploads
+              url: "/api/upload-image", // Replace with the actual server endpoint for file uploads
               acceptedFiles: "image/*",
               paramName: "file",
               maxFiles: 1,

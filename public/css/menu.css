@@ -269,10 +269,12 @@ body {
     }
 }
 
+
 #order-summary-overlay {
     display: none;
     flex-direction: column;
     position: fixed;
+    padding-top: 22px;
     top: 0;
     left: 100%;
     width: 100%;
@@ -301,6 +303,7 @@ body {
 #checkout-button {
     justify-content: space-between;
     align-items: center;
+    width: 96%;
     bottom: 5px;
     margin: 8px;
     padding: 10px;

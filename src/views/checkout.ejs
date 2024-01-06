@@ -1,0 +1,108 @@
+<!-- checkout.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+
+    <!-- Include Stripe.js script -->
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <!-- Your checkout content here -->
+
+    <!-- Add a payment form -->
+    <form id="payment-form">
+        <!-- Display payment errors to the user -->
+        <div id="payment-errors" role="alert"></div>
+
+        <!-- Payment method selection -->
+        <label for="payment-method">Select Payment Method:</label>
+        <select id="payment-method" name="payment-method">
+            <option value="card">Credit/Debit Card</option>
+            <option value="upi">UPI</option>
+            <option value="cash">Cash</option>
+        </select>
+
+        <!-- Card details input (displayed if Credit/Debit Card is selected) -->
+        <div id="card-element">
+            <!-- A Stripe Element will be inserted here. -->
+        </div>
+
+        <!-- Additional fields for UPI or Cash (displayed based on selection) -->
+        <div id="upi-fields" style="display: none;">
+            <!-- UPI fields go here -->
+        </div>
+
+        <div id="cash-fields" style="display: none;">
+            <!-- Cash payment instructions or fields go here -->
+        </div>
+
+        <!-- Used to display form errors. -->
+        <div id="card-errors" role="alert"></div>
+
+        <!-- Submit button -->
+        <button type="submit">Submit Payment</button>
+    </form>
+
+    <script>
+        // Your Stripe public key
+        var stripe = Stripe('YOUR_STRIPE_PUBLIC_KEY');
+
+        // Create an instance of Elements
+        var elements = stripe.elements();
+
+        // Create an instance of the card Element
+        var card = elements.create('card');
+
+        // Add an instance of the card Element into the `card-element` div
+        card.mount('#card-element');
+
+        // Handle form submission
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var paymentMethod = document.getElementById('payment-method').value;
+
+            if (paymentMethod === 'card') {
+                // Trigger the payment using Stripe.js
+                stripe.createPaymentMethod({
+                    type: 'card',
+                    card: card,
+                }).then(function(result) {
+                    if (result.error) {
+                        // Display error to the user
+                        var errorElement = document.getElementById('card-errors');
+                        errorElement.textContent = result.error.message;
+                    } else {
+                        // The payment was successful, handle the result
+                        console.log(result);
+                        // You can send the payment method ID (result.paymentMethod.id)
+                        // to your server for further processing
+                    }
+                });
+            } else if (paymentMethod === 'upi') {
+                // Handle UPI payment logic
+                // ...
+
+            } else if (paymentMethod === 'cash') {
+                // Handle cash payment logic
+                // ...
+            }
+        });
+
+        // Show/hide additional fields based on payment method selection
+        document.getElementById('payment-method').addEventListener('change', function() {
+            var selectedMethod = this.value;
+
+            document.getElementById('card-element').style.display = selectedMethod === 'card' ? 'block' : 'none';
+            document.getElementById('upi-fields').style.display = selectedMethod === 'upi' ? 'block' : 'none';
+            document.getElementById('cash-fields').style.display = selectedMethod === 'cash' ? 'block' : 'none';
+        });
+    </script>
+
+</body>
+</html>

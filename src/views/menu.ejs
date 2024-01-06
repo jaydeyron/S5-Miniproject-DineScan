@@ -49,8 +49,14 @@
           <div id="order-summary-content">
               <h2 style="text-align: center">Order Summary</h2>
               <ul id="order-summary-list"></ul>
-              <h4>Order Total : Rs. <span id="total-amount"></span></h4>        
-              <button id="checkout-button" onclick="">Checkout</button>
+              <h4 style="padding-left: 20px;">Order Total : Rs. <span id="total-amount"></span></h4>        
+              <form id="checkoutForm" action="/api/checkout" method="post">
+                <input type="hidden" name="cart" value='${JSON.stringify(cart)}'>
+                <input type="hidden" name="cartName" value='${JSON.stringify(cartName)}'>
+                <input type="hidden" name="cartPrice" value='${JSON.stringify(cartPrice)}'>
+                <input type="hidden" name="totalPrice" value='${totalPrice}'>
+                <button type="submit" id="checkout-button">Submit</button>
+              </form>
           </div>
         </div>        
         <div id="restaurant-description">

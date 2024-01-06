@@ -37,7 +37,6 @@ CREATE TABLE IF NOT EXISTS payment (
   payment_type ENUM('Credit card', 'Debit card', 'UPI', 'Cash') NOT NULL,
   total_amount DECIMAL(10, 2) NOT NULL,
   payment_date DATETIME NOT NULL,
-  transaction_status ENUM('Success', 'Pending', 'Failed') NOT NULL,
   card_number VARCHAR(19),
   card_expiration_date DATE,
   card_holder_name VARCHAR(255),

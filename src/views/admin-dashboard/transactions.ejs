@@ -52,18 +52,17 @@
                 <table id="transactions-table">
                     <thead>
                         <tr>
-                            <td colspan="6" style=" border-top: 1px solid #172233;"></td>
+                            <td colspan="5" style=" border-top: 1px solid #172233;"></td>
                         </tr>
                         <tr>
                             <th>Trn Id</th>
                             <th>Name</th>
                             <th>Payment method</th>
                             <th>Amount</th>
-                            <th>Payment status</th>
                             <th>Payment details</th>
                         </tr>
                         <tr>
-                            <td colspan="6" style=" border-bottom: 1px solid #172233;"></td>
+                            <td colspan="5" style=" border-bottom: 1px solid #172233;"></td>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,12 +72,11 @@
                             <td><%= transaction.customer_name %></td>
                             <td><%= transaction.payment_type %></td>
                             <td>Rs. <%= transaction.total_amount %></td>
-                            <td><%= transaction.transaction_status %></td>
                             <td>
                                 <% if (transaction.payment_type === 'Credit card' || transaction.payment_type === 'Debit card') { %>
                                   <!-- Display credit/debit card details -->
                                   Card Number: <%= transaction.card_number %><br>
-                                  Expiry Date: <%= transaction.card_expiration_date.toLocaleDateString('en-GB') %><br>
+                                  Expiry Date: <%= transaction.card_expiration_date.toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }) %><br>
                                   Card Holder: <%= transaction.card_holder_name %>
                                 <% } else if (transaction.payment_type === 'UPI') { %>
                                   <!-- Display UPI details -->
@@ -93,7 +91,7 @@
                               </td>
                           </tr>
                           <tr>
-                            <td class="table-divider" colspan="6"></td>
+                            <td class="table-divider" colspan="5"></td>
                         </tr>
                         <% }); %>
                       </tbody>
