@@ -20,14 +20,11 @@
     </head>
     <body>
         <div id="menu-division">
-            <img id="logo" src="/images/demologo.png">
+            <img id="logo" src="/images/logo.png">
             <nav id="navigation-menu">
                 <ul id="menu-list">
-                    <li id="overview" class="menu-item selected"><span class="material-symbols-outlined">grid_view</span><a href="/staff-dashboard/overview"><span style="padding: 8px;">Overview</span></a></li>
+                    <li id="orders" class="menu-item"><span class="material-symbols-outlined">orders</span><a href="/staff-dashboard/orders"><span style="padding: 8px;">Orders</span></a></li>                    
                     <li id="data-management" class="menu-item" style="opacity: 1;"><span class="material-symbols-outlined">database</span><a href="/staff-dashboard/data-management"><span style="padding: 8px;">Data management</span></a></li>
-                    <li id="orders" class="menu-item"><span class="material-symbols-outlined">orders</span><a href="/staff-dashboard/orders"><span style="padding: 8px;">Orders</span></a></li>
-                    <span class="divider"></span>
-                    <li id="settings" class="menu-item"><span class="material-symbols-outlined">Settings</span><a href="/staff-dashboard/settings"><span style="padding: 8px;">Settings</span></a></li>
                 </ul>
             </nav>
         </div>
@@ -43,8 +40,7 @@
                         <span id="profile-name"><%= username %></span>
                         <span class="material-symbols-outlined" style="color:black;">arrow_drop_down</span>
                     </button>
-                    <div id="dropdown-content">
-                        <a href="#"><div class="dropdown-item-text"><span class="material-symbols-outlined" style="color:black; padding-right: 10px;">person</span>Profile</div></a>
+                    <div id="dropdown-content">                        
                         <a href="/logout"><div class="dropdown-item-text"><span class="material-symbols-outlined" style="color:black; padding-right: 10px;">logout</span>Logout</div></a>
                     </div>
                 </div>

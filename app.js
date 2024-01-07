@@ -176,6 +176,14 @@ app.get("/admin-dashboard", (req, res) => {
   res.redirect("/admin-dashboard/overview");
 });
 
+app.get("/staff-dashboard", (req, res) => {
+  res.redirect("/staff-dashboard/orders");
+});
+
+app.get("/superuser-dashboard", (req, res) => {
+  res.redirect("/superuser-dashboard/overview");
+});
+
 app.get("/admin-dashboard/overview", isAuthenticated, (req, res) => {
   // Query to fetch payment type counts
   const paymentTypeQuery = `
@@ -226,20 +234,18 @@ app.get("/admin-dashboard/overview", isAuthenticated, (req, res) => {
   `;
 
   // Query to fetch total amount per month for the last 8 months
-  const totalAmountLast8MonthsQuery = `
+  const totalAmountAllMonthsQuery = `
   SELECT 
     DATE_FORMAT(payment_date, '%Y-%m') AS month,
     SUM(total_amount) AS totalAmount
   FROM 
     payment
-  WHERE 
-    payment_date >= CURDATE() - INTERVAL 8 MONTH
-    AND payment_date < CURDATE() -- Add this condition to limit to the last 8 months
   GROUP BY 
     MONTH(payment_date), YEAR(payment_date), DATE_FORMAT(payment_date, '%Y-%m')
   ORDER BY 
-    YEAR(payment_date), MONTH(payment_date);
+    YEAR(payment_date) , MONTH(payment_date) ;
 `;
+
 
   // Execute the queries using the connection pool
   pool.query(paymentTypeQuery, (error1, doughnutData) => {
@@ -270,7 +276,7 @@ app.get("/admin-dashboard/overview", isAuthenticated, (req, res) => {
             return;
           }
 
-          pool.query(totalAmountLast8MonthsQuery, (error5, totalAmountLast8MonthsData) => {
+          pool.query(totalAmountAllMonthsQuery, (error5, totalAmountLast8MonthsData) => {
             if (error5) {
               console.error("Error executing MySQL query for total amount last 8 months:", error5);
               res.status(500).send("Internal Server Error");
@@ -292,284 +298,6 @@ app.get("/admin-dashboard/overview", isAuthenticated, (req, res) => {
       });
     });
   });
-});
-
-
-
-app.get("/admin-dashboard/access-control", isAuthenticated, (req, res) => {
-  if (req.session.role === 'superuser') {
-    return res.redirect("/superuser-dashboard/access-control");
-  }
-  pool.getConnection((error, connection) => {
-    if (error) {
-      console.error("Error acquiring a connection from the pool:", error);
-      res.status(500).send("Internal Server Error");
-      return;
-    }
-
-    const query = 'SELECT * FROM users WHERE role = "staff"';
-
-    connection.query(query, (error, results, fields) => {
-      connection.release();
-
-      if (error) {
-        console.error("Error querying database:", error);
-        res.status(500).send("Internal Server Error");
-      } else {
-        res.render("admin-dashboard/access-control.ejs", {
-          username: req.session.username,
-          staff: results,
-          role: req.session.role
-        });
-      }
-    });
-  });
-});
-
-app.get("/admin-dashboard/orders", (req, res) => {
-  res.redirect("/admin-dashboard/orders/1");
-});
-
-app.get("/admin-dashboard/orders/:page", isAuthenticated, (req, res) => {
-  const itemsPerPage = 10;
-  const page = req.params.page;
-  const offset = (page - 1) * itemsPerPage;
-
-  pool.getConnection((error, connection) => {
-    if (error) {
-      console.error("Error acquiring a connection from the pool:", error);
-      res.status(500).send("Internal Server Error");
-      return;
-    }
-
-    const countQuery = 'SELECT COUNT(DISTINCT customer.order_id) AS total FROM customer';
-
-    connection.query(countQuery, (error, resultCount) => {
-      if (error) {
-        console.error("Error counting orders:", error);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-
-      const totalOrders = resultCount[0].total;
-
-      const query = `
-        SELECT 
-          customer.order_id, 
-          customer.table_num, 
-          customer.order_date, 
-          customer.order_status, 
-          GROUP_CONCAT(CONCAT(dishes.dish_name, ' x ', kitchen.quantity)) as ordered_dishes
-        FROM customer
-        LEFT JOIN kitchen ON customer.order_id = kitchen.order_id
-        LEFT JOIN dishes ON kitchen.dish_id = dishes.dish_id
-        GROUP BY customer.order_id
-        ORDER BY customer.order_date DESC
-        LIMIT ${itemsPerPage} OFFSET ${offset};
-      `;
-
-      connection.query(query, (error, results, fields) => {
-        connection.release();
-
-        if (error) {
-          console.error("Error querying database:", error);
-          res.status(500).send("Internal Server Error");
-        } else {
-          results.forEach(result => {
-            result.order_date = formatDateTime(result.order_date);
-          });
-
-          res.render("admin-dashboard/orders.ejs", { 
-            username: req.session.username, 
-            orders: results,
-            currentPage: parseInt(page),
-            totalPages: Math.ceil(totalOrders / itemsPerPage),
-            role: req.session.role
-          });
-        }
-      });
-    });
-  });
-});
-
-app.get("/admin-dashboard/report", isAuthenticated, (req, res) => {
-  res.render("admin-dashboard/report.ejs", { username: req.session.username, role: req.session.role });
-});
-
-app.get("/admin-dashboard/settings", isAuthenticated, (req, res) => {
-  res.render("admin-dashboard/settings.ejs", { username: req.session.username, role: req.session.role });
-});
-
-app.get("/admin-dashboard/data-management", isAuthenticated, (req, res) => {
-  pool.getConnection((error, connection) => {
-    const query = "SELECT * FROM dishes ORDER BY dish_name";
-
-    connection.query(query, (error, results, fields) => {
-      connection.release();
-
-      if (error) {
-        console.error("Error querying database:", error);
-        res.status(500).send("Internal Server Error");
-      } else {
-        res.render("admin-dashboard/data-management.ejs", { username: req.session.username, dishes: results, role: req.session.role });
-      }
-    });
-  })
-});
-
-app.get("/admin-dashboard/transactions", (req, res) => {
-  res.redirect("/admin-dashboard/transactions/1");
-});
-
-app.get("/admin-dashboard/transactions/:page", isAuthenticated, (req, res) => {
-  
-  const itemsPerPage = 10;
-  const page = req.params.page || 1;
-  const offset = (page - 1) * itemsPerPage;
-
-  const query = `
-    SELECT payment.payment_id, customer.customer_name, payment.card_number, payment.card_expiration_date, payment.card_holder_name, payment.upi_id, payment.payment_type, 
-           payment.total_amount, payment.payment_date
-    FROM payment
-    JOIN customer ON payment.payment_id = customer.payment_id
-    ORDER BY payment.payment_date DESC
-    LIMIT ${itemsPerPage} OFFSET ${offset};
-  `;
-
-  pool.query(query, (error, results) => {
-    if (error) {
-      console.error('Error fetching transactions:', error);
-      res.status(500).send('Internal Server Error');
-    } else {
-      const queryCount = 'SELECT COUNT(*) AS total FROM payment;';
-      pool.query(queryCount, (error, resultCount) => {
-        if (error) {
-          console.error('Error counting transactions:', error);
-          res.status(500).send('Internal Server Error');
-        } else {
-          const totalTransactions = resultCount[0].total;
-          const totalPages = Math.ceil(totalTransactions / itemsPerPage);
-          res.render("admin-dashboard/transactions.ejs", { 
-            username: req.session.username, 
-            transactions: results, 
-            currentPage: parseInt(page), 
-            totalPages: totalPages,
-            role: req.session.role
-          });
-        }
-      });
-    }
-  });
-});
-
-app.get("/staff-dashboard", (req, res) => {
-  res.redirect("/staff-dashboard/overview");
-});
-
-app.get("/staff-dashboard/overview", isAuthenticated, (req, res) => {
-  res.render("staff-dashboard/overview.ejs", { username: req.session.username, role: req.session.role });
-});
-
-app.get("/superuser-dashboard/data-management", isAuthenticated, (req, res) => {
-  res.redirect("/admin-dashboard/data-management");
-});
-
-app.get("/staff-dashboard/data-management", isAuthenticated, (req, res) => {
-  pool.getConnection((error, connection) => {
-    const query = "SELECT * FROM dishes ORDER BY dish_name";
-    connection.query(query, (error, results, fields) => {
-      connection.release();
-
-      if (error) {
-        console.error("Error querying database:", error);
-        res.status(500).send("Internal Server Error");
-      } else {
-        res.render("staff-dashboard/data-management.ejs", { username: req.session.username, dishes: results , role: req.session.role });
-      }
-    });
-  })
-});
-
-app.get("/staff-dashboard/orders", (req, res) => {
-  res.redirect("/staff-dashboard/orders/1");
-});
-
-app.get("/staff-dashboard/orders/:page", isAuthenticated, (req, res) => {
-  const itemsPerPage = 10;
-  const page = req.params.page;
-  const offset = (page - 1) * itemsPerPage;
-
-  pool.getConnection((error, connection) => {
-    if (error) {
-      console.error("Error acquiring a connection from the pool:", error);
-      res.status(500).send("Internal Server Error");
-      return;
-    }
-
-    const countQuery = 'SELECT COUNT(DISTINCT customer.order_id) AS total FROM customer';
-
-    connection.query(countQuery, (error, resultCount) => {
-      if (error) {
-        console.error("Error counting orders:", error);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-
-      const totalOrders = resultCount[0].total;
-
-      const query = `
-        SELECT 
-          customer.order_id, 
-          customer.table_num, 
-          customer.order_date, 
-          customer.order_status, 
-          GROUP_CONCAT(CONCAT(dishes.dish_name, ' x ', kitchen.quantity)) as ordered_dishes
-        FROM customer
-        LEFT JOIN kitchen ON customer.order_id = kitchen.order_id
-        LEFT JOIN dishes ON kitchen.dish_id = dishes.dish_id
-        GROUP BY customer.order_id
-        ORDER BY customer.order_date DESC
-        LIMIT ${itemsPerPage} OFFSET ${offset};
-      `;
-
-      connection.query(query, (error, results, fields) => {
-        connection.release();
-
-        if (error) {
-          console.error("Error querying database:", error);
-          res.status(500).send("Internal Server Error");
-        } else {
-          results.forEach(result => {
-            result.order_date = formatDateTime(result.order_date);
-          });
-
-          res.render("staff-dashboard/orders.ejs", { 
-            username: req.session.username, 
-            orders: results,
-            currentPage: parseInt(page),
-            totalPages: Math.ceil(totalOrders / itemsPerPage),
-            role: req.session.role
-          });
-        }
-      });
-    });
-  });
-});
-
-app.get("/staff-dashboard/settings", isAuthenticated, (req, res) => {
-  res.render("staff-dashboard/settings.ejs", { username: req.session.username, role: req.session.role });
-});
-
-app.get("/index", (req, res) => {
-  res.render("home");
-});
-
-app.get(["/", "/home"], (req, res) => {
-  res.redirect("/index");
-});
-
-app.get("/superuser-dashboard", (req, res) => {
-  res.redirect("/superuser-dashboard/overview");
 });
 
 app.get("/superuser-dashboard/overview", isAuthenticated, (req, res) => {
@@ -688,6 +416,39 @@ app.get("/superuser-dashboard/overview", isAuthenticated, (req, res) => {
   });
 });
 
+app.get("/staff-dashboard/overview", isAuthenticated, (req, res) => {
+  res.redirect("/staff-dashboard/orders")
+});
+
+app.get("/admin-dashboard/access-control", isAuthenticated, (req, res) => {
+  if (req.session.role === 'superuser') {
+    return res.redirect("/superuser-dashboard/access-control");
+  }
+  pool.getConnection((error, connection) => {
+    if (error) {
+      console.error("Error acquiring a connection from the pool:", error);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    const query = 'SELECT * FROM users WHERE role = "staff"';
+
+    connection.query(query, (error, results, fields) => {
+      connection.release();
+
+      if (error) {
+        console.error("Error querying database:", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        res.render("admin-dashboard/access-control.ejs", {
+          username: req.session.username,
+          staff: results,
+          role: req.session.role
+        });
+      }
+    });
+  });
+});
 
 app.get("/superuser-dashboard/access-control", isAuthenticated, (req, res) => {
   pool.getConnection((error, connection) => {
@@ -716,36 +477,231 @@ app.get("/superuser-dashboard/access-control", isAuthenticated, (req, res) => {
   });
 });
 
-app.get('/api/payment-data', isAuthenticated, (req, res) => {
+app.get("/admin-dashboard/orders", (req, res) => {
+  res.redirect("/admin-dashboard/orders/1");
+});
+
+app.get("/admin-dashboard/orders/:page", isAuthenticated, (req, res) => {
+  const itemsPerPage = 10;
+  const page = req.params.page;
+  const offset = (page - 1) * itemsPerPage;
+
   pool.getConnection((error, connection) => {
     if (error) {
-      console.error('Error acquiring a connection from the pool:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      console.error("Error acquiring a connection from the pool:", error);
+      res.status(500).send("Internal Server Error");
       return;
     }
 
-    const query = 'SELECT payment_type, SUM(total_amount) AS total_amount FROM payment GROUP BY payment_type';
+    const countQuery = 'SELECT COUNT(DISTINCT customer.order_id) AS total FROM customer';
+
+    connection.query(countQuery, (error, resultCount) => {
+      if (error) {
+        console.error("Error counting orders:", error);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      const totalOrders = resultCount[0].total;
+
+      const query = `
+        SELECT 
+          customer.order_id, 
+          customer.table_num, 
+          customer.order_date, 
+          customer.order_status, 
+          GROUP_CONCAT(CONCAT(dishes.dish_name, ' x ', kitchen.quantity)) as ordered_dishes
+        FROM customer
+        LEFT JOIN kitchen ON customer.order_id = kitchen.order_id
+        LEFT JOIN dishes ON kitchen.dish_id = dishes.dish_id
+        GROUP BY customer.order_id
+        ORDER BY customer.order_date DESC
+        LIMIT ${itemsPerPage} OFFSET ${offset};
+      `;
+
+      connection.query(query, (error, results, fields) => {
+        connection.release();
+
+        if (error) {
+          console.error("Error querying database:", error);
+          res.status(500).send("Internal Server Error");
+        } else {
+          results.forEach(result => {
+            result.order_date = formatDateTime(result.order_date);
+          });
+
+          res.render("admin-dashboard/orders.ejs", { 
+            username: req.session.username, 
+            orders: results,
+            currentPage: parseInt(page),
+            totalPages: Math.ceil(totalOrders / itemsPerPage),
+            role: req.session.role
+          });
+        }
+      });
+    });
+  });
+});
+
+
+app.get("/staff-dashboard/orders", (req, res) => {
+  res.redirect("/staff-dashboard/orders/1");
+});
+
+app.get("/staff-dashboard/orders/:page", isAuthenticated, (req, res) => {
+  const itemsPerPage = 10;
+  const page = req.params.page;
+  const offset = (page - 1) * itemsPerPage;
+
+  pool.getConnection((error, connection) => {
+    if (error) {
+      console.error("Error acquiring a connection from the pool:", error);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    const countQuery = 'SELECT COUNT(DISTINCT customer.order_id) AS total FROM customer';
+
+    connection.query(countQuery, (error, resultCount) => {
+      if (error) {
+        console.error("Error counting orders:", error);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      const totalOrders = resultCount[0].total;
+
+      const query = `
+        SELECT 
+          customer.order_id, 
+          customer.table_num, 
+          customer.order_date, 
+          customer.order_status, 
+          GROUP_CONCAT(CONCAT(dishes.dish_name, ' x ', kitchen.quantity)) as ordered_dishes
+        FROM customer
+        LEFT JOIN kitchen ON customer.order_id = kitchen.order_id
+        LEFT JOIN dishes ON kitchen.dish_id = dishes.dish_id
+        GROUP BY customer.order_id
+        ORDER BY customer.order_date DESC
+        LIMIT ${itemsPerPage} OFFSET ${offset};
+      `;
+
+      connection.query(query, (error, results, fields) => {
+        connection.release();
+
+        if (error) {
+          console.error("Error querying database:", error);
+          res.status(500).send("Internal Server Error");
+        } else {
+          results.forEach(result => {
+            result.order_date = formatDateTime(result.order_date);
+          });
+
+          res.render("staff-dashboard/orders.ejs", { 
+            username: req.session.username, 
+            orders: results,
+            currentPage: parseInt(page),
+            totalPages: Math.ceil(totalOrders / itemsPerPage),
+            role: req.session.role
+          });
+        }
+      });
+    });
+  });
+});
+
+app.get("/admin-dashboard/report", isAuthenticated, (req, res) => {
+  res.render("admin-dashboard/report.ejs", { username: req.session.username, role: req.session.role });
+});
+
+app.get("/admin-dashboard/data-management", isAuthenticated, (req, res) => {
+  pool.getConnection((error, connection) => {
+    const query = "SELECT * FROM dishes ORDER BY dish_name";
 
     connection.query(query, (error, results, fields) => {
       connection.release();
 
       if (error) {
-        console.error('Error querying database:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.error("Error querying database:", error);
+        res.status(500).send("Internal Server Error");
       } else {
-        const labels = results.map(item => item.payment_type);
-        const data = results.map(item => item.total_amount);
-
-        res.json({
-          labels: labels,
-          datasets: [{
-            data: data,
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-          }],
-        });
+        res.render("admin-dashboard/data-management.ejs", { username: req.session.username, dishes: results, role: req.session.role });
       }
     });
+  })
+});
+
+app.get("/superuser-dashboard/data-management", isAuthenticated, (req, res) => {
+  res.redirect("/admin-dashboard/data-management");
+});
+
+app.get("/staff-dashboard/data-management", isAuthenticated, (req, res) => {
+  pool.getConnection((error, connection) => {
+    const query = "SELECT * FROM dishes ORDER BY dish_name";
+    connection.query(query, (error, results, fields) => {
+      connection.release();
+
+      if (error) {
+        console.error("Error querying database:", error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        res.render("staff-dashboard/data-management.ejs", { username: req.session.username, dishes: results , role: req.session.role });
+      }
+    });
+  })
+});
+
+app.get("/admin-dashboard/transactions", (req, res) => {
+  res.redirect("/admin-dashboard/transactions/1");
+});
+
+app.get("/admin-dashboard/transactions/:page", isAuthenticated, (req, res) => {
+  
+  const itemsPerPage = 10;
+  const page = req.params.page || 1;
+  const offset = (page - 1) * itemsPerPage;
+
+  const query = `
+    SELECT payment.payment_id, customer.customer_name, payment.card_number, payment.card_expiration_date, payment.card_holder_name, payment.upi_id, payment.payment_type, 
+           payment.total_amount, payment.payment_date
+    FROM payment
+    JOIN customer ON payment.payment_id = customer.payment_id
+    ORDER BY payment.payment_date DESC
+    LIMIT ${itemsPerPage} OFFSET ${offset};
+  `;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      console.error('Error fetching transactions:', error);
+      res.status(500).send('Internal Server Error');
+    } else {
+      const queryCount = 'SELECT COUNT(*) AS total FROM payment;';
+      pool.query(queryCount, (error, resultCount) => {
+        if (error) {
+          console.error('Error counting transactions:', error);
+          res.status(500).send('Internal Server Error');
+        } else {
+          const totalTransactions = resultCount[0].total;
+          const totalPages = Math.ceil(totalTransactions / itemsPerPage);
+          res.render("admin-dashboard/transactions.ejs", { 
+            username: req.session.username, 
+            transactions: results, 
+            currentPage: parseInt(page), 
+            totalPages: totalPages,
+            role: req.session.role
+          });
+        }
+      });
+    }
   });
+});
+
+app.get("/index", (req, res) => {
+  res.render("home");
+});
+
+app.get(["/", "/home"], (req, res) => {
+  res.redirect("/index");
 });
 
 app.post('/api/add-user', isAuthenticated, (req, res) => {
@@ -1061,47 +1017,77 @@ app.get("/menu/:table_num", (req, res) => {
       return;
     }
 
-    const dishesQuery = "SELECT * FROM dishes";
+    const categories = [
+      "Specials",
+      "Appetizers",
+      "Soups",
+      "Salads",
+      "Noodles and rice",
+      "Curries",
+      "Sushi and sashimi",
+      "Grills and barbeque",
+      "Seafood",
+      "Deserts",
+      "Beverages"
+    ];
 
+    const categoryResults = {};
+    let restaurantResult;
+
+    // Query to fetch restaurant details
     const restaurantQuery = "SELECT * FROM restaurant";
 
-    const categoriesQuery = "SELECT * FROM categories";
-
-    connection.query(dishesQuery, (error, dishesResults) => {
+    connection.query(restaurantQuery, (error, results) => {
       if (error) {
-        console.error("Error querying dishes:", error);
+        console.error("Error querying restaurant:", error);
         connection.release();
         res.status(500).send("Internal Server Error");
         return;
       }
 
-      connection.query(restaurantQuery, (error, restaurantResults) => {
-        if (error) {
-          console.error("Error querying restaurant:", error);
+      restaurantResult = results[0]; // Assuming there is only one restaurant
+
+      // Function to execute category queries
+      function executeCategoryQuery(index) {
+        if (index === categories.length) {
+          // All queries executed, release connection and render menu
           connection.release();
-          res.status(500).send("Internal Server Error");
+
+          res.render("menu", {
+            categories: categories,
+            table_num: tableNumber,
+            restaurant: restaurantResult,
+            categoryResults: categoryResults
+          });
+
           return;
         }
 
-        connection.query(categoriesQuery, (error, categoriesResults) => {
+        const category = categories[index];
+        const categoryQuery = `
+          SELECT dishes.* 
+          FROM dishes
+          INNER JOIN categories ON dishes.dish_id = categories.dish_id
+          WHERE categories.category = ? AND dishes.available > 0
+        `;
+
+        connection.query(categoryQuery, [category], (error, results) => {
           if (error) {
-            console.error("Error querying categories:", error);
+            console.error(`Error querying category ${category}:`, error);
             connection.release();
             res.status(500).send("Internal Server Error");
             return;
           }
 
-          connection.release();
+          categoryResults[category] = results;
 
-          res.render("menu", {
-            dishes: dishesResults,
-            restaurant: restaurantResults[0],
-            categories: categoriesResults,
-            table_num: tableNumber,
-            role: req.session.role
-          });
+          // Continue with the next category query
+          executeCategoryQuery(index + 1);
         });
-      });
+      }
+
+      // Start executing category queries after fetching restaurant details
+      executeCategoryQuery(0);
     });
   });
 });
@@ -1117,67 +1103,96 @@ app.post('/api/checkout', (req, res) => {
 });
 
 app.post("/api/place-order", (req, res) => {
-  const { tableNum, cart, totalPrice, customerName, email, paymentMethod, upiId, cardHolderName, cardNumber, expiryDate } = req.body;
-  const parts = expiryDate.split('/');
-  const formattedExpiryDate = parts[1] + '-' + parts[0] + '-01';
+  const {
+    tableNum,
+    cart,
+    totalPrice,
+    customerName,
+    email,
+    paymentMethod,
+    upiId,
+    cardHolderName,
+    cardNumber,
+    expiryDate,
+  } = req.body;
 
-  const paymentQuery = "INSERT INTO payment (payment_type, total_amount, payment_date, card_number, card_expiration_date, card_holder_name, upi_id) VALUES (?, ?, NOW(), ?, ?, ?, ?)";
-  pool.query(paymentQuery, [paymentMethod, totalPrice, cardNumber, formattedExpiryDate, cardHolderName, upiId], (paymentError, paymentResults) => {
-    if (paymentError) {
-      console.error("Error inserting payment details:", paymentError);
-      res.status(500).json({ error: "Internal Server Error" });
-      return;
-    }
+  // Mask the card number
+  const maskedCardNumber = maskCardNumber(cardNumber);
 
-    const paymentId = paymentResults.insertId;
+  const parts = expiryDate.split("/");
+  const formattedExpiryDate = parts[1] + "-" + parts[0] + "-01";
 
-    pool.getConnection((orderError, connection) => {
-      if (orderError) {
-        console.error("Error acquiring a connection from the pool:", orderError);
+  const paymentQuery =
+    "INSERT INTO payment (payment_type, total_amount, payment_date, card_number, card_expiration_date, card_holder_name, upi_id) VALUES (?, ?, NOW(), ?, ?, ?, ?)";
+  pool.query(
+    paymentQuery,
+    [paymentMethod, totalPrice, maskedCardNumber, formattedExpiryDate, cardHolderName, upiId],
+    (paymentError, paymentResults) => {
+      if (paymentError) {
+        console.error("Error inserting payment details:", paymentError);
         res.status(500).json({ error: "Internal Server Error" });
         return;
       }
 
-      const orderQuery =
-        "INSERT INTO customer (payment_id, customer_name, email, order_date, order_status, table_num) VALUES (?, ?, ?, NOW(), 'Preparing', ?)";
-      connection.query(orderQuery, [paymentId, customerName, email, tableNum ], (orderError, orderResults) => {
+      const paymentId = paymentResults.insertId;
+
+      pool.getConnection((orderError, connection) => {
         if (orderError) {
-          console.error("Error inserting order details:", orderError);
-          connection.release();
+          console.error("Error acquiring a connection from the pool:", orderError);
           res.status(500).json({ error: "Internal Server Error" });
           return;
         }
 
-        const orderId = orderResults.insertId;
-
-        const cartObj = JSON.parse(cart);
-        console.log(cartObj);
-
-        Object.entries(cartObj).forEach(([dishId, quantity]) => {
-          const kitchenQuery =
-            "INSERT INTO kitchen (order_id, dish_id, quantity) VALUES (?, ?, ?)";
-          connection.query(
-            kitchenQuery,
-            [orderId, dishId, quantity],
-            (kitchenError) => {
-              if (kitchenError) {
-                console.error("Error inserting kitchen details:", kitchenError);
-                connection.release();
-                res.status(500).json({ error: "Internal Server Error" });
-                return;
-              }
+        const orderQuery =
+          "INSERT INTO customer (payment_id, customer_name, email, order_date, order_status, table_num) VALUES (?, ?, ?, NOW(), 'Preparing', ?)";
+        connection.query(
+          orderQuery,
+          [paymentId, customerName, email, tableNum],
+          (orderError, orderResults) => {
+            if (orderError) {
+              console.error("Error inserting order details:", orderError);
+              connection.release();
+              res.status(500).json({ error: "Internal Server Error" });
+              return;
             }
-          );
-        });
-        
 
-        connection.release();
+            const orderId = orderResults.insertId;
 
-        res.render("payment-success");
+            const cartObj = JSON.parse(cart);
+            console.log(cartObj);
+
+            Object.entries(cartObj).forEach(([dishId, quantity]) => {
+              const kitchenQuery =
+                "INSERT INTO kitchen (order_id, dish_id, quantity) VALUES (?, ?, ?)";
+              connection.query(
+                kitchenQuery,
+                [orderId, dishId, quantity],
+                (kitchenError) => {
+                  if (kitchenError) {
+                    console.error("Error inserting kitchen details:", kitchenError);
+                    connection.release();
+                    res.status(500).json({ error: "Internal Server Error" });
+                    return;
+                  }
+                }
+              );
+            });
+
+            connection.release();
+
+            res.render("payment-success");
+          }
+        );
       });
-    });
-  });
+    }
+  );
 });
+
+// Function to mask the card number
+function maskCardNumber(cardNumber) {
+  const maskedNumber = "**** **** **** " + cardNumber.slice(-4);
+  return maskedNumber;
+}
 
 app.get("/staff-dashboard", (req, res) => {
   res.render("staff-dashboard");

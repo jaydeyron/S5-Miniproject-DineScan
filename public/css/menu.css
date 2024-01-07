@@ -43,7 +43,7 @@ body {
     justify-content: space-between;
     padding: 16px;
     background-color: #171919;
-    border-radius: 6px;
+    border-radius: 10px;
     cursor: pointer;
     position: relative;
 }
@@ -314,4 +314,38 @@ body {
     border: none;
     border-radius: 5px;
     z-index: 1000;
+}
+
+.category-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .category-button {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 12px;
+    background-color: rgba(112, 112, 112, 0.924);
+    color: white;
+    font-size: large;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
+
+
+  .dropdown-content {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    transform-origin: top; /* Set the transform origin to the top */
+}
+
+.dropdown.active .category-dropdown-content {
+    max-height: 1000px; /* Adjust the max-height as per your content */
+    opacity: 1;
+    transform: scaleY(1); /* Scale vertically to reveal content */
 }

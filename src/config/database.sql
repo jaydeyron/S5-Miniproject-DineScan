@@ -70,7 +70,7 @@ CREATE TABLE restaurant (
     address VARCHAR(255) NOT NULL,
     restaurant_phone_num VARCHAR(20),
     restaurant_email VARCHAR(255),
-    description TEXT    
+    description TEXT
 );
 
 -- Categories table
@@ -82,4 +82,4 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 -- Veg, Non-veg, Appetizers, Soups, Salads, Noodles and rice,
--- Curries, Sushi and sashimi, Grills and barbeque, Deserts, Beverages
+-- Curries, Sushi and sashimi, Grills and barbeque, Seafood, Deserts, Beverages

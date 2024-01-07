@@ -13,7 +13,7 @@
     </head>
     <body>
         <div id="title-division">
-            <img id="dinescan-logo" src="/images/demologo.png">
+            <img id="dinescan-logo" src="/images/logo.png">
             <a id="about-link" href="#">About DineScan</a>
         </div>
         <div id="restaurant-name">
@@ -21,26 +21,35 @@
             <span style="font-size: 24px;"> <%= restaurant.restaurant_name %> </span>
         </div>
         <div id="content-division">
-            <% dishes.forEach(dish => { %>
-              <div class="dish-box" onclick="openDishSummary(<%= JSON.stringify(dish) %>)">
-                <span class="material-symbols-outlined <%= dish.vegetarian ? 'vegetarian' : 'non-vegetarian' %> dish-veg">
-                  <%= dish.vegetarian ? 'fiber_manual_record' : 'change_history' %>
-                </span>
-                <div class="dish-details">
-                  <span style="padding-bottom: 5px;"><%= dish.dish_name %></span>
-                  <span style="padding-bottom: 15px;">Rs. <%= dish.price %></span>
-                </div>
-                <div class="dish-image-section">
-                  <img class="dish-image" src="https://dinescan.s3.ap-southeast-2.amazonaws.com/<%= dish.dish_photo %>">
-                  <button class="cart-button" onclick="addToCart(event, <%= JSON.stringify(dish) %>)">Add</button>
-                </div>
+          <% categories.forEach(category => { %>
+            <div class="category-dropdown">
+              <button class="category-button" onclick="toggleCategory('<%= category %>')">
+                <%= category %><span class="material-symbols-outlined" id="<%= category +'-text' %>">arrow_drop_down</span>
+              </button>              
+              <div class="dropdown-content" id="<%= category %>">
+                <% categoryResults[category].forEach(dish => { %>
+                  <div class="dish-box" onclick="openDishSummary(<%= JSON.stringify(dish) %>)">
+                    <span class="material-symbols-outlined <%= dish.vegetarian ? 'vegetarian' : 'non-vegetarian' %> dish-veg">
+                      <%= dish.vegetarian ? 'fiber_manual_record' : 'change_history' %>
+                    </span>
+                    <div class="dish-details">
+                      <span style="padding-bottom: 5px;"><%= dish.dish_name %></span>
+                      <span style="padding-bottom: 15px;">Rs. <%= dish.price %></span>
+                    </div>
+                    <div class="dish-image-section">
+                      <img class="dish-image" src="https://dinescan.s3.ap-southeast-2.amazonaws.com/<%= dish.dish_photo %>">
+                      <button class="cart-button" onclick="addToCart(event, <%= JSON.stringify(dish) %>)">Add</button>
+                    </div>
+                  </div>
+                <% }); %>
               </div>
-            <% }); %>
-          </div>
+            </div>
+          <% }); %>
+        </div>
         <div id="overlay">
         </div>
         <span style="margin: 15px;"></span>
-        <div id="view-cart-button" onclick="openOrderSummary(<%= JSON.stringify(dishes) %>)">
+        <div id="view-cart-button" onclick="openOrderSummary(<%= JSON.stringify(categoryResults) %>)">
           <span id="item-count">0 items added</span>
           <span style="display: flex; align-items:center">View cart<span class="material-symbols-outlined">navigate_next</span> </span>
         </div>

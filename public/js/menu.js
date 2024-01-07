@@ -268,3 +268,20 @@ function closeOrderSummary() {
     // Enable scrolling
     document.body.style.overflow = "auto";
 }
+
+function toggleCategory(category) {
+    const content = document.getElementById(`${category}`);
+    const contentButton = document.getElementById(`${category}-text`);
+
+    if (content.style.maxHeight === '0px' || content.style.maxHeight === '') {
+        content.style.maxHeight = '10000px'; // Adjust the max-height as per your content
+        content.style.opacity = '1';
+        contentButton.textContent = 'arrow_drop_up'
+
+    } else {
+        content.style.maxHeight = '0';
+        content.style.opacity = '0';
+        contentButton.textContent = 'arrow_drop_down'
+
+    }
+}

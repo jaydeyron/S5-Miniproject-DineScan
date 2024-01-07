@@ -148,13 +148,7 @@ VALUES
   (24, 24, 3), -- Carter Garcia ordered 3 servings of Pongal
   (25, 29, 2), -- Chloe Martinez ordered 2 servings of Chicken Curry
   (26, 5, 1),  -- Elijah White ordered 1 serving of Masala Dosa
-  (27, 10, 3), -- Grace Taylor ordered 3 servings of Butter Chicken
-  (28, 15, 2), -- Aiden Davis ordered 2 servings of Paneer Tikka
-  (29, 20, 1), -- Zoe Wilson ordered 1 serving of Rogan Josh
-  (30, 25, 3), -- Jackson Brown ordered 3 servings of Chicken Biryani
-  (31, 5, 2),
-  (31, 21, 7),
-  (31, 13, 3);
+  (27, 10, 3); -- Grace Taylor ordered 3 servings of Butter Chicken
 
 -- Sample data for restaurant table
 
@@ -171,5 +165,33 @@ INSERT INTO restaurant (
   'info@sakurasushi.com',
   'Experience the finest sushi and Japanese cuisine in a traditional setting.'
 );
+
+-- Sample data for categories table
+INSERT INTO categories (dish_id, category)
+VALUES
+  (1, 'Appetizers'),
+  (2, 'Noodles and rice'),
+  (3, 'Specials'),
+  (4, 'Noodles and rice'),
+  (5, 'Appetizers'),
+  (6, 'Noodles and rice'),
+  (7, 'Noodles and rice'),
+  (8, 'Noodles and rice'),
+  (9, 'Noodles and rice'),
+  (10, 'Noodles and rice'),
+  (11, 'Specials'),
+  (12, 'Noodles and rice'),
+  (13, 'Specials'),
+  (14, 'Appetizers'),
+  (15, 'Noodles and rice'),
+  (16, 'Appetizers'),
+  (17, 'Noodles and rice'),
+  (18, 'Noodles and rice'),
+  (19, 'Desserts'),
+  (20, 'Noodles and rice'),
+  (21, 'Noodles and rice'),
+  (22, 'Appetizers'),
+  (23, 'Desserts'),
+  (24, 'Specials');
 
 COMMIT;
