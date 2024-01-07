@@ -48,7 +48,6 @@ CREATE TABLE IF NOT EXISTS customer (
   order_id INT AUTO_INCREMENT PRIMARY KEY,
   payment_id INT NOT NULL,
   customer_name VARCHAR(255) NOT NULL,
-  phone_num BIGINT NOT NULL,
   email VARCHAR(255),
   order_date DATETIME NOT NULL,
   order_status ENUM('Preparing', 'Completed') NOT NULL,

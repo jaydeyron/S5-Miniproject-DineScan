@@ -1,108 +1,62 @@
-<!-- checkout.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+        <link rel="stylesheet" href="/css/checkout.css">
+        <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
+        <script src="https://unpkg.com/flatpickr"></script>
+        <script src="/js/checkout.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+        <title>Checkout page</title>
+    </head>
+    <body>
+        <div id="body-division">
+            <span style="font-size: 24px; font-weight: bolder; padding-bottom: 12px; text-align: center;">Checkout page</span>
+            <form id="order-form" action="/api/place-order" method="post">
+                <span style="font-size: larger; padding-top: 15px; font-weight: bolder">Customer details</span>
 
-    <!-- Include Stripe.js script -->
-    <script src="https://js.stripe.com/v3/"></script>
-</head>
-<body>
-    <!-- Your checkout content here -->
+                <label for="customerName">Customer Name:</label>
+                <input type="text" id="customerName" name="customerName" required>
 
-    <!-- Add a payment form -->
-    <form id="payment-form">
-        <!-- Display payment errors to the user -->
-        <div id="payment-errors" role="alert"></div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
 
-        <!-- Payment method selection -->
-        <label for="payment-method">Select Payment Method:</label>
-        <select id="payment-method" name="payment-method">
-            <option value="card">Credit/Debit Card</option>
-            <option value="upi">UPI</option>
-            <option value="cash">Cash</option>
-        </select>
+                <span style="font-size: larger; padding-top: 20px; font-weight: bolder">Payment</span>
 
-        <!-- Card details input (displayed if Credit/Debit Card is selected) -->
-        <div id="card-element">
-            <!-- A Stripe Element will be inserted here. -->
+                <label for="paymentMethod">Payment Method:</label>
+                <select id="paymentMethod" name="paymentMethod" required onchange="togglePaymentDetails()">
+                    <option value="UPI">UPI</option>
+                    <option value="Credit card">Credit Card</option>
+                    <option value="Debit card">Debit Card</option>
+                    <option value="Cash">Cash</option>
+                </select>
+
+                <input type="hidden" id="tableNum" name="tableNum" value="<%= tableNum %>">
+                <input type="hidden" id="cart" name="cart" value="<%= cart %>">
+                <input type="hidden" id="totalPrice" name="totalPrice" value="<%= totalPrice %>">
+
+                <div id="upiDetails">
+                    <label for="upiId">Upi Id:</label>
+                    <input type="text" id="upiId" name="upiId">
+                </div>
+
+                <div id="cardDetails" >
+                    <label for="cardHolderName">Card Holder Name:</label>
+                    <input type="text" id="cardHolderName" name="cardHolderName">
+    
+                    <label for="cardNumber">Card Number:</label>
+                    <input type="text" id="cardNumber" name="cardNumber" placeholder="**** **** **** ****">
+    
+                    <label for="expiryDate">Expiry Date:</label>
+                    <input type="text" id="expiryDate" name="expiryDate" readonly>
+                </div>
+                <span style="padding-top: 20px;"></span>
+                <button type="submit">Make payment</button>
+            </form>
         </div>
-
-        <!-- Additional fields for UPI or Cash (displayed based on selection) -->
-        <div id="upi-fields" style="display: none;">
-            <!-- UPI fields go here -->
-        </div>
-
-        <div id="cash-fields" style="display: none;">
-            <!-- Cash payment instructions or fields go here -->
-        </div>
-
-        <!-- Used to display form errors. -->
-        <div id="card-errors" role="alert"></div>
-
-        <!-- Submit button -->
-        <button type="submit">Submit Payment</button>
-    </form>
-
-    <script>
-        // Your Stripe public key
-        var stripe = Stripe('YOUR_STRIPE_PUBLIC_KEY');
-
-        // Create an instance of Elements
-        var elements = stripe.elements();
-
-        // Create an instance of the card Element
-        var card = elements.create('card');
-
-        // Add an instance of the card Element into the `card-element` div
-        card.mount('#card-element');
-
-        // Handle form submission
-        var form = document.getElementById('payment-form');
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            var paymentMethod = document.getElementById('payment-method').value;
-
-            if (paymentMethod === 'card') {
-                // Trigger the payment using Stripe.js
-                stripe.createPaymentMethod({
-                    type: 'card',
-                    card: card,
-                }).then(function(result) {
-                    if (result.error) {
-                        // Display error to the user
-                        var errorElement = document.getElementById('card-errors');
-                        errorElement.textContent = result.error.message;
-                    } else {
-                        // The payment was successful, handle the result
-                        console.log(result);
-                        // You can send the payment method ID (result.paymentMethod.id)
-                        // to your server for further processing
-                    }
-                });
-            } else if (paymentMethod === 'upi') {
-                // Handle UPI payment logic
-                // ...
-
-            } else if (paymentMethod === 'cash') {
-                // Handle cash payment logic
-                // ...
-            }
-        });
-
-        // Show/hide additional fields based on payment method selection
-        document.getElementById('payment-method').addEventListener('change', function() {
-            var selectedMethod = this.value;
-
-            document.getElementById('card-element').style.display = selectedMethod === 'card' ? 'block' : 'none';
-            document.getElementById('upi-fields').style.display = selectedMethod === 'upi' ? 'block' : 'none';
-            document.getElementById('cash-fields').style.display = selectedMethod === 'cash' ? 'block' : 'none';
-        });
-    </script>
-
-</body>
+    </body>
 </html>

@@ -9,6 +9,8 @@ const MySQLStore = require('express-mysql-session')(session);
 const multer = require("multer");
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const crypto = require('crypto');
+const { jsPDF } = require('jspdf');
+require('jspdf-autotable');
 const fs = require("fs");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -142,7 +144,7 @@ app.post("/login", (req, res) => {
             res.redirect("/staff-dashboard");
           } else if (role == "superuser") {
             console.log("Authentication successful: Redirected to superuser dashboard");
-            res.redirect("superuser-dashboard");
+            res.redirect("/superuser-dashboard");
           }
         } else {
           // Authentication failed
@@ -348,7 +350,7 @@ app.get("/admin-dashboard/transactions/:page", isAuthenticated, (req, res) => {
 
   const query = `
     SELECT payment.payment_id, customer.customer_name, payment.card_number, payment.card_expiration_date, payment.card_holder_name, payment.upi_id, payment.payment_type, 
-           payment.total_amount, payment.payment_date, payment.transaction_status
+           payment.total_amount, payment.payment_date
     FROM payment
     JOIN customer ON payment.payment_id = customer.payment_id
     ORDER BY payment.payment_date DESC
@@ -784,6 +786,117 @@ app.post('/api/update-dish/:dishId', isAuthenticated, (req, res) => {
   );
 });
 
+function generatePDFReport(data) {
+  // Create a random file name
+  const fileName = `sales_report_${Date.now()}.pdf`;
+
+  // Create a PDF document
+  const doc = new jsPDF();
+
+  // Add content to the PDF
+  doc.setFontSize(18);
+  doc.text('Sales Report', doc.internal.pageSize.width / 2, 15, { align: 'center' });
+  doc.setFontSize(12);
+
+  // Convert data to an array of arrays
+  const rows = data.map(sale => [sale.payment_id, sale.payment_date, sale.customer_name, sale.email, sale.payment_type, sale.total_amount]);
+
+  // Calculate the total amount for each payment type
+  const totalAmounts = {
+    'Credit card': 0,
+    'Debit card': 0,
+    'UPI': 0,
+    'Cash': 0,
+  };
+
+  data.forEach(sale => {
+    totalAmounts[sale.payment_type] += parseFloat(sale.total_amount);
+  });
+
+  const overallTotalAmount = Object.values(totalAmounts).reduce((sum, amount) => sum + amount, 0);
+
+  // Add the autoTable plugin
+  doc.autoTable({
+    head: [['Payment ID', 'Payment Date', 'Customer Name', 'Email', 'Payment Type', 'Amount']],
+    body: rows,
+    startY: 25,
+  });
+
+  // Add rows for total amounts by payment type
+  Object.entries(totalAmounts).forEach(([paymentType, totalAmount]) => {
+    doc.autoTable({
+      head: [[`Total Amount (${paymentType})`]],
+      body: [['Rs. ' + totalAmount.toFixed(2)]],
+      startY: doc.autoTable.previous.finalY + 10, // Add some space after the main table
+    });
+  });
+
+  doc.autoTable({
+    head: [['Overall Total Amount']],
+    body: [['Rs. ' + overallTotalAmount.toFixed(2)]],
+    startY: doc.autoTable.previous.finalY + 10, // Add some space after the last table
+  });
+
+  // Save the PDF to a file
+  doc.save(fileName);
+
+  return fileName;
+}
+
+
+app.post('/api/generate-sales-report', async (req, res) => {
+  try {
+    const dateRange = req.body.dateRangePicker;
+    let startEndDates = dateRange.split(" to ");
+    const startDate = new Date(startEndDates[0]);
+    const endDate = new Date(startEndDates[1]);
+    console.log(startDate);
+
+    // Fetch sales data from the database based on the date range
+    const query = `
+      SELECT
+          p.payment_id,
+          p.payment_date,
+          c.customer_name,
+          c.email,
+          p.payment_type,
+          p.total_amount
+      FROM
+          payment p
+      JOIN
+          customer c ON p.payment_id = c.payment_id
+      WHERE
+          p.payment_date BETWEEN ? AND ?;
+    `;
+
+    const results = await new Promise((resolve, reject) => {
+      pool.query(query, [startDate, endDate], (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+    const pdfFilePath = generatePDFReport(results);
+
+    // Send the PDF file back to the client for download
+    res.download(pdfFilePath, 'sales_report.pdf', (err) => {
+      if (err) {
+        console.error('Error sending file:', err);
+        res.status(500).send('Internal Server Error');
+      } else {
+        // Remove the generated PDF file after sending
+        fs.unlinkSync(pdfFilePath);
+      }
+    });
+  } catch (error) {
+    console.error('Error generating PDF report:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 app.post('/api/add-dish',isAuthenticated, (req, res) => {
   const { dishName, price, vegetarian, available, dishDescription, dishPhoto, calories, protein, fat, carb } = req.body;
   pool.query(
@@ -867,19 +980,82 @@ app.get("/menu/:table_num", (req, res) => {
 
 app.post('/api/checkout', (req, res) => {
   // Access the submitted data from the request body
-  const { cart, cartName, cartPrice, totalPrice } = req.body;
-
+  const { tableNum, cart, totalPrice } = req.body;
+  console.log(cart);
   res.render("checkout", {
-      cart: JSON.stringify(cart),
-      cartName: JSON.stringify(cartName),
-      cartPrice: JSON.stringify(cartPrice),
+      tableNum: tableNum,
+      cart: cart,
       totalPrice: totalPrice,
   });
 });
 
-// defines a route to the payment successful page
-app.get("/payment-succesful", (req, res) => {
-  res.render("payment-successful");
+app.post("/api/place-order", (req, res) => {
+  const { tableNum, cart, totalPrice, customerName, email, paymentMethod, upiId, cardHolderName, cardNumber, expiryDate } = req.body;
+  const parts = expiryDate.split('/');
+  const formattedExpiryDate = parts[1] + '-' + parts[0] + '-01';
+
+  // Add logic to insert payment details into the database
+  const paymentQuery = "INSERT INTO payment (payment_type, total_amount, payment_date, card_number, card_expiration_date, card_holder_name, upi_id) VALUES (?, ?, NOW(), ?, ?, ?, ?)";
+  pool.query(paymentQuery, [paymentMethod, totalPrice, cardNumber, formattedExpiryDate, cardHolderName, upiId], (paymentError, paymentResults) => {
+    if (paymentError) {
+      console.error("Error inserting payment details:", paymentError);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+
+    const paymentId = paymentResults.insertId;
+
+    // Add logic to insert order details into the database
+    pool.getConnection((orderError, connection) => {
+      if (orderError) {
+        console.error("Error acquiring a connection from the pool:", orderError);
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+      }
+
+      const orderQuery =
+        "INSERT INTO customer (payment_id, customer_name, email, order_date, order_status, table_num) VALUES (?, ?, ?, NOW(), 'Preparing', ?)";
+      connection.query(orderQuery, [paymentId, customerName, email, tableNum ], (orderError, orderResults) => {
+        if (orderError) {
+          console.error("Error inserting order details:", orderError);
+          connection.release();
+          res.status(500).json({ error: "Internal Server Error" });
+          return;
+        }
+
+        const orderId = orderResults.insertId;
+
+        // Insert ordered dishes into the kitchen table
+        const cartObj = JSON.parse(cart);
+        console.log(cartObj);
+
+        Object.entries(cartObj).forEach(([dishId, quantity]) => {
+          // Your existing query logic
+          const kitchenQuery =
+            "INSERT INTO kitchen (order_id, dish_id, quantity) VALUES (?, ?, ?)";
+          connection.query(
+            kitchenQuery,
+            [orderId, dishId, quantity],
+            (kitchenError) => {
+              if (kitchenError) {
+                console.error("Error inserting kitchen details:", kitchenError);
+                connection.release();
+                res.status(500).json({ error: "Internal Server Error" });
+                return;
+              }
+            }
+          );
+        });
+        
+
+        // Release the connection back to the pool
+        connection.release();
+
+        // Send a success response
+        res.render("payment-success");
+      });
+    });
+  });
 });
 
 app.get("/staff-dashboard", (req, res) => {

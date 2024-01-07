@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#body-division {
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    height: 83%;
+    width: 83%;
+    border-radius: 15px;
+    background-color: rgb(68, 68, 68);
+}
+
+#cardDetails, upiDetails {
+    display: none;
+}
+
+#order-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#order-form label {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+#order-form input {
+    border-radius: 8px;
+    padding: 4px;
+    font-size: medium;
+}
+
+#order-form select {
+    font-size: medium;
+    color: black;
+}
+
+#order-form button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    cursor: pointer;
+    border-radius: 20px;
+    font-size: medium;
+}
+
+#cardDetails {
+    display: none;
+    flex-direction: column;
+}
+
+#upiDetails {
+    display: flex;
+    flex-direction: column;
+}

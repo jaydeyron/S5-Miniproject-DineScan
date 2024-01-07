@@ -97,7 +97,9 @@ function addToCart(event, dish) {
         cartName[dishId] = dishName;
         cartPrice[dishId] = dishPrice;
         cartVeg[dishId] = dishVeg;
-        totalPrice+=cartPrice[dishId];    
+        totalPrice+=cartPrice[dishId];
+        document.getElementById("price-input").value = totalPrice;  
+        document.getElementById("cart-input").value = JSON.stringify(cart);
 
     } else {
         // If the dish is already in the cart, increment the quantity
@@ -146,6 +148,8 @@ function incrementQuantity(event, dishId) {
     // Increment the quantity in the cart
     cart[dishId]++;
     totalPrice+=cartPrice[dishId];
+    document.getElementById("price-input").value = totalPrice;
+    document.getElementById("cart-input").value = JSON.stringify(cart);
 
     // Get the quantity element and update its content
     const quantityElement = event.target.parentElement.querySelector('.quantity');
@@ -160,6 +164,8 @@ function decrementQuantity(event, dishId) {
     // Decrement the quantity in the cart, ensuring it doesn't go below 1
     cart[dishId]--;
     totalPrice-=cartPrice[dishId];
+    document.getElementById("price-input").value = totalPrice;
+    document.getElementById("cart-input").value = JSON.stringify(cart);
     // Get the quantity element and update its content
     if (cart[dishId] === 0) {
         removeDishFromCart(dishId);
@@ -184,6 +190,8 @@ function removeDishFromCart(dishId) {
     delete cartPrice[dishId];
     delete cartVeg[dishId];
     const itemCountElement = document.getElementById("item-count");
+    document.getElementById("cart-input").value = JSON.stringify(cart);
+
     if (itemCountElement) {
         const cartSize = getCartSize();
         itemCountElement.textContent = cartSize === 1 ? `${cartSize} item added` : `${cartSize} items added`;
@@ -196,10 +204,6 @@ function removeDishFromCart(dishId) {
     // Optionally, you can add logic to update your cart or perform other actions here
 }
 
-// Helper function to get the current cart information
-function getCart() {
-    return cart;
-}
 
 function openOrderSummary(dishes) {
     const orderSummaryOverlay = document.getElementById("order-summary-overlay");

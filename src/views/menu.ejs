@@ -51,11 +51,10 @@
               <ul id="order-summary-list"></ul>
               <h4 style="padding-left: 20px;">Order Total : Rs. <span id="total-amount"></span></h4>        
               <form id="checkoutForm" action="/api/checkout" method="post">
-                <input type="hidden" name="cart" value='${JSON.stringify(cart)}'>
-                <input type="hidden" name="cartName" value='${JSON.stringify(cartName)}'>
-                <input type="hidden" name="cartPrice" value='${JSON.stringify(cartPrice)}'>
-                <input type="hidden" name="totalPrice" value='${totalPrice}'>
-                <button type="submit" id="checkout-button">Submit</button>
+                <input type="hidden" id="cart-input" name="cart" value="${JSON.stringify(cart)}">
+                <input type="hidden" id="price-input" name="totalPrice" >
+                <input type="hidden" name="tableNum" value='<%= table_num %>'>
+                <button type="submit" id="checkout-button">Checkout</button>
               </form>
           </div>
         </div>        
