@@ -2,9 +2,12 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/css/dashboard-common.css">
+        <link rel="stylesheet" href="/css/overview.css">
         <script src="/js/dashboard-common.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="/js/overview.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,6 +48,41 @@
                         <a href="/logout"><div class="dropdown-item-text"><span class="material-symbols-outlined" style="color:black; padding-right: 10px;">logout</span>Logout</div></a>
                     </div>
                 </div>
+            </div>
+            <div id="main-division">                
+                <div class="border-items">
+                    <canvas id="donut" width="280" height="280"></canvas>
+                    <div id="donut-label" data-labels="<%= JSON.stringify(doughnutData.map(item => item.payment_type)) %>"></div>
+                    <div id="donut-count" data-counts="<%= JSON.stringify(doughnutData.map(item => item.count)) %>"></div>
+                </div>
+                <div class="border-items">
+                    <canvas id="bar" width="380" height="280"></canvas>
+                    <div id="bar-label" data-labels="<%= JSON.stringify(soldDishesByCategoryData.map(item => item.category)) %>"></div>
+                    <div id="bar-count" data-counts="<%= JSON.stringify(soldDishesByCategoryData.map(item => item.count)) %>"></div>
+                </div>
+                <div id="sub-division">
+                    <div class="border-items subdiv">
+                        <span class="heading">
+                            Pending orders
+                        </span>
+                        <span class="number">
+                            <%= pendingOrdersData.count %>
+                        </span>
+                    </div>
+                    <div class="border-items subdiv">
+                        <span class="heading">
+                            Total Revenue this month
+                        </span>
+                        <span class="number" style="font-size: larger;">
+                            Rs.<%= totalAmountCurrentMonthData.totalAmount %>
+                        </span>
+                    </div>
+                </div>
+                <div class="border-items" style="width: 100%;">
+                    <canvas id="line" height="100"></canvas>
+                    <div id="total-amount-label" data-labels="<%= JSON.stringify(totalAmountLast8MonthsData.map(item => item.month)) %>"></div>
+                    <div id="total-amount-value" data-values="<%= JSON.stringify(totalAmountLast8MonthsData.map(item => item.totalAmount)) %>"></div>
+                </div>                                       
             </div>
         </div>
     </body>

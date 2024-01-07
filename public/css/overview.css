@@ -1,6 +1,53 @@
-/* Add this style to your CSS file or style tag */
-#myChart {
-    width: 300px; /* Set your desired width */
-    height: 200px; /* Set your desired height */
-  }
-  
+
+#main-division {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 22px;
+  gap: 15px;
+}
+
+.border-items {
+  padding: 8px;
+  border: 2px solid #ddd; /* Light grey border */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.flex-division {
+  display: flex;
+}
+
+.stats {
+  height: 100%;
+  width: 100%;
+}
+
+#sub-division {
+  gap: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.subdiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 152px;
+  height: 140px;
+}
+
+.heading {
+  font-size: x-large;
+  text-align: center;
+  color: #172233;
+}
+
+.number {
+  font-size: xx-large;
+  font-weight: bold;
+  color: #172233;
+}
+
+#donut-label, #donut-count, #bar-label, #bar-count, #total-amount-label, #total-amount-value {
+  display: none;
+}
