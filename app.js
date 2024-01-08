@@ -337,19 +337,21 @@ app.get("/superuser-dashboard/overview", isAuthenticated, (req, res) => {
 
   // Query to fetch count of sold dishes by category this month
   const soldDishesByCategoryQuery = `
-    SELECT 
-      c.category,
-      COUNT(*) AS count
-    FROM 
-      kitchen k
-    JOIN 
-      dishes d ON k.dish_id = d.dish_id
-    JOIN 
-      categories c ON d.dish_id = c.dish_id
-    WHERE 
-      MONTH(k.order_id) = MONTH(CURDATE())
-    GROUP BY 
-      c.category;
+  SELECT 
+  c.category,
+  COUNT(*) AS count
+FROM 
+  kitchen k
+JOIN 
+  dishes d ON k.dish_id = d.dish_id
+JOIN 
+  categories c ON d.dish_id = c.dish_id
+JOIN
+  customer cu ON k.order_id = cu.order_id
+WHERE 
+  MONTH(cu.order_date) = MONTH(CURDATE())
+GROUP BY 
+  c.category;
   `;
 
   // Query to fetch total amount per month for the last 8 months
