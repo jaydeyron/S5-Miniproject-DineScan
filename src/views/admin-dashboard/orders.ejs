@@ -69,7 +69,7 @@
                             <td>#<%= order.order_id %></td>
                             <td><%= order.table_num %></td>
                             <td><%= order.order_date %></td>
-                            <td><%= order.ordered_dishes.replace(/,/g, '<br>')  %></td>
+                            <td><%- order.ordered_dishes.replace(/,/g, '<br>') %></td>
                             <td><%= order.order_status %></td>
                             <td><button class="order-buttons" onclick="openUpdateForm('<%= order.order_id %>', '<%= order.table_num %>', '<%= order.order_status %>')">Update<br> status</button></td>
                           </tr>

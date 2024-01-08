@@ -349,3 +349,8 @@ body {
     opacity: 1;
     transform: scaleY(1); /* Scale vertically to reveal content */
 }
+
+#Specials {
+    max-height: 10000px;
+    opacity: 1;
+}

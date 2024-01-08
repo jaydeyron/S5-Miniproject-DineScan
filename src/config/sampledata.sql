@@ -195,3 +195,60 @@ VALUES
   (24, 'Specials');
 
 COMMIT;
+
+
+INSERT INTO payment (payment_type, total_amount, payment_date, card_number, card_expiration_date, card_holder_name, upi_id)
+VALUES
+  ('Credit card', 350.00, '2023-01-15 12:30:00', '**** **** **** 1234', '2025-01-01', 'John Doe', NULL),
+  ('UPI', 420.00, '2023-02-20 18:45:00', NULL, NULL, NULL, 'john.doe@upi'),
+  ('Debit card', 280.00, '2023-03-05 14:20:00', '**** **** **** 5678', '2024-02-01', 'Bob Johnson', NULL),
+  ('Credit card', 390.00, '2023-04-10 19:15:00', '**** **** **** 9876', '2023-12-01', 'Alice Williams', NULL),
+  ('UPI', 480.00, '2023-05-08 13:00:00', NULL, NULL, NULL, 'charlie.brown@upi'),
+  ('Debit card', 330.00, '2023-06-25 17:30:00', '**** **** **** 4321', '2024-08-01', 'Eva Davis', NULL),
+  ('UPI', 270.00, '2023-07-12 22:10:00', NULL, NULL, NULL, 'frank.miller@upi'),
+  ('Credit card', 320.00, '2023-08-18 16:05:00', '**** **** **** 8765', '2023-11-01', 'Grace Wilson', NULL),
+  ('Credit card', 450.00, '2023-09-30 21:45:00', '**** **** **** 2345', '2024-05-01', 'Harry Turner', NULL),
+  ('UPI', 540.00, '2023-10-14 11:55:00', NULL, NULL, NULL, 'ivy.robinson@upi'),
+  ('Credit card', 380.00, '2023-11-09 15:40:00', '**** **** **** 6543', '2024-09-01', 'Jack Young', NULL),
+  ('Debit card', 510.00, '2023-12-22 23:25:00', '**** **** **** 8765', '2023-12-01', 'Kelly Harris', NULL),
+  ('UPI', 300.00, '2023-01-07 18:30:00', NULL, NULL, NULL, 'leo.king@upi'),
+  ('Credit card', 440.00, '2023-02-19 14:15:00', '**** **** **** 3456', '2024-04-01', 'Mia Lopez', NULL),
+  ('UPI', 380.00, '2023-03-28 20:50:00', NULL, NULL, NULL, 'noah.white@upi');
+
+
+INSERT INTO customer (payment_id, customer_name, email, order_date, order_status, table_num)
+VALUES
+  (1, 'John Doe', 'john.doe@example.com', '2023-01-15 12:30:00', 'Preparing', 5),
+  (2, 'Jane Smith', 'jane.smith@example.com', '2023-02-20 18:45:00', 'Preparing', 8),
+  (3, 'Bob Johnson', 'bob.johnson@example.com', '2023-03-05 14:20:00', 'Preparing', 3),
+  (4, 'Alice Williams', 'alice.williams@example.com', '2023-04-10 19:15:00', 'Preparing', 6),
+  (5, 'Charlie Brown', 'charlie.brown@example.com', '2023-05-08 13:00:00', 'Preparing', 9),
+  (6, 'Eva Davis', 'eva.davis@example.com', '2023-06-25 17:30:00', 'Preparing', 2),
+  (7, 'Frank Miller', 'frank.miller@example.com', '2023-07-12 22:10:00', 'Preparing', 7),
+  (8, 'Grace Wilson', 'grace.wilson@example.com', '2023-08-18 16:05:00', 'Preparing', 4),
+  (9, 'Harry Turner', 'harry.turner@example.com', '2023-09-30 21:45:00', 'Preparing', 1),
+  (10, 'Ivy Robinson', 'ivy.robinson@example.com', '2023-10-14 11:55:00', 'Preparing', 10),
+  (11, 'Jack Young', 'jack.young@example.com', '2023-11-09 15:40:00', 'Preparing', 8),
+  (12, 'Kelly Harris', 'kelly.harris@example.com', '2023-12-22 23:25:00', 'Preparing', 3),
+  (13, 'Leo King', 'leo.king@example.com', '2023-01-07 18:30:00', 'Preparing', 5),
+  (14, 'Mia Lopez', 'mia.lopez@example.com', '2023-02-19 14:15:00', 'Preparing', 2),
+  (15, 'Noah White', 'noah.white@example.com', '2023-03-28 20:50:00', 'Preparing', 9);
+
+
+INSERT INTO kitchen (order_id, dish_id, quantity)
+VALUES
+  (1, 1, 2), (1, 3, 1), (1, 5, 3), (1, 8, 1),
+  (2, 2, 2), (2, 4, 1), (2, 6, 2), (2, 9, 1),
+  (3, 1, 1), (3, 3, 2), (3, 5, 2), (3, 7, 1),
+  (4, 2, 1), (4, 4, 1), (4, 6, 1), (4, 8, 3),
+  (5, 1, 3), (5, 3, 1), (5, 5, 2), (5, 7, 2),
+  (6, 2, 2), (6, 4, 2), (6, 6, 1), (6, 9, 1),
+  (7, 1, 1), (7, 3, 3), (7, 5, 2), (7, 8, 1),
+  (8, 2, 2), (8, 4, 1), (8, 6, 1), (8, 9, 2),
+  (9, 1, 2), (9, 3, 1), (9, 5, 3), (9, 7, 1),
+  (10, 2, 2), (10, 4, 1), (10, 6, 2), (10, 8, 1),
+  (11, 1, 1), (11, 3, 2), (11, 5, 2), (11, 9, 1),
+  (12, 2, 1), (12, 4, 1), (12, 6, 1), (12, 8, 3),
+  (13, 1, 3), (13, 3, 1), (13, 5, 2), (13, 7, 2),
+  (14, 2, 2), (14, 4, 2), (14, 6, 1), (14, 9, 1),
+  (15, 1, 1), (15, 3, 3), (15, 5, 2), (15, 8, 1);

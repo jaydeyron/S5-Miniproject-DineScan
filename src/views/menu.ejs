@@ -45,6 +45,46 @@
               </div>
             </div>
           <% }); %>
+
+          <div class="category-dropdown">
+            <button class="category-button" onclick="toggleCategory('Vegetarian')">
+              Vegetarian<span class="material-symbols-outlined" id="Vegetarian-text">arrow_drop_down</span>
+            </button>
+            <div class="dropdown-content" id="Vegetarian">
+              <% allDishes.filter(dish => dish.vegetarian).forEach(dish => { %>
+                <div class="dish-box" onclick="openDishSummary(<%= JSON.stringify(dish) %>)">
+                  <div class="dish-details">
+                    <span style="padding-bottom: 5px;"><%= dish.dish_name %></span>
+                    <span style="padding-bottom: 15px;">Rs. <%= dish.price %></span>
+                  </div>
+                  <div class="dish-image-section">
+                    <img class="dish-image" src="https://dinescan.s3.ap-southeast-2.amazonaws.com/<%= dish.dish_photo %>">
+                    <button class="cart-button" onclick="addToCart(event, <%= JSON.stringify(dish) %>)">Add</button>
+                  </div>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+        
+          <div class="category-dropdown">
+            <button class="category-button" onclick="toggleCategory('NonVegetarian')">
+              Non-Vegetarian<span class="material-symbols-outlined" id="NonVegetarian-text">arrow_drop_down</span>
+            </button>
+            <div class="dropdown-content" id="NonVegetarian">
+              <% allDishes.filter(dish => !dish.vegetarian).forEach(dish => { %>
+                <div class="dish-box" onclick="openDishSummary(<%= JSON.stringify(dish) %>)">
+                  <div class="dish-details">
+                    <span style="padding-bottom: 5px;"><%= dish.dish_name %></span>
+                    <span style="padding-bottom: 15px;">Rs. <%= dish.price %></span>
+                  </div>
+                  <div class="dish-image-section">
+                    <img class="dish-image" src="https://dinescan.s3.ap-southeast-2.amazonaws.com/<%= dish.dish_photo %>">
+                    <button class="cart-button" onclick="addToCart(event, <%= JSON.stringify(dish) %>)">Add</button>
+                  </div>
+                </div>
+              <% }); %>
+            </div>
+          </div>
         </div>
         <div id="overlay">
         </div>

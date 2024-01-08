@@ -125,7 +125,7 @@
                     <input type="text" id="update-fat" name="fat">
                     
                     <label for="carb">Carbohydrates:</label>
-                    <input type="text" id="update-carb" name="carb">
+                    <input type="text" id="update-carb" name="carb">            
 
                     <button type="submit">Update</button>
                 </form>
@@ -167,6 +167,16 @@
                     
                     <label for="carb">Carbohydrates:</label>
                     <input type="text" id="add-carb" name="carb">
+
+                    <label for="categories">Categories:</label>
+                    <div id="category-checklist">
+                        <% categories.forEach(category => { %>
+                            <label style="display: inline-block; margin-right: 10px">
+                                <input type="checkbox" name="categories" value="<%= category %>">
+                                <%= category %>
+                            </label>
+                            <% }); %>
+                    </div>
 
                     <button type="submit">Add</button>
                 </form>

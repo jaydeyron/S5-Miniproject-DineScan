@@ -218,19 +218,22 @@ app.get("/admin-dashboard/overview", isAuthenticated, (req, res) => {
 
   // Query to fetch count of sold dishes by category this month
   const soldDishesByCategoryQuery = `
-    SELECT 
-      c.category,
-      COUNT(*) AS count
-    FROM 
-      kitchen k
-    JOIN 
-      dishes d ON k.dish_id = d.dish_id
-    JOIN 
-      categories c ON d.dish_id = c.dish_id
-    WHERE 
-      MONTH(k.order_id) = MONTH(CURDATE())
-    GROUP BY 
-      c.category;
+  SELECT 
+  c.category,
+  COUNT(*) AS count
+FROM 
+  kitchen k
+JOIN 
+  dishes d ON k.dish_id = d.dish_id
+JOIN 
+  categories c ON d.dish_id = c.dish_id
+JOIN
+  customer cu ON k.order_id = cu.order_id
+WHERE 
+  MONTH(cu.order_date) = MONTH(CURDATE())
+GROUP BY 
+  c.category;
+
   `;
 
   // Query to fetch total amount per month for the last 8 months
@@ -282,7 +285,7 @@ app.get("/admin-dashboard/overview", isAuthenticated, (req, res) => {
               res.status(500).send("Internal Server Error");
               return;
             }
-            console.log(totalAmountLast8MonthsData);
+            console.log(soldDishesByCategoryData);
             // Render the EJS template with the query results
             res.render("admin-dashboard/overview.ejs", {
               username: req.session.username,
@@ -617,6 +620,19 @@ app.get("/admin-dashboard/report", isAuthenticated, (req, res) => {
 app.get("/admin-dashboard/data-management", isAuthenticated, (req, res) => {
   pool.getConnection((error, connection) => {
     const query = "SELECT * FROM dishes ORDER BY dish_name";
+    const categories = [
+      "Specials",
+      "Appetizers",
+      "Soups",
+      "Salads",
+      "Noodles and rice",
+      "Curries",
+      "Sushi and sashimi",
+      "Grills and barbeque",
+      "Seafood",
+      "Deserts",
+      "Beverages"
+    ];
 
     connection.query(query, (error, results, fields) => {
       connection.release();
@@ -625,7 +641,7 @@ app.get("/admin-dashboard/data-management", isAuthenticated, (req, res) => {
         console.error("Error querying database:", error);
         res.status(500).send("Internal Server Error");
       } else {
-        res.render("admin-dashboard/data-management.ejs", { username: req.session.username, dishes: results, role: req.session.role });
+        res.render("admin-dashboard/data-management.ejs", { username: req.session.username, dishes: results, role: req.session.role, categories: categories });
       }
     });
   })
@@ -638,6 +654,19 @@ app.get("/superuser-dashboard/data-management", isAuthenticated, (req, res) => {
 app.get("/staff-dashboard/data-management", isAuthenticated, (req, res) => {
   pool.getConnection((error, connection) => {
     const query = "SELECT * FROM dishes ORDER BY dish_name";
+    const categories = [
+      "Specials",
+      "Appetizers",
+      "Soups",
+      "Salads",
+      "Noodles and rice",
+      "Curries",
+      "Sushi and sashimi",
+      "Grills and barbeque",
+      "Seafood",
+      "Deserts",
+      "Beverages"
+    ];
     connection.query(query, (error, results, fields) => {
       connection.release();
 
@@ -645,7 +674,7 @@ app.get("/staff-dashboard/data-management", isAuthenticated, (req, res) => {
         console.error("Error querying database:", error);
         res.status(500).send("Internal Server Error");
       } else {
-        res.render("staff-dashboard/data-management.ejs", { username: req.session.username, dishes: results , role: req.session.role });
+        res.render("staff-dashboard/data-management.ejs", { username: req.session.username, dishes: results , role: req.session.role, categories: categories });
       }
     });
   })
@@ -827,6 +856,8 @@ app.post('/api/update-order-status/:orderId', isAuthenticated, (req, res) => {
 
 app.delete('/api/remove-dish/:dishId', isAuthenticated, (req, res) => {
   const dishId = req.params.dishId;
+
+  // Check for foreign key reference in the kitchen table
   const checkQuery = 'SELECT * FROM kitchen WHERE dish_id = ? LIMIT 1';
   pool.query(checkQuery, [dishId], (checkError, checkResults) => {
     if (checkError) {
@@ -835,13 +866,23 @@ app.delete('/api/remove-dish/:dishId', isAuthenticated, (req, res) => {
     } else if (checkResults.length > 0) {
       res.status(400).json({ error: 'Cannot remove dish. It is referenced in the kitchen table.' });
     } else {
-      const deleteQuery = 'DELETE FROM dishes WHERE dish_id = ?';
-      pool.query(deleteQuery, [dishId], (deleteError, deleteResults) => {
-        if (deleteError) {
-          console.error('Error removing dish:', deleteError);
+      // Remove entries from the dish_categories table
+      const removeCategoriesQuery = 'DELETE FROM dish_categories WHERE dish_id = ?';
+      pool.query(removeCategoriesQuery, [dishId], (removeCategoriesError) => {
+        if (removeCategoriesError) {
+          console.error('Error removing categories:', removeCategoriesError);
           res.status(500).json({ error: 'Internal Server Error' });
         } else {
-          res.json({ message: 'Dish removed successfully' });
+          // Remove the dish from the dishes table
+          const deleteQuery = 'DELETE FROM dishes WHERE dish_id = ?';
+          pool.query(deleteQuery, [dishId], (deleteError, deleteResults) => {
+            if (deleteError) {
+              console.error('Error removing dish:', deleteError);
+              res.status(500).json({ error: 'Internal Server Error' });
+            } else {
+              res.json({ message: 'Dish removed successfully' });
+            }
+          });
         }
       });
     }
@@ -991,18 +1032,36 @@ app.post('/api/generate-sales-report', async (req, res) => {
 
 
 app.post('/api/add-dish',isAuthenticated, (req, res) => {
-  const { dishName, price, vegetarian, available, dishDescription, dishPhoto, calories, protein, fat, carb } = req.body;
+  const { dishName, price, vegetarian, available, dishDescription, dishPhoto, calories, protein, fat, carb, categories } = req.body;
+  const categoryArray = Array.isArray(categories) ? categories : [categories];
+
   pool.query(
     'INSERT INTO dishes (dish_name, price, vegetarian, available, dish_description, dish_photo, calories, protein, fat, carb) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [dishName, price, vegetarian, available, dishDescription, dishPhoto, calories, protein, fat, carb],
-    (error, results) => {
-      if (error) {
-        console.error('Error adding new dish:', error);
+    (dishError, dishResults) => {
+      if (dishError) {
+        console.error('Error adding new dish:', dishError);
         res.status(500).json({ error: 'Internal Server Error' });
-      } else {
-        const referer = req.get('referer');
-        res.redirect(referer);
+        return;
       }
+
+      const dishId = dishResults.insertId;
+
+      const categoryValues = categoryArray.map(category => [dishId, category]);
+
+      pool.query(
+        'INSERT INTO categories (dish_id, category) VALUES ?',
+        [categoryValues],
+        (categoryError) => {
+          if (categoryError) {
+            console.error('Error adding dish categories:', categoryError);
+            res.status(500).json({ error: 'Internal Server Error' });
+          } else {
+            const referer = req.get('referer');
+            res.redirect(referer);
+          }
+        }
+      );
     }
   );
 })
@@ -1033,64 +1092,76 @@ app.get("/menu/:table_num", (req, res) => {
 
     const categoryResults = {};
     let restaurantResult;
+    let allDishes;
 
-    // Query to fetch restaurant details
-    const restaurantQuery = "SELECT * FROM restaurant";
+    // Query to get all dishes
+    const allDishesQuery = "SELECT * FROM dishes";
 
-    connection.query(restaurantQuery, (error, results) => {
+    connection.query(allDishesQuery, (error, results) => {
       if (error) {
-        console.error("Error querying restaurant:", error);
+        console.error("Error querying all dishes:", error);
         connection.release();
         res.status(500).send("Internal Server Error");
         return;
       }
 
-      restaurantResult = results[0]; // Assuming there is only one restaurant
+      allDishes = results;
 
-      // Function to execute category queries
-      function executeCategoryQuery(index) {
-        if (index === categories.length) {
-          // All queries executed, release connection and render menu
+      const restaurantQuery = "SELECT * FROM restaurant";
+
+      connection.query(restaurantQuery, (error, results) => {
+        if (error) {
+          console.error("Error querying restaurant:", error);
           connection.release();
-
-          res.render("menu", {
-            categories: categories,
-            table_num: tableNumber,
-            restaurant: restaurantResult,
-            categoryResults: categoryResults
-          });
-
+          res.status(500).send("Internal Server Error");
           return;
         }
 
-        const category = categories[index];
-        const categoryQuery = `
-          SELECT dishes.* 
-          FROM dishes
-          INNER JOIN categories ON dishes.dish_id = categories.dish_id
-          WHERE categories.category = ? AND dishes.available > 0
-        `;
+        restaurantResult = results[0];
 
-        connection.query(categoryQuery, [category], (error, results) => {
-          if (error) {
-            console.error(`Error querying category ${category}:`, error);
+        function executeCategoryQuery(index) {
+          if (index === categories.length) {
             connection.release();
-            res.status(500).send("Internal Server Error");
+
+            res.render("menu", {
+              categories: categories,
+              table_num: tableNumber,
+              restaurant: restaurantResult,
+              categoryResults: categoryResults,
+              allDishes: allDishes
+            });
+
             return;
           }
 
-          categoryResults[category] = results;
+          const category = categories[index];
+          const categoryQuery = `
+            SELECT dishes.* 
+            FROM dishes
+            INNER JOIN categories ON dishes.dish_id = categories.dish_id
+            WHERE categories.category = ? AND dishes.available > 0
+          `;
 
-          // Continue with the next category query
-          executeCategoryQuery(index + 1);
-        });
-      }
+          connection.query(categoryQuery, [category], (error, results) => {
+            if (error) {
+              console.error(`Error querying category ${category}:`, error);
+              connection.release();
+              res.status(500).send("Internal Server Error");
+              return;
+            }
 
-      // Start executing category queries after fetching restaurant details
-      executeCategoryQuery(0);
+            categoryResults[category] = results;
+
+            executeCategoryQuery(index + 1);
+          });
+        }
+
+        executeCategoryQuery(0);
+      });
     });
   });
 });
+
 
 app.post('/api/checkout', (req, res) => {
   const { tableNum, cart, totalPrice } = req.body;
@@ -1162,6 +1233,19 @@ app.post("/api/place-order", (req, res) => {
             console.log(cartObj);
 
             Object.entries(cartObj).forEach(([dishId, quantity]) => {
+              // Update dishes table to reduce available quantity
+              const updateDishQuery =
+                "UPDATE dishes SET available = available - ? WHERE dish_id = ?";
+              connection.query(updateDishQuery, [quantity, dishId], (updateError) => {
+                if (updateError) {
+                  console.error("Error updating dish quantity:", updateError);
+                  connection.release();
+                  res.status(500).json({ error: "Internal Server Error" });
+                  return;
+                }
+              });
+
+              // Insert into kitchen table
               const kitchenQuery =
                 "INSERT INTO kitchen (order_id, dish_id, quantity) VALUES (?, ?, ?)";
               connection.query(
@@ -1188,7 +1272,6 @@ app.post("/api/place-order", (req, res) => {
   );
 });
 
-// Function to mask the card number
 function maskCardNumber(cardNumber) {
   const maskedNumber = "**** **** **** " + cardNumber.slice(-4);
   return maskedNumber;
