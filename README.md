@@ -18,17 +18,13 @@ This repository represents our team's mini project for the fifth semester of the
 
 ### Sample visuals
 
-<div style="display: flex; gap: 20px;">
+<img src="https://github.com/jaydeyron/S5-Miniproject-DineScan/assets/94859351/097c1de8-55a5-49a5-84d0-35344c611731" alt="Screenshot 1" width="190" />
 
-  <img src="https://github.com/jaydeyron/S5-Miniproject-DineScan/assets/94859351/097c1de8-55a5-49a5-84d0-35344c611731" alt="Screenshot 1" width="200" />
+<img src="https://github.com/jaydeyron/S5-Miniproject-DineScan/assets/94859351/84858935-29d4-42dd-a65c-e7f920ab487d" alt="Screenshot 3" width="190" />
 
-  <img src="https://github.com/jaydeyron/S5-Miniproject-DineScan/assets/94859351/84858935-29d4-42dd-a65c-e7f920ab487d" alt="Screenshot 3" width="200" />
+<img src="https://github.com/jaydeyron/S5-Miniproject-DineScan/assets/94859351/97d102b4-1a2c-4fef-902b-17afff4547b1" alt="Screenshot 4" width="190" />
 
-  <img src="https://github.com/jaydeyron/S5-Miniproject-DineScan/assets/94859351/97d102b4-1a2c-4fef-902b-17afff4547b1" alt="Screenshot 4" width="200" />
-
-  <img src="https://github.com/jaydeyron/S5-Miniproject-DineScan/assets/94859351/9458f2f8-c650-4a3a-85bf-c4e6bd6e7338" alt="Screenshot 5" width="200" />
-
-</div>
+<img src="https://github.com/jaydeyron/S5-Miniproject-DineScan/assets/94859351/9458f2f8-c650-4a3a-85bf-c4e6bd6e7338" alt="Screenshot 5" width="190" />
 
 ### Dashboard view
 
