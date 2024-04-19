@@ -35,9 +35,9 @@ https://github.com/jaydeyron/S5-Miniproject-DineScan/assets/94859351/6fc59cdb-dc
 https://github.com/jaydeyron/S5-Miniproject-DineScan/assets/94859351/445ae5ae-371f-435d-a997-fb796baa4ad2
 
 #### Hosted websites
-*_[Home page](https://determined-trench-coat-calf.cyclic.app/)_* \
-*_[Menu ( Designed for mobile website, view in smartphone for best experience)](https://determined-trench-coat-calf.cyclic.app/menu/1)_* \
-*_[Login](https://determined-trench-coat-calf.cyclic.app/login)_*
+*_[Home page](https://defiant-slip-fly.cyclic.app/)_* \
+*_[Menu ( Designed for mobile website, view in smartphone for best experience)](https://defiant-slip-fly.cyclic.app/menu/1)_* \
+*_[Login](https://defiant-slip-fly.cyclic.app/login)_*
 
 
 ## Team Members
